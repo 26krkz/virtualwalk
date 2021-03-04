@@ -1,0 +1,53 @@
+version: '3'
+services:
+  front:
+    build: ./frontend
+    command: npm run serve
+    volumes:
+      - ./frontend:/webapp:cached
+      - node-data:/webapp/node_modules
+    ports:
+      - '8080:8080'
+    tty: true
+    stdin_open: true
+
+  app:
+    build: ./backend
+    env_file:
+      - ./environments/db.env
+    command: bundle exec puma -C config/puma.rb
+    volumes:
+      - ./backend:/webapp:cached
+      - public-data:/webapp/public
+      - tmp-data:/webapp/tmp
+      - log-data:/webapp/log
+    tty: true
+    stdin_open: true
+    depends_on:
+      - db
+
+  db:
+    image: mysql:5.7
+    env_file:
+      - ./environments/db.env
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - '3306:3306'
+
+  web:
+    build: ./server
+    volumes:
+      - public-data:/webapp/public
+      - tmp-data:/webapp/tmp
+    ports:
+      - 80:80
+    depends_on:
+      - app
+
+volumes:
+  node-data:
+  public-data:
+  tmp-data:
+  log-data:
+  db-data:
