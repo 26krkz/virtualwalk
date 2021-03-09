@@ -1,60 +1,67 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
+    <header>
+      <Header></Header>
+    </header>
 
     <v-main>
-      <HelloWorld/>
+      <v-container>
+        <v-row>
+          <v-col cols="10">
+            <GoogleMap @change-marker-num="changeMarkerNum"></GoogleMap>
+          </v-col>
+          <v-col cols="2">
+            <Ranking :items='items' @change-marker-num="changeMarkerNum"></Ranking>
+          </v-col>
+        </v-row>
+      </v-container>
+      
+      <ImportPlaylist @playlist-items="playlistItems"></ImportPlaylist>
+      <Youtube :marker-num='markerNum' :items='items'></Youtube>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import Header from './components/Header';
+import GoogleMap from './components/GoogleMap';
+import Youtube from './components/Youtube';
+import ImportPlaylist from './components/ImportPlaylist';
+import Ranking from './components/Ranking';
 
 export default {
   name: 'App',
-
-  components: {
-    HelloWorld,
+  data(){
+    return {
+      markerNum: null,
+      items: null,
+    }
+  },
+  methods: {
+    changeMarkerNum(e){
+      this.markerNum = e;
+    },
+    playlistItems(e){
+      this.items= e;
+    }
   },
 
-  data: () => ({
-    //
-  }),
+  components: {
+    Header,
+    GoogleMap,
+    Youtube,
+    ImportPlaylist,
+    Ranking
+  },
+
+
 };
 </script>
+
+<style>
+  .sample {
+      height: 100px;
+      background-color: skyblue;
+      margin-bottom: 10px;
+  }
+</style>
