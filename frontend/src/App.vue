@@ -1,16 +1,16 @@
 <template>
-  <v-app>
+  <v-app >
     <header>
       <Header></Header>
     </header>
 
-    <v-main>
-      <v-container>
+    <v-main id="sample">
+      <v-container fluid>
         <v-row>
-          <v-col cols="10">
+          <v-col cols="9">
             <GoogleMap @change-marker-num="changeMarkerNum"></GoogleMap>
           </v-col>
-          <v-col cols="2">
+          <v-col cols="3">
             <Ranking :items='items' @change-marker-num="changeMarkerNum"></Ranking>
           </v-col>
         </v-row>
@@ -19,6 +19,7 @@
       <ImportPlaylist @playlist-items="playlistItems"></ImportPlaylist>
       <Youtube :marker-num='markerNum' :items='items'></Youtube>
     </v-main>
+
   </v-app>
 </template>
 
@@ -59,9 +60,7 @@ export default {
 </script>
 
 <style>
-  .sample {
-      height: 100px;
-      background-color: skyblue;
-      margin-bottom: 10px;
+  #sample {
+    margin: 0 5vw;
   }
 </style>

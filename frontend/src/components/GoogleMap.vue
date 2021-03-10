@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="map-wrapper">
     <div class="map" ref="googleMap">
     </div>
   </div>
@@ -13,6 +13,7 @@ export default {
         return {
             google: null,
             map: null,
+            apiKey: process.env.VUE_APP_GOOGLE_MAP_API_KEY,
             mapConfig: {
                 center: {
                     lat: 35.68944,
@@ -34,7 +35,7 @@ export default {
     //google-map-api-loaderライブラリ、Maps javascript APIを利用してマップを表示。マップ上にはマーカーも表示。
     async mounted() {
          const googleMapApi = await GoogleMapsApiLoader({
-         apiKey: 'AIzaSyCcqzebC6q7mZEE3kt4Hv748c62_TPWwxs',
+         apiKey: this.apiKey,
          libraries: ['places']
     })
     this.google = googleMapApi
@@ -76,9 +77,22 @@ export default {
 </script>
 
 <style scoped>
- .map {
+ /* .map {
   height: 650px;
-  width: 950px;
+  width: 100%;
   margin: 20px auto;
-}
+} */
+.map-wrapper {
+  width:100%;
+  padding-top:70%;
+  position: relative;
+  margin:auto;
+  }
+ 
+.map {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  }
 </style>

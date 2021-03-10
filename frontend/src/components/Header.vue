@@ -13,7 +13,7 @@
         <span class="mr-3">how to use</span>
       </v-btn>
       <v-btn text>
-        <span class="mr-3">log in</span>
+        <span class="mr-3">sign in</span>
       </v-btn>
       <v-btn text>
         <span class="mr-3">sign up</span>
