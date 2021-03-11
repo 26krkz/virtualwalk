@@ -6,7 +6,11 @@
             <p class="title">{{ items[markerNum].snippet.title }}</p>
         </v-col>
         <v-col cols='2'>
-            <v-btn block class="fav-btn">お気に入りに追加</v-btn>
+
+            <v-btn block @click="addFavorite">
+                お気に入りに追加
+                <v-icon v-bind:color="heartColor">{{ heartIcon }}</v-icon>
+            </v-btn>
             
             <div class="select-btn">
             <!-- 開始時間を設定 -->
@@ -49,7 +53,6 @@ export default {
   props: ['markerNum', 'items'],
   data(){
       return{
-        //   items: [],
           apiKey: null,
           selectedMovieUrl: '',
           startTime: '',
@@ -66,12 +69,11 @@ export default {
               { text: '20 mim', value: '1200'},
               { text: '30 mim', value: '1800'},
               { text: '1 h',    value: '3600'},
-          ]
+          ],
+          heartColor: null,
+          heartIcon: "mdi-heart-outline"
       };
   },
-//   mounted(){
-//         console.log(process.env.VUE_APP_YOUTUBE_API_KEY);
-//     },
   methods: {
     // 開始時間と再生時間の和を終了時間としてendTimeに代入している
     EndTime(){
@@ -82,6 +84,15 @@ export default {
                                 + '?start=' + this.startTime
                                 + '&end=' + this.endTime
     },
+    addFavorite(){
+      if(this.heartIcon == "mdi-heart-outline"){
+          this.heartIcon = "mdi-heart";
+          this.heartColor = "pink";
+      }else{
+          this.heartIcon = "mdi-heart-outline";
+          this.heartColor = null;
+      }
+    }
   }
 }
 

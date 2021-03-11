@@ -77,11 +77,6 @@ export default {
 </script>
 
 <style scoped>
- /* .map {
-  height: 650px;
-  width: 100%;
-  margin: 20px auto;
-} */
 .map-wrapper {
   width:100%;
   padding-top:70%;
