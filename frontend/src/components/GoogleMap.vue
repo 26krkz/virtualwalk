@@ -29,7 +29,7 @@ export default {
                         {lat:59.9311985, lng: 30.3541205,   id: '3' },
                        ],
             markers: [],
-            markerNum: 0
+            markerNum: 0,
         }
     },
     //google-map-api-loaderライブラリ、Maps javascript APIを利用してマップを表示。マップ上にはマーカーも表示。
@@ -65,8 +65,10 @@ export default {
                         this.markers[i].setAnimation(null);
                     }
                     marker.setAnimation(this.google.maps.Animation.BOUNCE);
+                    this.$emit('expand-window', true)
                   } else {
-                      marker.setAnimation(null);
+                    marker.setAnimation(null);
+                    this.$emit('expand-window', false)
                 }
                 this.$emit('change-marker-num', this.markerLocation[i].id);    //event upで選択したマーカーのidをApp.vueに渡す。
             });
@@ -77,11 +79,6 @@ export default {
 </script>
 
 <style scoped>
- /* .map {
-  height: 650px;
-  width: 100%;
-  margin: 20px auto;
-} */
 .map-wrapper {
   width:100%;
   padding-top:70%;

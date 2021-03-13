@@ -1,66 +1,18 @@
 <template>
-  <v-app >
-    <header>
-      <Header></Header>
-    </header>
+  <v-app>
+  <header>
+    <Header></Header>
+  </header>
 
-    <v-main id="sample">
-      <v-container fluid>
-        <v-row>
-          <v-col cols="9">
-            <GoogleMap @change-marker-num="changeMarkerNum"></GoogleMap>
-          </v-col>
-          <v-col cols="3">
-            <Ranking :items='items' @change-marker-num="changeMarkerNum"></Ranking>
-          </v-col>
-        </v-row>
-      </v-container>
-      
-      <ImportPlaylist @playlist-items="playlistItems"></ImportPlaylist>
-      <Youtube :marker-num='markerNum' :items='items'></Youtube>
-    </v-main>
-
+  <router-view/>
   </v-app>
 </template>
 
 <script>
-import Header from './components/Header';
-import GoogleMap from './components/GoogleMap';
-import Youtube from './components/Youtube';
-import ImportPlaylist from './components/ImportPlaylist';
-import Ranking from './components/Ranking';
-
+import Header from "./components/Header"
 export default {
-  name: 'App',
-  data(){
-    return {
-      markerNum: null,
-      items: null,
-    }
-  },
-  methods: {
-    changeMarkerNum(e){
-      this.markerNum = e;
-    },
-    playlistItems(e){
-      this.items= e;
-    }
-  },
-
   components: {
     Header,
-    GoogleMap,
-    Youtube,
-    ImportPlaylist,
-    Ranking
-  },
-
-
-};
-</script>
-
-<style>
-  #sample {
-    margin: 0 5vw;
   }
-</style>
+}
+</script>

@@ -12,9 +12,6 @@ export default {
             }
         }
     },
-    // mounted(){
-    //     this.apiKey = process.env.VUE_APP_YOUTUBE_API_KEY;
-    // },
     mounted(){
     // axiosにより指定のプレイリストの動画を取得し、それらをitemsに代入する
         let that = this;
