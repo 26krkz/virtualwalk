@@ -10,7 +10,7 @@
       <v-spacer></v-spacer>
 
       <v-btn text>
-        <span class="mr-3">テストユーザーでログイン</span>
+        <span class="mr-3">ゲストユーザーでログイン</span>
       </v-btn>
 
       <v-btn text>

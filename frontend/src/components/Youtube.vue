@@ -1,5 +1,9 @@
 <template>
-  <v-container class="container grey lighten-2">
+<v-expand-transition>
+  <v-container v-show="expand" class="container grey lighten-2">
+      <v-btn class="close-btn" color="black" icon small outlined @click="expand = !expand">
+          <v-icon>mdi-window-close</v-icon>
+      </v-btn>
       <v-row>
         <v-col cols='4' class="select-movie">
             <img v-bind:src="items[markerNum].snippet.thumbnails.medium.url">
@@ -38,19 +42,20 @@
 
             <v-btn block class="resume-btn" @click="Resume">表示</v-btn>
         </v-col>
-        <v-col cols='6'>
+        <v-col class="iframe" cols='6'>
             <iframe width="560" height="315" 
                 v-bind:src="selectedMovieUrl" frameborder="0" allowfullscreen>
             </iframe>
+            <div class="iframe-cover" v-show="show">表示ボタンを押してね</div>
         </v-col>
       </v-row>
   </v-container>
+</v-expand-transition>
 </template>
 
 <script>
-
 export default {
-  props: ['markerNum', 'items'],
+  props: ['markerNum', 'items', 'expand'],
   data(){
       return{
           apiKey: null,
@@ -58,6 +63,7 @@ export default {
           startTime: '',
           playingTime: '',
           endTime: '',
+          show: true,
           sTimes: [
               { text: '0 : 10', value: '600'},
               { text: '0 : 30', value: '1800'},
@@ -71,7 +77,7 @@ export default {
               { text: '1 h',    value: '3600'},
           ],
           heartColor: null,
-          heartIcon: "mdi-heart-outline"
+          heartIcon: "mdi-heart-outline",
       };
   },
   methods: {
@@ -82,7 +88,9 @@ export default {
     Resume(){
         this.selectedMovieUrl= 'https://www.youtube.com/embed/' + this.items[this.markerNum].snippet.resourceId.videoId
                                 + '?start=' + this.startTime
-                                + '&end=' + this.endTime
+                                + '&end=' + this.endTime;
+
+        if(this.show == true){this.show = false;}  //初めて表示ボタンを押す時には.iframe-coverを外す。
     },
     addFavorite(){
       if(this.heartIcon == "mdi-heart-outline"){
@@ -92,7 +100,7 @@ export default {
           this.heartIcon = "mdi-heart-outline";
           this.heartColor = null;
       }
-    }
+    },
   }
 }
 
@@ -115,5 +123,25 @@ export default {
 
   .container {
       margin-bottom: 50px;
+      position: relative;
   }
+  .close-btn {
+      position:absolute;
+      top: -13px;
+      right: -13px;
+  }
+   .iframe {
+       position:relative;
+   }
+   .iframe-cover {
+       position:absolute;
+       top: 0;
+       left: 0;
+       background-color: #c0c0c0;
+       width:560px;
+       height: 315px;
+       margin-left: 12px;
+       margin-top: 12px;
+       text-align: center;
+   }
 </style>
