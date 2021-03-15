@@ -116,7 +116,7 @@
             return pattern.test(value) || '有効なメールアドレスを入力してください'
           },
           required: value => !!value || 'Passwordは必須です',
-          min: value => value.length >= 8 || '8字以上で作成してください',
+          min: value => value.length >= 6 || '6字以上で作成してください',
           issame: value => value == this.form.password1 || '同じパスワードを入力してください',
         },
       }
