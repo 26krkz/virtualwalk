@@ -98,6 +98,7 @@
 </template>
 
 <script>
+import axios from 'axios'
   export default {
     data () {
     //   Object.freezeにより以降オブジェクトの変更を防ぐ
@@ -116,7 +117,7 @@
             return pattern.test(value) || '有効なメールアドレスを入力してください'
           },
           required: value => !!value || 'Passwordは必須です',
-          min: value => value.length >= 8 || '8字以上で作成してください',
+          min: value => value.length >= 6 || '6字以上で作成してください',
           issame: value => value == this.form.password1 || '同じパスワードを入力してください',
         },
       }
@@ -139,6 +140,19 @@
         this.$refs.form.reset()
       },
       submit () {
+        let that = this;
+        axios.post('http://localhost/users', {user: {name: that.form.userName,
+                                              email: that.form.email,
+                                              password: that.form.password1,
+                                              password_confirmation: that.form.password2}})
+        .then(function (response) {
+            const error_message = response.data;
+            console.log(error_message);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })    
+
         this.snackbar = true
         this.resetForm()
       },

@@ -37,7 +37,7 @@
                     <v-col cols="12">
                         <v-text-field
                         class="text-field"
-                        v-model="form.password1"
+                        v-model="form.password"
                         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
                         :type="show1 ? 'text' : 'password'"
                         name="input-10-1"
@@ -72,16 +72,19 @@
 </template>
 
 <script>
+import axios from 'axios'
+
   export default {
     data () {
     //   Object.freezeにより以降オブジェクトの変更を防ぐ
-      const defaultForm = Object.freeze({ userName: '', password1: ''})
+      const defaultForm = Object.freeze({ userName: '', password: ''})
 
       return {
         snackbar: false,
         show1: false,
         defaultForm,
         form: Object.assign({}, defaultForm),
+        user: null,
       }
     },
 
@@ -89,7 +92,7 @@
       formIsValid () {
         return (
           this.form.userName &&
-          this.form.password1
+          this.form.password
         )
       },
     },
@@ -102,6 +105,16 @@
       submit () {
         this.snackbar = true
         this.resetForm()
+
+        axios.get('http://localhost/users/show')
+        .then(function (response) {
+            const user = response.data;
+            console.log(user);
+            // router.push({ name: 'user', params: { user.name } })
+        })
+        .catch(function (error) {
+        console.log(error);
+        })
       },
     },
   }
@@ -118,5 +131,8 @@
  }
  .text-field {
      padding: 0;
+ }
+ .login {
+     text-decoration: none;
  }
 </style>
