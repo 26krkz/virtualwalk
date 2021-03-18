@@ -18,12 +18,12 @@
     <!-- ログインしていた場合表示されるnav -->
       <div v-if="loggedInUser">
         <v-btn text >
-          <span class="mr-3">user</span>
+          <span class="mr-3">{{ userName }}</span>
         </v-btn>
 
-        <v-btn text>
-          <span class="mr-3">log out</span>
-        </v-btn>
+        <router-link to="/logout" class="nav-btn mr-3" >
+          <v-btn text >log out</v-btn>
+        </router-link>
       </div>
 
     <!-- ログインしていない場合表示されるnav -->
@@ -44,7 +44,7 @@
     </v-app-bar>
   </header>
 
-  <router-view @logged-in="loggedIn"></router-view>
+  <router-view @logged-in-data="loggedInData"></router-view>
   </v-app>
 </template>
 
@@ -52,12 +52,17 @@
 export default {
   data(){
     return{
+      data: null,
       loggedInUser: false,
+      userName: ''
     }
   },
   methods: {
-    loggedIn(e){
-      this.loggedInUser = e;
+    loggedInData(e){
+      this.data = e;
+      this.loggedInUser = this.data.loggedIn;
+      this.userName = this.data.current_user.name;
+      
     }
   }
 }

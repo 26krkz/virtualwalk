@@ -28,8 +28,8 @@
                     <v-col cols="12">
                         <v-text-field
                         calss="text-field"
-                        v-model="form.userName"
-                        label="User name"
+                        v-model="form.email"
+                        label="Email"
                         ></v-text-field>
                     </v-col>
 
@@ -78,7 +78,7 @@ import axios from 'axios'
   export default {
     data () {
     //   Object.freezeにより以降オブジェクトの変更を防ぐ
-      const defaultForm = Object.freeze({ userName: '', password: ''})
+      const defaultForm = Object.freeze({ email: '', password: ''})
 
       return {
         // snackbar: false,
@@ -93,7 +93,7 @@ import axios from 'axios'
     computed: {
       formIsValid () {
         return (
-          this.form.userName &&
+          this.form.email &&
           this.form.password
         )
       },
@@ -106,13 +106,17 @@ import axios from 'axios'
       },
       submit () {
         let that = this;
-        axios.post('http://localhost/login', {session: {name: that.form.userName,
-                                                        password: that.form.password
-                                              }})
+        axios.post('http://localhost/login',
+                    {session: {email: that.form.email,
+                                password: that.form.password
+                               }
+                    },
+                    {withCredentials: true}
+                   )
         .then(function (response) {
             that.data = response.data;
             console.log(that.data);
-            that.$emit('logged-in', that.data.loggedIn);
+            that.$emit('logged-in-data', that.data);
         })
         .catch(function (error) {
             console.log(error);
