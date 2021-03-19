@@ -1,11 +1,11 @@
 <template>
   <v-main>
-    <div class="signup-top">
-        <h4>Sign in to virtualwalk</h4>
+    <div class="signin-top">
+        <h4>Log in to virtualwalk</h4>
     </div>
 
     <!-- 登録に成功した時にスナックバーを表示する -->
-    <v-snackbar
+    <!-- <v-snackbar
       v-model="snackbar" 
       absolute
       top
@@ -13,7 +13,7 @@
       color="success"
     >
       <span>ログインしました</span>
-    </v-snackbar>
+    </v-snackbar> -->
     
     <!-- 登録フォーム -->
     <v-card class="form-container" width="300">
@@ -28,8 +28,8 @@
                     <v-col cols="12">
                         <v-text-field
                         calss="text-field"
-                        v-model="form.userName"
-                        label="User name"
+                        v-model="form.email"
+                        label="Email"
                         ></v-text-field>
                     </v-col>
 
@@ -68,6 +68,7 @@
             </v-card-actions>
         </v-form>
     </v-card>
+    <router-link to="/signup" ><div class="signup-link">新規登録はこちら！</div></router-link>
   </v-main>
 </template>
 
@@ -77,21 +78,22 @@ import axios from 'axios'
   export default {
     data () {
     //   Object.freezeにより以降オブジェクトの変更を防ぐ
-      const defaultForm = Object.freeze({ userName: '', password: ''})
+      const defaultForm = Object.freeze({ email: '', password: ''})
 
       return {
-        snackbar: false,
+        // snackbar: false,
         show1: false,
         defaultForm,
         form: Object.assign({}, defaultForm),
         user: null,
+        data: null
       }
     },
 
     computed: {
       formIsValid () {
         return (
-          this.form.userName &&
+          this.form.email &&
           this.form.password
         )
       },
@@ -103,25 +105,36 @@ import axios from 'axios'
         this.$refs.form.reset()
       },
       submit () {
-        this.snackbar = true
-        this.resetForm()
-
-        axios.get('http://localhost/users/show')
+        let that = this;
+        axios.post('http://localhost/login',
+                    {session: {email: that.form.email,
+                                password: that.form.password
+                               }
+                    },
+                    {withCredentials: true}
+                   )
         .then(function (response) {
-            const user = response.data;
-            console.log(user);
-            // router.push({ name: 'user', params: { user.name } })
+            that.data = response.data;
+            console.log(that.data);
+            that.$emit('logged-in-data', that.data);
         })
         .catch(function (error) {
-        console.log(error);
+            console.log(error);
         })
+        
+        // this.snackbar = true
+        this.resetForm()
+
+        // this.$router.push({ name: 'Home'})
+
+        
       },
     },
   }
 </script>
 
 <style scoped>
- .signup-top {
+ .signin-top {
      text-align: center;
      margin-top:4vw;
      margin-bottom: 2vw;
@@ -135,4 +148,12 @@ import axios from 'axios'
  .login {
      text-decoration: none;
  }
+ .signup-link {
+     display:block;
+     text-align: right;
+     padding-right: 15px;
+     margin: 15px auto;
+     width: 300px;
+     color: black;
+}
 </style>

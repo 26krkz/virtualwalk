@@ -6,7 +6,7 @@
     </div>
 
     <!-- 登録に成功した時にスナックバーを表示する -->
-    <v-snackbar
+    <!-- <v-snackbar
       v-model="snackbar" 
       absolute
       top
@@ -14,7 +14,7 @@
       color="success"
     >
       <span>登録が完了しました！</span>
-    </v-snackbar>
+    </v-snackbar> -->
     
     <!-- 登録フォーム -->
     <v-card class="form-container" width="300">
@@ -108,6 +108,7 @@ import axios from 'axios'
         snackbar: false,
         show1: false,
         show2: false,
+        data: null,
         defaultForm,
         form: Object.assign({}, defaultForm),
         rules: {
@@ -142,18 +143,20 @@ import axios from 'axios'
       submit () {
         let that = this;
         axios.post('http://localhost/users', {user: {name: that.form.userName,
-                                              email: that.form.email,
-                                              password: that.form.password1,
-                                              password_confirmation: that.form.password2}})
+                                                     email: that.form.email,
+                                                     password: that.form.password1,
+                                                     password_confirmation: that.form.password2}},
+                                                    { withCredentials: true })
         .then(function (response) {
-            const error_message = response.data;
-            console.log(error_message);
+            that.data = response.data;
+            console.log(that.data);
+            that.$emit('logged-in-data', that.data);
         })
         .catch(function (error) {
             console.log(error);
         })    
 
-        this.snackbar = true
+        // this.snackbar = true
         this.resetForm()
       },
     },

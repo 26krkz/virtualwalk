@@ -28,7 +28,7 @@ export default {
     return {
       markerNum: null,
       items: null,
-      expand: null
+      expand: null,
     }
   },
   methods: {
