@@ -1,5 +1,8 @@
 class SessionsController < ApplicationController
   def new
+    logged_in?
+    data = { sucess: 'ログインしています',current_user: @current_user, loggedIn: @logged_in }
+    render json: data
   end
 
   def create

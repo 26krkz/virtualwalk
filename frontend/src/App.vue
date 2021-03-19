@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data(){
     return{
@@ -57,12 +58,25 @@ export default {
       userName: ''
     }
   },
+  mounted(){
+    // アプリを開いた時にログイン済みかどうか確認する
+    let that = this;
+        axios.get('http://localhost/login', { withCredentials: true })
+        .then(function (response) {
+            that.data = response.data;
+            that.loggedInUser = that.data.loggedIn;
+            that.userName = that.data.current_user.name;
+            console.log(that.data);
+        })
+        .catch(function (error) {
+        console.log(error);
+        })
+  },
   methods: {
     loggedInData(e){
       this.data = e;
       this.loggedInUser = this.data.loggedIn;
       this.userName = this.data.current_user.name;
-      
     }
   }
 }

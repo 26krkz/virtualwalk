@@ -145,11 +145,12 @@ import axios from 'axios'
         axios.post('http://localhost/users', {user: {name: that.form.userName,
                                                      email: that.form.email,
                                                      password: that.form.password1,
-                                                     password_confirmation: that.form.password2}})
+                                                     password_confirmation: that.form.password2}},
+                                                    { withCredentials: true })
         .then(function (response) {
             that.data = response.data;
             console.log(that.data);
-            that.$emit('logged-in', that.data.loggedIn);
+            that.$emit('logged-in-data', that.data);
         })
         .catch(function (error) {
             console.log(error);

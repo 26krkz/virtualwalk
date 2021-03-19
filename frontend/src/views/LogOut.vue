@@ -8,11 +8,11 @@ export default {
     },
     created(){
         let that = this;
-        axios.delete('http://localhost/login')
+        axios.delete('http://localhost/login', {withCredentials: true} )
         .then(function (response) {
             that.data = response.data;
             console.log(that.data);
-            that.$emit('logged-in', that.data.loggedIn);
+            that.$emit('logged-in-data', that.data);
             that.$router.push({ name: 'Home'})
         })
         .catch(function (error) {
