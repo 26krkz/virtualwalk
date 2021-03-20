@@ -1,6 +1,6 @@
 <template>
   <v-main>
-    <div class="signin-top">
+    <div class="login-top">
         <h4>Log in to virtualwalk</h4>
     </div>
 
@@ -45,6 +45,16 @@
                         @click:append="show1 = !show1"
                         ></v-text-field>
                     </v-col>
+                    <v-col cols="12" class="textfield">
+                      <v-checkbox
+                        v-model="form.remember_me"
+                        class="checkbox"
+                        label="ログインしたままにする"
+                        color="cyan"
+                        hide-details
+                       >
+                      </v-checkbox>
+                    </v-col>
 
                 </v-row>
             </v-container>
@@ -78,7 +88,7 @@ import axios from 'axios'
   export default {
     data () {
     //   Object.freezeにより以降オブジェクトの変更を防ぐ
-      const defaultForm = Object.freeze({ email: '', password: ''})
+      const defaultForm = Object.freeze({ email: '', password: '', remember_me: false })
 
       return {
         // snackbar: false,
@@ -108,7 +118,8 @@ import axios from 'axios'
         let that = this;
         axios.post('http://localhost/login',
                     {session: {email: that.form.email,
-                                password: that.form.password
+                                password: that.form.password,
+                                remember_me: that.form.remember_me
                                }
                     },
                     {withCredentials: true}
@@ -117,6 +128,7 @@ import axios from 'axios'
             that.data = response.data;
             console.log(that.data);
             that.$emit('logged-in-data', that.data);
+            that.$router.push({ name: 'Home'})
         })
         .catch(function (error) {
             console.log(error);
@@ -134,7 +146,7 @@ import axios from 'axios'
 </script>
 
 <style scoped>
- .signin-top {
+ .login-top {
      text-align: center;
      margin-top:4vw;
      margin-bottom: 2vw;
@@ -144,6 +156,9 @@ import axios from 'axios'
  }
  .text-field {
      padding: 0;
+ }
+ .checkbox {
+   margin-top:0;
  }
  .login {
      text-decoration: none;

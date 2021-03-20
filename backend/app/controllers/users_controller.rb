@@ -8,11 +8,10 @@ class UsersController < ApplicationController
         @user = User.new(user_params)
         if @user.save
             log_in @user
-            current_user
             logged_in?
-            data = { sucess: '登録が完了しました。', name: @user.name, current_user: @current_user, loggedIn: @logged_in}
+            data = { sucess: '登録が完了しました!', current_user: @current_user, loggedIn: @logged_in}
         else
-            data = { errors: [@user.errors.full_messages] }
+            data = { error: [@user.errors.full_messages] }
         end
         render json: data
     end

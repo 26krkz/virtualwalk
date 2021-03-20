@@ -2,9 +2,10 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import SignUp from '../views/SignUp.vue'
-import SignIn from '../views/SignIn.vue'
+import LogIn from '../views/LogIn.vue'
 import LogOut from '../views/LogOut.vue'
-// import Users from '../views/Users.vue'
+import GuestUser from '../views/GuestUser.vue'
+import User from '../views/User.vue'
 
 Vue.use(VueRouter)
 
@@ -20,21 +21,25 @@ const routes = [
     component: SignUp
   },
   {
-    path: '/signin',
-    name: 'SignIn',
-    component: SignIn
+    path: '/login',
+    name: 'LogIn',
+    component: LogIn
   },
   {
     path: '/logout',
-    // redirect: { name: 'Home' },
     name: 'Logout',
     component: LogOut
   },
-  // {
-  //   path: '/users/:id',
-  //   name: 'Users',
-  //   component: Users
-  // }
+  {
+    path: '/guest',
+    name: 'GuestUser',
+    component: GuestUser
+  },
+  {
+    path: '/:username',
+    name: 'User',
+    component: User,
+  },
 
 ]
 

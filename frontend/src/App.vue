@@ -17,9 +17,14 @@
 
     <!-- ログインしていた場合表示されるnav -->
       <div v-if="loggedInUser">
-        <v-btn text >
+        <!-- <v-btn text >
           <span class="mr-3">{{ userName }}</span>
-        </v-btn>
+        </v-btn> -->
+
+        <router-link :to="{ name: 'User', params: { username: userName, data: data }}"
+                      class="nav-btn mr-3">
+          <v-btn text >{{ userName }}</v-btn>
+        </router-link>
 
         <router-link to="/logout" class="nav-btn mr-3" >
           <v-btn text >log out</v-btn>
@@ -28,7 +33,7 @@
 
     <!-- ログインしていない場合表示されるnav -->
       <div v-else>
-        <router-link to="/users/guest" class="nav-btn mr-3">
+        <router-link to="/guest" class="nav-btn mr-3">
           <v-btn text>ゲストユーザーでログイン</v-btn>
         </router-link>
 
@@ -36,7 +41,7 @@
           <v-btn text>sign up</v-btn>
         </router-link>
 
-        <router-link to="/signin" class="nav-btn mr-3">
+        <router-link to="/login" class="nav-btn mr-3">
           <v-btn text>log in</v-btn>
         </router-link>
       </div>
