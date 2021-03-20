@@ -8,16 +8,21 @@ export default {
     },
     created(){
         let that = this;
-        axios.delete('http://localhost/login', {withCredentials: true} )
-        .then(function (response) {
-            that.data = response.data;
-            console.log(that.data);
-            that.$emit('logged-in-data', that.data);
-            that.$router.push({ name: 'Home'})
-        })
-        .catch(function (error) {
-        console.log(error);
-        })
+        let result = confirm('ログアウトしますか？');
+        if( result ){
+            axios.delete('http://localhost/login', {withCredentials: true} )
+            .then(function (response) {
+                that.data = response.data;
+                console.log(that.data);
+                that.$emit('logged-in-data', that.data);
+                that.$router.push({ name: 'Home'})
+            })
+            .catch(function (error) {
+            console.log(error);
+            })
+        }else{
+            this.$router.push({ name: 'Home'})
+        }
 
     }
 }
