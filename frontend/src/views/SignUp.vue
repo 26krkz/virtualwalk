@@ -4,17 +4,6 @@
         <h4>Start virtualwalk</h4>
         <h1>Create your account!</h1>
     </div>
-
-    <!-- 登録に成功した時にスナックバーを表示する -->
-    <!-- <v-snackbar
-      v-model="snackbar" 
-      absolute
-      top
-      right
-      color="success"
-    >
-      <span>登録が完了しました！</span>
-    </v-snackbar> -->
     
     <!-- 登録フォーム -->
     <v-card class="form-container" width="300">
@@ -108,7 +97,7 @@ import axios from 'axios'
         snackbar: false,
         show1: false,
         show2: false,
-        data: null,
+        info: null,
         defaultForm,
         form: Object.assign({}, defaultForm),
         rules: {
@@ -148,15 +137,14 @@ import axios from 'axios'
                                                      password_confirmation: that.form.password2}},
                                                     { withCredentials: true })
         .then(function (response) {
-            that.data = response.data;
-            console.log(that.data);
-            that.$emit('logged-in-data', that.data);
+            that.info = response.data;
+            that.$emit('logged-in-info', that.info);
+            that.$router.push({ name: 'Home'})
         })
         .catch(function (error) {
             console.log(error);
         })    
 
-        // this.snackbar = true
         this.resetForm()
       },
     },

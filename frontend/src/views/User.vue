@@ -9,7 +9,7 @@
 export default {
     data(){
         return{
-            userData: this.$route.params.data.current_user,
+            userData: this.$route.params.info.current_user,
         }
     },
 }

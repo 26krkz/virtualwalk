@@ -39,7 +39,7 @@ export default {
       this.items= e;
     },
     expandWindow(e){
-        this.expand = e;
+      this.expand = e;
     }
   },
 

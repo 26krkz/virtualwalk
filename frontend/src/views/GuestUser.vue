@@ -5,22 +5,22 @@ export default {
         return {
             email: 'guest@gmail.com',
             password: 'guestuser',
+            info: null,
         }
     },
-    mounted(){
+    created(){
         let that = this;
         axios.post('http://localhost/login',
                     {session: {email: that.email,
                                 password: that.password,
-                                remember_me: true
+                                remember_me: false
                                }
                     },
                     {withCredentials: true}
                    )
         .then(function (response) {
-            that.data = response.data;
-            console.log(that.data);
-            that.$emit('logged-in-data', that.data);
+            that.info = response.data;
+            that.$emit('logged-in-info', that.info);
             that.$router.push({ name: 'Home'})
         })
         .catch(function (error) {

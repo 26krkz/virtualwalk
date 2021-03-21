@@ -3,7 +3,7 @@ import axios from 'axios'
 export default {
     data(){
         return{
-            data: null,
+            info: null,
         }
     },
     created(){
@@ -12,9 +12,8 @@ export default {
         if( result ){
             axios.delete('http://localhost/login', {withCredentials: true} )
             .then(function (response) {
-                that.data = response.data;
-                console.log(that.data);
-                that.$emit('logged-in-data', that.data);
+                that.info = response.data;
+                that.$emit('logged-in-info', that.info);
                 that.$router.push({ name: 'Home'})
             })
             .catch(function (error) {
