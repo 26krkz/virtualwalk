@@ -9,11 +9,28 @@ class UsersController < ApplicationController
         if @user.save
             log_in @user
             logged_in?
-            data = { sucess: '登録が完了しました!', current_user: @current_user, loggedIn: @logged_in}
+            info = { message: '登録が完了しました！', current_user: @current_user, loggedIn: @logged_in}
         else
-            data = { error: [@user.errors.full_messages] }
+            info = { error: [@user.errors.full_messages] }
         end
-        render json: data
+        render json: info
+    end
+
+    def update
+        @user = User.find(params[:id])
+        if @user.update(user_params)
+            logged_in?
+            info = { message: 'プロフィールを変更しました！', current_user: @current_user, loggedIn: @logged_in }
+        else
+            info = { error: [@user.errors.full_messages] }
+        end
+        render json: info
+    end
+
+    def destroy
+        User.find(params[:id]).destroy
+        info = { message: '退会しました'}
+        render json: info
     end
 
     private

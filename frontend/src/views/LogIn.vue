@@ -3,17 +3,6 @@
     <div class="login-top">
         <h4>Log in to virtualwalk</h4>
     </div>
-
-    <!-- 登録に成功した時にスナックバーを表示する -->
-    <!-- <v-snackbar
-      v-model="snackbar" 
-      absolute
-      top
-      right
-      color="success"
-    >
-      <span>ログインしました</span>
-    </v-snackbar> -->
     
     <!-- 登録フォーム -->
     <v-card class="form-container" width="300">
@@ -96,7 +85,7 @@ import axios from 'axios'
         defaultForm,
         form: Object.assign({}, defaultForm),
         user: null,
-        data: null
+        info: null
       }
     },
 
@@ -116,28 +105,28 @@ import axios from 'axios'
       },
       submit () {
         let that = this;
-        axios.post('http://localhost/login',
-                    {session: {email: that.form.email,
-                                password: that.form.password,
-                                remember_me: that.form.remember_me
+        const url = 'http://localhost/login';
+        let params = {session: {email: this.form.email,
+                                password: this.form.password,
+                                remember_me: this.form.remember_me
                                }
-                    },
-                    {withCredentials: true}
-                   )
+                      };
+
+        axios.post(url, params, {withCredentials: true} )
         .then(function (response) {
-            that.data = response.data;
-            console.log(that.data);
-            that.$emit('logged-in-data', that.data);
-            that.$router.push({ name: 'Home'})
+            that.info = response.data;
+            that.$emit('logged-in-info', that.info);
+            if( that.info.current_user ){
+              that.$router.push({ name: 'Home' })
+            }else{
+              that.$touter.push({ name: 'User' })
+            }
         })
         .catch(function (error) {
             console.log(error);
         })
         
-        // this.snackbar = true
         this.resetForm()
-
-        // this.$router.push({ name: 'Home'})
 
         
       },

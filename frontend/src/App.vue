@@ -11,17 +11,14 @@
       <v-spacer></v-spacer>
 
 
-      <v-btn text>
-        <span class="mr-3">how to use</span>
-      </v-btn>
+      <router-link to="/about" class="nav-btn mr-3" >
+          <v-btn text >virtualwalkとは</v-btn>
+        </router-link>
 
     <!-- ログインしていた場合表示されるnav -->
       <div v-if="loggedInUser">
-        <!-- <v-btn text >
-          <span class="mr-3">{{ userName }}</span>
-        </v-btn> -->
 
-        <router-link :to="{ name: 'User', params: { username: userName, data: data }}"
+        <router-link :to="{ name: 'User', params: { username: userName, info: info }}"
                       class="nav-btn mr-3">
           <v-btn text >{{ userName }}</v-btn>
         </router-link>
@@ -49,7 +46,21 @@
     </v-app-bar>
   </header>
 
-  <router-view @logged-in-data="loggedInData"></router-view>
+    <!-- error or messageがあったらスナックバーを表示する -->
+    <v-snackbar
+      class="snackbar"
+      v-model="snackbar" 
+      :color="snackbarColor"
+      top
+      right
+      elevation="7"
+      transition="slide-x-reverse-transition"
+      timeout="3000"
+    >
+      <span>{{ snackbarText }}</span>
+    </v-snackbar>
+
+  <router-view @logged-in-info="loggedInInfo"></router-view>
   </v-app>
 </template>
 
@@ -58,30 +69,45 @@ import axios from 'axios';
 export default {
   data(){
     return{
-      data: null,
+      snackbar: false,
+      snackbarText: '',
+      snackbarColor: '',
+      info: null,
       loggedInUser: false,
       userName: ''
     }
   },
-  mounted(){
+  created(){
     // アプリを開いた時にログイン済みかどうか確認する
     let that = this;
         axios.get('http://localhost/login', { withCredentials: true })
         .then(function (response) {
-            that.data = response.data;
-            that.loggedInUser = that.data.loggedIn;
-            that.userName = that.data.current_user.name;
-            console.log(that.data);
+            that.info = response.data;
+            that.loggedInUser = that.info.loggedIn;
+            that.userName = that.info.current_user.name;
         })
         .catch(function (error) {
         console.log(error);
         })
   },
   methods: {
-    loggedInData(e){
-      this.data = e;
-      this.loggedInUser = this.data.loggedIn;
-      this.userName = this.data.current_user.name;
+    loggedInInfo(e){
+      this.info = e;
+      this.loggedInUser = this.info.loggedIn;
+      this.snackbarText = this.info.message;
+      if(this.info.current_user){
+        this.userName = this.info.current_user.name;
+        this.snackbarColor = 'green';
+      }else{
+        this.snackbarColor  = 'red';
+      }
+      this.snackbar = true;
+
+      //snackbarが表示されて3秒後に消えた後、再びsnackbarをfalseにセットする
+      let that = this;
+      setTimeout(function(){
+        that.snackbar = false;
+      }, 4000);
     }
   }
 }
@@ -91,5 +117,9 @@ export default {
  .home-btn, .nav-btn {
    color: #fff;
    text-decoration: none;
+ }
+ .snackbar {
+   position:absolute;
+   top:5px;
  }
 </style>

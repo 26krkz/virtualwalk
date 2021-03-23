@@ -7,7 +7,7 @@
       <v-row>
         <v-col cols='4' class="select-movie">
             <img v-bind:src="items[markerNum].snippet.thumbnails.medium.url">
-            <p class="title">{{ items[markerNum].snippet.title }}</p>
+            <!-- <p class="title">{{ items[markerNum].snippet.title }}</p> -->
         </v-col>
         <v-col cols='2'>
 
