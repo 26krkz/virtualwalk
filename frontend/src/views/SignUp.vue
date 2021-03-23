@@ -129,13 +129,17 @@ import axios from 'axios'
         this.form = Object.assign({}, this.defaultForm)
         this.$refs.form.reset()
       },
-      submit () {
+      submit() {
         let that = this;
-        axios.post('http://localhost/users', {user: {name: that.form.userName,
-                                                     email: that.form.email,
-                                                     password: that.form.password1,
-                                                     password_confirmation: that.form.password2}},
-                                                    { withCredentials: true })
+        const url = 'http://localhost/users';
+        let params = {user: {name: this.form.userName,
+                             email: this.form.email,
+                             password: this.form.password1,
+                             password_confirmation: this.form.password2
+                             }
+                      };
+
+        axios.post( url, params, { withCredentials: true })
         .then(function (response) {
             that.info = response.data;
             that.$emit('logged-in-info', that.info);

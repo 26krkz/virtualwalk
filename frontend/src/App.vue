@@ -11,9 +11,9 @@
       <v-spacer></v-spacer>
 
 
-      <v-btn text>
-        <span class="mr-3">how to use</span>
-      </v-btn>
+      <router-link to="/about" class="nav-btn mr-3" >
+          <v-btn text >virtualwalkとは</v-btn>
+        </router-link>
 
     <!-- ログインしていた場合表示されるnav -->
       <div v-if="loggedInUser">
@@ -50,7 +50,7 @@
     <v-snackbar
       class="snackbar"
       v-model="snackbar" 
-      color="success"
+      :color="snackbarColor"
       top
       right
       elevation="7"
@@ -70,7 +70,8 @@ export default {
   data(){
     return{
       snackbar: false,
-      snackbarText: 'sample',
+      snackbarText: '',
+      snackbarColor: '',
       info: null,
       loggedInUser: false,
       userName: ''
@@ -96,6 +97,9 @@ export default {
       this.snackbarText = this.info.message;
       if(this.info.current_user){
         this.userName = this.info.current_user.name;
+        this.snackbarColor = 'green';
+      }else{
+        this.snackbarColor  = 'red';
       }
       this.snackbar = true;
 

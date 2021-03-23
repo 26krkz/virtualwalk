@@ -105,19 +105,21 @@ import axios from 'axios'
       },
       submit () {
         let that = this;
-        axios.post('http://localhost/login',
-                    {session: {email: that.form.email,
-                                password: that.form.password,
-                                remember_me: that.form.remember_me
+        const url = 'http://localhost/login';
+        let params = {session: {email: this.form.email,
+                                password: this.form.password,
+                                remember_me: this.form.remember_me
                                }
-                    },
-                    {withCredentials: true}
-                   )
+                      };
+
+        axios.post(url, params, {withCredentials: true} )
         .then(function (response) {
             that.info = response.data;
+            that.$emit('logged-in-info', that.info);
             if( that.info.current_user ){
-              that.$emit('logged-in-info', that.info);
-              that.$router.push({ name: 'Home'})
+              that.$router.push({ name: 'Home' })
+            }else{
+              that.$touter.push({ name: 'User' })
             }
         })
         .catch(function (error) {

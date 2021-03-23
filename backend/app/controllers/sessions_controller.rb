@@ -12,10 +12,10 @@ class SessionsController < ApplicationController
       logged_in?                    #そこで@current_userと@looged_inを取得するためにlooged_in?を追加している
       params[:session][:remember_me] == true ? remember(user) : forget(user)
       #ユーザーログイン後にsucessメッセージとuser nameをrenderする
-      info = { message: 'ログインしました!', current_user: @current_user, loggedIn: @logged_in }
+      info = { message: 'ログインしました！', current_user: @current_user, loggedIn: @logged_in }
     else
       #ログインに失敗したらエラーメッセージをrenderする
-      info = { error: ['メールアドレスまたはパスワードが正しくありません。'] }
+      info = { message: 'メールアドレスまたはパスワードが正しくありません。' }
     end
     render json: info
   end
@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
   def destroy
     log_out if logged_in?
     logged_in?
-    info = { message: 'ログアウトしました!', loggedIn: @logged_in }
+    info = { message: 'ログアウトしました', loggedIn: @logged_in }
     render json: info
   end
 

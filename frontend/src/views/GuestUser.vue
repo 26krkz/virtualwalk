@@ -10,14 +10,14 @@ export default {
     },
     created(){
         let that = this;
-        axios.post('http://localhost/login',
-                    {session: {email: that.email,
-                                password: that.password,
+        const url = 'http://localhost/login';
+        let params = {session: {email: this.email,
+                                password: this.password,
                                 remember_me: false
                                }
-                    },
-                    {withCredentials: true}
-                   )
+                      };
+
+        axios.post( url, params, {withCredentials: true} )
         .then(function (response) {
             that.info = response.data;
             that.$emit('logged-in-info', that.info);
