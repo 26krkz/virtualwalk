@@ -3,16 +3,16 @@
       <v-container fluid>
         <v-row>
           <v-col cols="9">
-            <GoogleMap @change-marker-num="changeMarkerNum" @expand-window="expandWindow"></GoogleMap>
+            <GoogleMap @select-video-id="selectVideoId" @expand-window="expandWindow"></GoogleMap>
           </v-col>
           <v-col cols="3">
-            <Ranking :items='items' @change-marker-num="changeMarkerNum"></Ranking>
+            <Ranking :items='items' @select-video-id="selectVideoId"></Ranking>
           </v-col>
         </v-row>
       </v-container>
       
       <ImportPlaylist @playlist-items="playlistItems"></ImportPlaylist>
-      <Youtube :marker-num='markerNum' :items='items' :expand='expand'></Youtube>
+      <Youtube :video-id='videoId' :items='items' :expand='expand'></Youtube>
     </v-main>
 </template>
 
@@ -26,17 +26,18 @@ export default {
   name: 'App',
   data(){
     return {
-      markerNum: null,
+      videoId: '',
       items: null,
       expand: null,
     }
   },
   methods: {
-    changeMarkerNum(e){
-      this.markerNum = e;
+    selectVideoId(e){
+      this.videoId = e;
     },
     playlistItems(e){
       this.items= e;
+      console.log(this.items)
     },
     expandWindow(e){
       this.expand = e;

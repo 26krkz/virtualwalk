@@ -102,7 +102,7 @@
 import axios from 'axios'
   export default {
     data () {
-    //   Object.freezeにより以降オブジェクトの変更を防ぐ
+    //   Object.freezeにより以降オブジェクトの変更を防ぎ空のオブジェクトを保つ
     //   let that = this;
       const defaultForm = Object.freeze({ userName: '', email: '', password1: '', password2: '' })
 

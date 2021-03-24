@@ -6,8 +6,9 @@
       </v-btn>
       <v-row>
         <v-col cols='4' class="select-movie">
-            <img v-bind:src="items[markerNum].snippet.thumbnails.medium.url">
-            <!-- <p class="title">{{ items[markerNum].snippet.title }}</p> -->
+            <img v-bind:src="item.snippet.thumbnails.medium.url">
+            <p>{{ videoData.country }}</p>
+            <p>{{ videoData.region }}</p>
         </v-col>
         <v-col cols='2'>
 
@@ -54,11 +55,14 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
-  props: ['markerNum', 'items', 'expand'],
+  props: ['videoId', 'items', 'expand'],
   data(){
       return{
           apiKey: null,
+          videoData: [],
+          item: [],
           selectedMovieUrl: '',
           startTime: '',
           playingTime: '',
@@ -80,13 +84,33 @@ export default {
           heartIcon: "mdi-heart-outline",
       };
   },
+  watch: {
+      videoId: function(){
+                    let that = this;
+                    const url = 'http://localhost/videos/' + this.videoId;
+            
+                    axios.get(url, {withCredentials: true} )
+                    .then(function (response) {
+                        that.videoData = response.data;
+                        console.log(that.videoData);
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                    for(let i = 0;i < this.items.length; i++){
+                        if(this.items[i].snippet.resourceId.videoId == this.videoId){
+                            this.item = this.items[i];
+                        }
+                    }
+                }
+  },
   methods: {
     // 開始時間と再生時間の和を終了時間としてendTimeに代入している
     EndTime(){
             this.endTime = Number(this.startTime) + Number(this.playingTime);
     },
     Resume(){
-        this.selectedMovieUrl= 'https://www.youtube.com/embed/' + this.items[this.markerNum].snippet.resourceId.videoId
+        this.selectedMovieUrl= 'https://www.youtube.com/embed/' + this.item.snippet.resourceId.videoId
                                 + '?start=' + this.startTime
                                 + '&end=' + this.endTime;
 

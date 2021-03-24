@@ -23,10 +23,10 @@ export default {
                 minZoom: 1.9,
             },
             markerLocation: [
-                        {lat:49.2802229, lng: -123.1265343, id: '0'},
-                        {lat:47.6054117, lng: -122.3530468, id: '1'},
-                        {lat:41.8902142, lng: 12.4900422,   id: '2' },
-                        {lat:59.9311985, lng: 30.3541205,   id: '3' },
+                        {lat:49.2802229, lng: -123.1265343, videoId: 'lh8dNmneVyY' },
+                        {lat:47.6054117, lng: -122.3530468, videoId: '3EaCj-seAHM' },
+                        {lat:41.8902142, lng: 12.4900422,   videoId: 'eJeF7hDB0UA' },
+                        {lat:59.9311985, lng: 30.3541205,   videoId: 'unSFkZQiqDs' },
                        ],
             markers: [],
             markerNum: 0,
@@ -56,7 +56,7 @@ export default {
             let marker = new this.google.maps.Marker({
                 position: this.markerLocation[i],
                 map: this.map,
-                title: this.markerLocation[i].id,
+                // title: this.markerLocation[i].id,
             });
             this.markers.push(marker);          //生成したマーカーをマーカー配列にpushする
             marker.addListener('click', ()=>{          //マーカーをクリックしたときのイベント
@@ -70,7 +70,7 @@ export default {
                     marker.setAnimation(null);
                     this.$emit('expand-window', false)
                 }
-                this.$emit('change-marker-num', this.markerLocation[i].id);    //event upで選択したマーカーのidをApp.vueに渡す。
+                this.$emit('select-video-id', this.markerLocation[i].videoId);    //event upで選択したマーカーのidをApp.vueに渡す。
             });
         }
       }
