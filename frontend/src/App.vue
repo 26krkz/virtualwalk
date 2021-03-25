@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="body">
   <header>
     <v-app-bar app color="cyan" dark>
 
@@ -114,6 +114,10 @@ export default {
 </script>
 
 <style scoped>
+ .body {
+   font-family: Helvetica, Arial, sans-serif;
+   font-size: 0.875rem;
+}
  .home-btn, .nav-btn {
    color: #fff;
    text-decoration: none;

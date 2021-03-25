@@ -7,8 +7,8 @@
       <v-row>
         <v-col cols='4' class="select-movie">
             <img v-bind:src="item.snippet.thumbnails.medium.url">
-            <p>{{ videoData.country }}</p>
-            <p>{{ videoData.region }}</p>
+            <p><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.country }}</p>
+            <p><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.region }}</p>
         </v-col>
         <v-col cols='2'>
 
