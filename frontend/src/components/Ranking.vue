@@ -13,7 +13,7 @@ export default {
     props: ['items'],
     methods: {
         selectMovie(){
-            this.$emit('change-marker-num', 1);
+            this.$emit('select-video-id', 1);
         }
     }
 }
