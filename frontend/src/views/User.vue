@@ -109,7 +109,7 @@ import axios from 'axios'
       return {
         expand1: false,
         expand2: false,
-        userData: this.$route.params.info.current_user,
+        userData: this.$route.params.current_user,
         snackbar: false,
         show1: false,
         show2: false,

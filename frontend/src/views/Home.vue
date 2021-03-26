@@ -37,7 +37,6 @@ export default {
     },
     playlistItems(e){
       this.items= e;
-      console.log(this.items)
     },
     expandWindow(e){
       this.expand = e;

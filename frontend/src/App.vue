@@ -18,9 +18,9 @@
     <!-- ログインしていた場合表示されるnav -->
       <div v-if="loggedInUser">
 
-        <router-link :to="{ name: 'User', params: { username: userName, info: info }}"
+        <router-link :to="{ name: 'User', params: { username:current_user.name, current_user:current_user }}"
                       class="nav-btn mr-3">
-          <v-btn text >{{ userName }}</v-btn>
+          <v-btn text >{{ current_user.name }}</v-btn>
         </router-link>
 
         <router-link to="/logout" class="nav-btn mr-3" >
@@ -74,7 +74,7 @@ export default {
       snackbarColor: '',
       info: null,
       loggedInUser: false,
-      userName: ''
+      current_user: null
     }
   },
   created(){
@@ -83,8 +83,10 @@ export default {
         axios.get('http://localhost/login', { withCredentials: true })
         .then(function (response) {
             that.info = response.data;
-            that.loggedInUser = that.info.loggedIn;
-            that.userName = that.info.current_user.name;
+            if(that.info.current_user){
+              that.loggedInUser = that.info.loggedIn;
+              that.current_user = that.info.current_user;
+            }
         })
         .catch(function (error) {
         console.log(error);
@@ -96,7 +98,7 @@ export default {
       this.loggedInUser = this.info.loggedIn;
       this.snackbarText = this.info.message;
       if(this.info.current_user){
-        this.userName = this.info.current_user.name;
+        this.current_user = this.info.current_user;
         this.snackbarColor = 'green';
       }else{
         this.snackbarColor  = 'red';

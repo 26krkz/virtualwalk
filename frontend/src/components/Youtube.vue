@@ -12,7 +12,7 @@
         </v-col>
         <v-col cols='2'>
 
-            <v-btn block @click="addFavorite">
+            <v-btn v-show="show1" block @click="addFavorite">
                 お気に入りに追加
                 <v-icon v-bind:color="heartColor">{{ heartIcon }}</v-icon>
             </v-btn>
@@ -47,7 +47,7 @@
             <iframe width="560" height="315" 
                 v-bind:src="selectedMovieUrl" frameborder="0" allowfullscreen>
             </iframe>
-            <div class="iframe-cover" v-show="show">表示ボタンを押してね</div>
+            <div class="iframe-cover" v-show="show2">表示ボタンを押してね</div>
         </v-col>
       </v-row>
   </v-container>
@@ -61,13 +61,17 @@ export default {
   data(){
       return{
           apiKey: null,
-          videoData: [],
+          current_user: null,
+          videoData: null,
           item: [],
+          show1: false,
+          show2: true,
+          heartColor: null,
+          heartIcon: "mdi-heart-outline",
           selectedMovieUrl: '',
           startTime: '',
           playingTime: '',
           endTime: '',
-          show: true,
           sTimes: [
               { text: '0 : 10', value: '600'},
               { text: '0 : 30', value: '1800'},
@@ -80,19 +84,37 @@ export default {
               { text: '30 mim', value: '1800'},
               { text: '1 h',    value: '3600'},
           ],
-          heartColor: null,
-          heartIcon: "mdi-heart-outline",
       };
   },
+  created(){
+    // アプリを開いた時にログイン済みかどうか確認する。
+    // ログイン済みの場合のみ（jsonにcurrent_userが含まれる）、current_userを取得＋お気に入りボタンを表示
+    let that = this;
+        axios.get('http://localhost/login', { withCredentials: true })
+        .then(function (response) {
+            const info = response.data;
+            if(info.current_user){
+              that.current_user = info.current_user;
+              that.show1 = true;
+            }
+        })
+        .catch(function (error) {
+        console.log(error);
+        })
+  },
   watch: {
+    //   マップ上のマーカーが押されpropsで取得したvideoIdが更新されるたびに以下を実行
       videoId: function(){
                     let that = this;
+
+                    //    videoIdを元にdb上のvideoテーブルからvideoIdと一致するvideo_idをもつデータを取得
+                    //    データ取得後、propsで取得したyoutubeのプレイリストの動画の中から取得したデータと一致する動画をitemに格納
                     const url = 'http://localhost/videos/' + this.videoId;
             
                     axios.get(url, {withCredentials: true} )
                     .then(function (response) {
                         that.videoData = response.data;
-                        console.log(that.videoData);
+                        that.whetherAddedFavorite();
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -102,7 +124,7 @@ export default {
                             this.item = this.items[i];
                         }
                     }
-                }
+                },
   },
   methods: {
     // 開始時間と再生時間の和を終了時間としてendTimeに代入している
@@ -115,6 +137,27 @@ export default {
                                 + '&end=' + this.endTime;
 
         if(this.show == true){this.show = false;}  //初めて表示ボタンを押す時には.iframe-coverを外す。
+    },
+    whetherAddedFavorite(){
+         // ログインしているユーザーがお気に入りした全ての動画のvideo_idを取得し、その中に選択した動画のidがあるか調べる。
+         // あればお気に入り登録されているのでハートマークを赤色に、なければそのままにする。
+        let that = this;
+        axios.get('http://localhost/users/favorites', {withCredentials: true} )
+        .then(function (response) {
+            let favoriteList = response.data;
+            for(let i = 0;i < favoriteList.length; i++){
+                if(favoriteList[i].id == that.videoData.id){
+                    that.heartIcon = "mdi-heart";
+                    that.heartColor = "pink";
+                }else{
+                    that.heartIcon = "mdi-heart-outline";
+                    that.heartColor = null;
+                }
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
     },
     addFavorite(){
       if(this.heartIcon == "mdi-heart-outline"){

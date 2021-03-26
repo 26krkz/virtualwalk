@@ -33,6 +33,15 @@ class UsersController < ApplicationController
         render json: info
     end
 
+    #ログインしているユーザーがお気に入りした動画のvideo_idを取得
+    def favorites
+        current_user
+
+        favorites = Favorite.where(user_id: @current_user.id).pluck(:video_id)
+        @favorite_list = Video.find(favorites)
+        render json: @favorite_list
+    end
+
     private
 
         def user_params
