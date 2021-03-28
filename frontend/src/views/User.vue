@@ -92,28 +92,37 @@
             </v-form>
         </v-card>
     </v-expand-transition>
+    <ImportPlaylist @playlist-items="playlistItems"></ImportPlaylist>
     <div>
-        お気に入り一覧
+        <p>お気に入り一覧</p>
+        <div v-for="favoriteVideo of favoriteVideos" v-bind:key="favoriteVideo.id">
+            <img :src="favoriteVideo.snippet.thumbnails.medium.url">
+            <hr>
+        </div>
+        <p>end</p>
     </div>
 </v-main>
 </template>
 
 <script>
 import axios from 'axios'
+import ImportPlaylist from '../components/ImportPlaylist';
   export default {
     data () {
     //   Object.freezeにより以降オブジェクトの変更を防ぎ空のオブジェクトを保つ
-    //   let that = this;
       const defaultForm = Object.freeze({ userName: '', email: '', password1: '', password2: '' })
 
       return {
         expand1: false,
         expand2: false,
-        userData: this.$route.params.info.current_user,
+        userData: this.$route.params.current_user,
         snackbar: false,
         show1: false,
         show2: false,
         info: null,
+        items: null,
+        favoriteList: null,
+        favoriteVideos: [],
         defaultForm,
         form: Object.assign({}, this.defaultForm),
         rules: {
@@ -123,10 +132,25 @@ import axios from 'axios'
             return pattern.test(value) || '有効なメールアドレスを入力してください'
           },
           required: value => !!value || 'Passwordは必須です',
-          min: value => value.length >= 6 || '6字以上で作成してください',
+          min: value => value&&value.length >= 6 || '6字以上で作成してください',
           issame: value => value == this.form.password1 || '同じパスワードを入力してください',
         },
       }
+    },
+    mounted(){
+        let that = this;
+        axios.get('http://localhost/users/favorites', {withCredentials: true} )
+        .then(function (response) {
+            that.favoriteList = response.data;
+            // that.favoriteVideos = [];   //既に追加されているお気に入りをリストから外すとその後のお気に入りリストが上手く表示されなくなるからここで一度リセット。
+            console.log('in axios')
+            that.sample();
+            that.compareFavoriteListAndItems();
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
     },
     computed: {
       formIsValid () {
@@ -136,7 +160,6 @@ import axios from 'axios'
         )
       },
     },
-
     methods: {
       resetForm () {
         this.form = Object.assign({}, this.defaultForm)
@@ -181,8 +204,28 @@ import axios from 'axios'
         }else{
             this.$router.push({ name: 'User'})
         }
+       },
+       playlistItems(e){
+          this.items= e;
+       },
+       compareFavoriteListAndItems(){
+           for(let i = 0; this.favoriteList&&this.favoriteList.length > i; i++){
+               let favorite = this.favoriteList[i].video_id;
+               for(let i = 0; this.items&&this.items.length > i; i++){
+                   if(favorite == this.items[i].snippet.resourceId.videoId){
+                       this.favoriteVideos.push(this.items[i]);
+                   }
+               }
+           }
+           console.log('in compare');
+       },
+       sample(){
+           console.log('sample');
        }
     },
+    components: {
+    ImportPlaylist,
+    }
   }
 </script>
 
