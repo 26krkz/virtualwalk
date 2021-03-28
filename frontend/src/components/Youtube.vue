@@ -180,7 +180,7 @@ export default {
       if(this.heartIcon == "mdi-heart-outline"){
           this.heartIcon = "mdi-heart";
           this.heartColor = "pink";
-        //   this.addFavorite();
+          this.addFavorite();
       }else{
           this.heartIcon = "mdi-heart-outline";
           this.heartColor = null;
@@ -211,9 +211,8 @@ export default {
         //既にお気に入りに登録している場合、favoritesテーブルのuser_idとvideo_idの一致するデータを削除する。
         let that = this;
         const url = 'http://localhost/favorite';
-        // let params = {data: { video_id: this.videoData.id }};
-        // console.log(params)
-        axios.delete( url, { withCredentials: true })
+        let params = { data: { video_id: this.videoData.id, user_id: this.current_user.id } };
+        axios.delete( url, params, { withCredentials: true })
         .then(function (response) {
             that.snackbarText = response.data.message;
             console.log(response.data)
