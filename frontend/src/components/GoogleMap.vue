@@ -16,8 +16,8 @@ export default {
             apiKey: process.env.VUE_APP_GOOGLE_MAP_API_KEY,
             mapConfig: {
                 center: {
-                    lat: 35.68944,
-                    lng: 139.69167
+                    lat: 35,
+                    lng: 155
                 },
                 zoom: 1.9,
                 minZoom: 1.9,
@@ -27,6 +27,7 @@ export default {
                         {lat:47.6054117, lng: -122.3530468, videoId: '3EaCj-seAHM' },
                         {lat:41.8902142, lng: 12.4900422,   videoId: 'eJeF7hDB0UA' },
                         {lat:59.9311985, lng: 30.3541205,   videoId: 'unSFkZQiqDs' },
+                        {lat:32.3518153, lng: 35.0150653,   videoId: 'NYUWOdMkay0' },
                        ],
             markers: [],
             markerNum: 0,

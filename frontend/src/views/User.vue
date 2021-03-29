@@ -92,21 +92,18 @@
             </v-form>
         </v-card>
     </v-expand-transition>
-    <ImportPlaylist @playlist-items="playlistItems"></ImportPlaylist>
     <div>
         <p>お気に入り一覧</p>
         <div v-for="favoriteVideo of favoriteVideos" v-bind:key="favoriteVideo.id">
             <img :src="favoriteVideo.snippet.thumbnails.medium.url">
             <hr>
         </div>
-        <p>end</p>
     </div>
 </v-main>
 </template>
 
 <script>
 import axios from 'axios'
-import ImportPlaylist from '../components/ImportPlaylist';
   export default {
     data () {
     //   Object.freezeにより以降オブジェクトの変更を防ぎ空のオブジェクトを保つ
@@ -120,11 +117,12 @@ import ImportPlaylist from '../components/ImportPlaylist';
         show1: false,
         show2: false,
         info: null,
-        items: null,
+        items: [],
         favoriteList: null,
         favoriteVideos: [],
         defaultForm,
         form: Object.assign({}, this.defaultForm),
+        //ユーザー登録欄のバリデーション
         rules: {
           name: [value => (value || '').length > 0 || 'user nameは必須です'],
           email: value => {
@@ -135,21 +133,25 @@ import ImportPlaylist from '../components/ImportPlaylist';
           min: value => value&&value.length >= 6 || '6字以上で作成してください',
           issame: value => value == this.form.password1 || '同じパスワードを入力してください',
         },
+        //youtubeから指定のプレイリストの動画を取得するのに必要なparams
+        getPlayListParams: {
+            part: 'snippet',
+            playlistId: process.env.VUE_APP_YOUTUBE_PLAYLIST_ID, /*Youtubeのplaylist id*/
+            key: process.env.VUE_APP_YOUTUBE_API_KEY
+        },
       }
     },
     mounted(){
         let that = this;
-        axios.get('http://localhost/users/favorites', {withCredentials: true} )
-        .then(function (response) {
-            that.favoriteList = response.data;
-            // that.favoriteVideos = [];   //既に追加されているお気に入りをリストから外すとその後のお気に入りリストが上手く表示されなくなるからここで一度リセット。
-            console.log('in axios')
-            that.sample();
-            that.compareFavoriteListAndItems();
 
+        // YoutubeAPIにより指定プレイリストの動画を取得し、それらをitemsにいれる
+        axios.get('https://www.googleapis.com/youtube/v3/playlistItems', { params: that.getPlayListParams })
+        .then(function (response) {
+            that.items = response.data.items;
+            that.getFavoriteList();
         })
         .catch(function (error) {
-            console.log(error);
+        console.log(error);
         })
     },
     computed: {
@@ -165,6 +167,7 @@ import ImportPlaylist from '../components/ImportPlaylist';
         this.form = Object.assign({}, this.defaultForm)
         this.$refs.form.reset()
       },
+      //ユーザーアカウントの更新メソッド
       updateAccount() {
         let that = this;
         const url = 'http://localhost/users/' + this.userData.id;
@@ -187,6 +190,7 @@ import ImportPlaylist from '../components/ImportPlaylist';
 
         this.resetForm()
       },
+      //ユーザーの退会メソッド
       deleteAccount(){
         let that = this;
         const url = 'http://localhost/users/' + this.userData.id;
@@ -205,26 +209,35 @@ import ImportPlaylist from '../components/ImportPlaylist';
             this.$router.push({ name: 'User'})
         }
        },
-       playlistItems(e){
-          this.items= e;
+       //dbのfavoritesテーブル取得メソッド
+       getFavoriteList(){
+        //Youtuebeからプレイリストを取得した後、続けてdbのfavoritesテーブルからログインユーザーのお気に入りした動画のidを取得しfavoriteListにいれる
+        let that = this;
+
+        axios.get('http://localhost/users/favorites', {withCredentials: true} )
+        .then(function (response) {
+            that.favoriteList = response.data;
+            that.compareFavoriteListAndItems();
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
        },
+       //お気に入りした動画データの取得メソッド
        compareFavoriteListAndItems(){
+           //YoutubeAPIで取得したプレイリストとgetFavoriteList()で取得したデータを照らし合わせることで
+           //プレイリストの中のユーザーがお気に入りに入れた動画の情報のみを取得。取得したデータはfavoriteVideosに入れていく。
            for(let i = 0; this.favoriteList&&this.favoriteList.length > i; i++){
-               let favorite = this.favoriteList[i].video_id;
-               for(let i = 0; this.items&&this.items.length > i; i++){
-                   if(favorite == this.items[i].snippet.resourceId.videoId){
-                       this.favoriteVideos.push(this.items[i]);
+               for(let j = 0; this.items&&this.items.length > j; j++){
+                   let favorite = this.favoriteList[i].video_id;
+                   let item = this.items[j].snippet.resourceId.videoId;
+                   if(favorite == item){
+                       this.favoriteVideos.push(this.items[j]);
                    }
                }
            }
-           console.log('in compare');
-       },
-       sample(){
-           console.log('sample');
        }
-    },
-    components: {
-    ImportPlaylist,
     }
   }
 </script>

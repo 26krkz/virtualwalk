@@ -15,14 +15,14 @@ export default {
             }
         }
     },
-    mounted(){
+    created(){
     // axiosにより指定のプレイリストの動画を取得し、それらをitemsに代入する
         let that = this;
         axios.get('https://www.googleapis.com/youtube/v3/playlistItems', { params: that.params })
         .then(function (response) {
             that.items = response.data.items;
+            console.log(that.items);
             that.$emit('playlist-items', that.items);
-
         })
         .catch(function (error) {
         console.log(error);
