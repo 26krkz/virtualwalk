@@ -1,6 +1,6 @@
 <template>
-    <v-main id="main">
-      <v-container fluid>
+    <v-main class="main">
+      <v-container fluid class="googlemap-container">
         <v-row>
           <v-col cols="9">
             <GoogleMap @select-video-id="selectVideoId" @expand-window="expandWindow"></GoogleMap>
@@ -55,7 +55,10 @@ export default {
 </script>
 
 <style>
-  #main {
+  .main {
     margin: 0 6vw;
+  }
+  .googlemap-container {
+    margin-bottom: 30px;
   }
 </style>
