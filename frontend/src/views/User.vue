@@ -1,108 +1,133 @@
 <template>
-<v-main id="main-container">
-    <p>ユーザー名</p>
-    <p>{{ userData.name }}</p>
-    <p>メールアドレス</p>
-    <p>{{ userData.email }}</p>
-    <v-btn class="btn" @click="expand1 = !expand1">プロフィールを変更</v-btn>
-    <v-btn class="btn" @click="deleteAccount">退会する</v-btn>
-    <v-expand-transition>
-        <v-card class="form-container" width="260" v-show="expand1">
-            <!-- submit.preventによりsubmitボタンを押してもページがリロードされるのを防ぐ -->
-            <v-form
-            ref="form"
-            @submit.prevent="updateAccount"
-            >
-                <v-container>
-                    <v-row class="mr-3 ml-3">
-                        <!-- ユーザーネームの登録 -->
-                        <v-col cols="12" >
-                            <v-text-field
-                            calss="text-field"
-                            v-model="form.userName"
-                            label="User name"
-                            :rules="rules.name"
-                            required
-                            ></v-text-field>
-                        </v-col>
+<v-main class="main-container">
+    <v-card class="user-card" width="450" elevation="1">
+        <div class="user-info">
+            <div class="user-info--name">
+                <div>ユーザー名：</div>
+                <div>{{ userData.name }}</div>
+            </div>
+            <div class="user-info--email">
+                <div>メールアドレス：</div>
+                <div class="email-invisible" v-show="!show1" @click="isVisible">
+                    <div class="invisible-icon"><v-icon>mdi-eye-off</v-icon></div>
+                    <div>***********</div>
+                </div>
+                <div class="email-visible" v-show="show1" @click="isVisible">
+                    <div class="visible-icon"><v-icon>mdi-eye</v-icon></div>
+                    <div>{{ userData.email }}</div>
+                </div>
+            </div>
+        </div>
+        <v-btn class="update-user-btn" @click="expand1 = !expand1">プロフィールを変更</v-btn>
+        <v-btn class="delete-user-btn" @click="deleteAccount">退会する</v-btn>
+        <v-expand-transition>
+            <v-card class="form-container" width="260" v-show="expand1" >
+                <!-- submit.preventによりsubmitボタンを押してもページがリロードされるのを防ぐ -->
+                <v-form
+                ref="form"
+                @submit.prevent="updateAccount"
+                >
+                    <v-container>
+                        <v-row class="mr-3 ml-3">
+                            <!-- ユーザーネームの登録 -->
+                            <v-col cols="12" >
+                                <v-text-field
+                                calss="text-field"
+                                v-model="form.userName"
+                                label="User name"
+                                :rules="rules.name"
+                                required
+                                ></v-text-field>
+                            </v-col>
 
-                        <!-- メールアドレスの登録 -->
-                        <v-col cols="12">
-                            <v-text-field
-                            class="text-field"
-                            v-model="form.email"
-                            :rules="[rules.required, rules.email]"
-                            label="E-mail"
-                            ></v-text-field>
-                        </v-col>
+                            <!-- メールアドレスの登録 -->
+                            <v-col cols="12">
+                                <v-text-field
+                                class="text-field"
+                                v-model="form.email"
+                                :rules="[rules.required, rules.email]"
+                                label="E-mail"
+                                ></v-text-field>
+                            </v-col>
 
-                        <v-btn class="btn" @click="expand2 = !expand2">パスワードを変更</v-btn>
+                            <v-btn class="btn" @click="expand2 = !expand2">パスワードを変更</v-btn>
 
-                        <v-expand-transition>
-                            <div v-show="expand2">
-                                <!-- パスワードの登録 -->
-                                <v-col cols="12">
-                                    <v-text-field
-                                    class="text-field"
-                                    v-model="form.password1"
-                                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                                    :rules="[rules.required, rules.min]"
-                                    :type="show1 ? 'text' : 'password'"
-                                    label="Password"
-                                    counter
-                                    @click:append="show1 = !show1"
-                                    ></v-text-field>
-                                </v-col>
+                            <v-expand-transition>
+                                <div v-show="expand2">
+                                    <!-- パスワードの登録 -->
+                                    <v-col cols="12">
+                                        <v-text-field
+                                        class="text-field"
+                                        v-model="form.password1"
+                                        :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :rules="[rules.required, rules.min]"
+                                        :type="show2 ? 'text' : 'password'"
+                                        label="Password"
+                                        counter
+                                        @click:append="show2 = !show2"
+                                        ></v-text-field>
+                                    </v-col>
 
-                                <!-- パスワードの確認 -->
-                                <v-col cols="12">
-                                    <v-text-field
-                                    class="text-field"
-                                    v-model="form.password2"
-                                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                                    :rules="[rules.issame]"
-                                    :type="show2 ? 'text' : 'password'"
-                                    label="Password(確認)"
-                                    @click:append="show2 = !show2"
-                                    ></v-text-field>
-                                </v-col>
-                            </div>
+                                    <!-- パスワードの確認 -->
+                                    <v-col cols="12">
+                                        <v-text-field
+                                        class="text-field"
+                                        v-model="form.password2"
+                                        :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :rules="[rules.issame]"
+                                        :type="show3 ? 'text' : 'password'"
+                                        label="Password(確認)"
+                                        @click:append="show3 = !show3"
+                                        ></v-text-field>
+                                    </v-col>
+                                </div>
 
-                        </v-expand-transition>
-                    </v-row>
-                </v-container>
-                <!-- キャンセルと登録ボタン、登録ボタンはformIsValidを満たした時にdisabledが外れる。 -->
-                <v-card-actions>
-                    <v-btn
-                    text
-                    @click="resetForm"
+                            </v-expand-transition>
+                        </v-row>
+                    </v-container>
+                    <!-- キャンセルと登録ボタン、登録ボタンはformIsValidを満たした時にdisabledが外れる。 -->
+                    <v-card-actions>
+                        <v-btn
+                        text
+                        @click="resetForm"
+                        >
+                        キャンセル
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                        :disabled="!formIsValid"
+                        text
+                        color="primary"
+                        type="submit"
+                        >
+                        変更する
+                        </v-btn>
+                    </v-card-actions>
+                </v-form>
+            </v-card>
+        </v-expand-transition>
+    </v-card>
+    <div class="favorites">
+        <div class="favorites-title">お気に入り一覧</div>
+        <div class="border">
+            <div class="favorite-videos">
+                <div v-for="favoriteVideo of favoriteVideos" 
+                    v-bind:key="favoriteVideo.id"
                     >
-                    キャンセル
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                    :disabled="!formIsValid"
-                    text
-                    color="primary"
-                    type="submit"
-                    >
-                    変更する
-                    </v-btn>
-                </v-card-actions>
-            </v-form>
-        </v-card>
-    </v-expand-transition>
-    <div>
-        <p>お気に入り一覧</p>
-        <div v-for="favoriteVideo of favoriteVideos" v-bind:key="favoriteVideo.id">
-            <img :src="favoriteVideo.snippet.thumbnails.medium.url">
-            <hr>
+                        <img :src="favoriteVideo.snippet.thumbnails.medium.url" 
+                            class="favorite-video-img"
+                            @click="showSelectedVideo(favoriteVideo.snippet.resourceId.videoId)"
+                        >
+                </div>
+            </div>
         </div>
     </div>
+        <Youtube :video-id='videoId' :expand='expand'></Youtube>
 </v-main>
 </template>
 
 <script>
+import Youtube from '../components/Youtube'
 import axios from 'axios'
   export default {
     data () {
@@ -116,8 +141,11 @@ import axios from 'axios'
         snackbar: false,
         show1: false,
         show2: false,
+        show3: false,
         info: null,
+        videoId: '',
         items: [],
+        expand: null,
         favoriteList: null,
         favoriteVideos: [],
         defaultForm,
@@ -163,6 +191,13 @@ import axios from 'axios'
       },
     },
     methods: {
+      isVisible(){
+          if(this.show1){
+              this.show1 = false;
+          }else{
+              this.show1 = true;
+          }
+      },
       resetForm () {
         this.form = Object.assign({}, this.defaultForm)
         this.$refs.form.reset()
@@ -237,23 +272,69 @@ import axios from 'axios'
                    }
                }
            }
+       },
+       showSelectedVideo(videoId){
+           this.videoId = videoId;
+           this.expand = true;
        }
+    },
+    components: {
+        Youtube,
     }
   }
 </script>
 
 <style scoped>
- p {
-     margin:0;
+.main-container {
+     margin: 30px 5vw;
  }
- .btn {
+.user-card {
+    margin-bottom: 25px;
+    padding: 25px;
+ }
+.user-info--name, .user-info--email, .email-invisible, .email-visible{
+    display: flex;
+ }
+ .user-info {
+     font-size: 1.2rem;
+     margin-bottom: 10px;
+ }
+ .email-invisible, .email-visible {
+     cursor: pointer;
+     user-select: none;    
+ }
+ .update-user-btn, .delete-user-btn {
      margin-bottom: 10px;
      margin-right: 20px;
- }
- #main-container {
-     margin-left: 5vw;
- }
+ } 
  .text-field {
      padding: 0;
+ }
+ .favorites {
+     margin-bottom: 35px;
+ }
+ .favorites-title {
+     font-size: 1.5rem;
+     font-weight: bold;
+     color: #FF9800;
+     margin-bottom: 15px;
+ }
+ .border {
+     border-top: 3px solid #e0e0e0;
+     border-bottom: 3px solid #e0e0e0;
+ }
+ .favorite-videos {
+     display:flex;
+     overflow-x:scroll;
+     height: 198px;
+     border-radius: 1%/4.5%;
+     margin: 10px 0;
+ }
+ .favorite-video-img {
+     cursor: pointer;
+     height:198px;
+     width:352px;
+     margin-right: 0.5rem;
+     border-radius: 3%/6%;
  }
 </style>

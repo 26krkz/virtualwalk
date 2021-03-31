@@ -2,11 +2,8 @@
     <div>
         <div class="ranking-title">お気に入りランキング<span>Top 5</span></div>
         <div class="scroll-area">
-        <div v-for="item of items" v-bind:key="item.id">
-            <img :src="item.snippet.thumbnails.medium.url">
         </div>
-        </div>
-        <div class="icon"><v-icon large >mdi-chevron-down</v-icon></div>
+        <div class="scroll-area-bottom-icon"><v-icon large >mdi-chevron-down</v-icon></div>
     </div>
 
 </template>
@@ -43,34 +40,25 @@ export default {
 
     },
     methods: {
-        // selectMovie(){
-        //     this.$emit('select-video-id', 1);
-        // },
+        //お気に入りに追加された回数で降順に並べた動画データを配列で取得する
         getTopFiveFavorites(){
             let that = this;
 
             axios.get('http://localhost/favorite', {withCredentials: true} )
             .then(function (response) {
                 that.topFiveFavorites = response.data;
-                console.log(that.topFiveFavorites);
+                that.compareTopFiveFavoritesAndItems();
+                that.getRankingView();
+                // console.log(that.topFiveFavorites);
             })
             .catch(function (error) {
                 console.log(error);
             })
         },
-        getRankingView(){
-            let that = this;
-            const scrollArea = document.getElementsByClassName('scroll-area'); 
-            for(let i = 0;this.items&&this.items.length > i; i++){
-                let newImg = document.createElement('img');
-                newImg.src = that.items[i].snippet.thumbnails.medium.url;
-                newImg.appendChild(scrollArea);
-            }
-        },
         //お気に入りした動画データの取得メソッド
         compareTopFiveFavoritesAndItems(){
             //YoutubeAPIで取得したプレイリストとgetTopFiveFavorites()で取得したデータを照らし合わせることで
-            //プレイリストの中のお気に入りランキングトップ５の動画の情報のみを取得。取得したデータはtopFivefavoriteVideosに入れていく。
+            //プレイリストの中のお気に入りランキングトップ５の動画情報のみを取得。取得したデータはtopFiveFavoriteVideosに入れていく。
             for(let i = 0; this.topFiveFavorites&&this.topFiveFavorites.length > i; i++){
                 for(let j = 0; this.items&&this.items.length > j; j++){
                     let topFive = this.topFiveFavorites[i].video_id;
@@ -80,31 +68,45 @@ export default {
                     }
                 }
             }
-        }
+        },
+        //.scroll-area内にimgタグを作る。それぞれのsrcはお気に入りtopFiveFavoriteVideosから取得する。
+        getRankingView(){
+            let that = this;
+            const scrollArea = document.querySelector('.scroll-area'); 
+            for(let i = 0; this.items&&this.items.length > i; i++){
+                let newImg = document.createElement('img');
+                newImg.src = that.topFiveFavoriteVideos[i].snippet.thumbnails.medium.url;
+                newImg.width = 270;
+                newImg.style.cssText = "cursor:pointer;";
+                newImg.addEventListener('click', ()=>{
+                    that.$emit('select-video-id', that.topFiveFavoriteVideos[i].snippet.resourceId.videoId);
+                    that.$emit('expand-window', true)
+                });
+                scrollArea.appendChild(newImg);
+            }
+        },
     }
 }
 </script>
 
 <style scoped>
- img {
-     width: 300px;
- }
  .scroll-area{
-	height: 570px;
+    height: 570px;
 	overflow: auto;
-	padding-right: 20px;
+    padding-right: 20px;
 }
-.icon {
+.scroll-area-bottom-icon {
     text-align: center;
+    padding-right: 20px;
 }
 .ranking-title {
     color: #FF9800;
     font-size: 1.2rem;
     font-weight: bold;
+    margin-bottom: 5px;
 }
 .ranking-title span {
     color: #00BCD4; 
-    /* color: #FF5722; */
     font-size: 1.7rem;
 }
 </style>

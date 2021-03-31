@@ -1,6 +1,8 @@
 <template>
 <v-expand-transition>
   <v-container v-show="expand" class="container grey lighten-3">
+      <div class="down-icon1"><v-icon x-large >mdi-chevron-down</v-icon></div>
+      <div class="down-icon2"><v-icon x-large >mdi-chevron-down</v-icon></div>
       <v-btn class="close-btn" color="black" icon small outlined @click="expand = !expand">
           <v-icon>mdi-window-close</v-icon>
       </v-btn>
@@ -72,12 +74,13 @@
 <script>
 import axios from 'axios';
 export default {
-  props: ['videoId', 'items', 'expand'],
+  props: ['videoId', 'expand'],
   data(){
       return{
           apiKey: null,
           current_user: null,
           videoData: null,
+          items: [],
           item: [],
           disable: true,
           show2: true,
@@ -101,6 +104,12 @@ export default {
               { text: '30 mim', value: '1800'},
               { text: '1 h',    value: '3600'},
           ],
+          //youtubeから指定のプレイリストの動画を取得するのに必要なparams
+          getPlayListParams: {
+            part: 'snippet',
+            playlistId: process.env.VUE_APP_YOUTUBE_PLAYLIST_ID, /*Youtubeのplaylist id*/
+            key: process.env.VUE_APP_YOUTUBE_API_KEY
+          },
       };
   },
   created(){
@@ -114,6 +123,15 @@ export default {
               that.current_user = info.current_user;
               that.disable = false;
             }
+        })
+        .catch(function (error) {
+        console.log(error);
+        })
+
+        // YoutubeAPIにより指定プレイリストの動画を取得し、それらをitemsにいれる
+        axios.get('https://www.googleapis.com/youtube/v3/playlistItems', { params: that.getPlayListParams })
+        .then(function (response) {
+            that.items = response.data.items;
         })
         .catch(function (error) {
         console.log(error);
@@ -234,6 +252,42 @@ export default {
 </script>
 
 <style scoped>
+ .container {
+      margin-bottom: 50px;
+      position: relative;
+ }
+ .down-icon1 {
+     position:absolute;
+     top: -45px;
+     right: 50%;
+ }
+ .down-icon2 {
+     position:absolute;
+     top: -35px;
+     right: 50%;
+ }
+ .close-btn {
+      position:absolute;
+      top: -13px;
+      right: -13px;
+ }
+
+ .selected-video {
+       padding-left: 1.5rem;
+ }
+ .thumbnail {
+      height:198px;
+      width:352px;
+      margin: 5px 0;
+ }
+ .selected-video--tags {
+      display:flex;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+ }
+ .tag {
+      margin-right: 0.5rem;
+  }
  .select-time {
      display: flex;
  }
@@ -252,47 +306,23 @@ export default {
  .fav-btn, .resume-btn {
      width: 20vw;
  }
-  .thumbnail {
-      height:198px;
-      width:352px;
-      margin: 5px 0;
-  }
 
-  .container {
-      margin-bottom: 50px;
-      position: relative;
-  }
-  .close-btn {
+ .iframe {
+      position:relative;
+      padding-top: 20px;
+      padding-right: 20px;
+ }
+ .iframe-cover {
       position:absolute;
-      top: -13px;
-      right: -13px;
-  }
-   .iframe {
-       position:relative;
-       padding-top: 20px;
-       padding-right: 20px;
-   }
-   .iframe-cover {
-       position:absolute;
-       top: 0;
-       left: 0;
-       background-color: #c0c0c0;
-       width:656px;
-       height: 369px;
-       margin-left: 20px;
-       margin-top: 20px;
-       text-align: center;
-   }
-   .selected-video {
-       padding-left: 1.5rem;
-   }
-   .selected-video--tags {
-       display:flex;
-       flex-wrap: wrap;
-       /* margin-left: 1rem; */
-       margin-bottom: 15px;
-   }
-   .tag {
-       margin-right: 0.5rem;
-   }
+      top: 0;
+      left: 0;
+      background-color: #c0c0c0;
+      width:656px;
+      height: 369px;
+      margin-left: 20px;
+      margin-top: 20px;
+      text-align: center;
+ }
+   
+   
 </style>

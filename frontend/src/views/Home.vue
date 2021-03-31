@@ -6,20 +6,17 @@
             <GoogleMap @select-video-id="selectVideoId" @expand-window="expandWindow"></GoogleMap>
           </v-col>
           <v-col cols="3">
-            <Ranking :items='items' @select-video-id="selectVideoId"></Ranking>
+            <Ranking @select-video-id="selectVideoId" @expand-window="expandWindow"></Ranking>
           </v-col>
         </v-row>
       </v-container>
-      
-      <ImportPlaylist @playlist-items="playlistItems"></ImportPlaylist>
-      <Youtube :video-id='videoId' :items='items' :expand='expand'></Youtube>
+      <Youtube :video-id='videoId' :expand='expand'></Youtube>
     </v-main>
 </template>
 
 <script>
 import GoogleMap from '../components/GoogleMap';
 import Youtube from '../components/Youtube';
-import ImportPlaylist from '../components/ImportPlaylist';
 import Ranking from '../components/Ranking';
 
 export default {
@@ -35,9 +32,6 @@ export default {
     selectVideoId(e){
       this.videoId = e;
     },
-    playlistItems(e){
-      this.items= e;
-    },
     expandWindow(e){
       this.expand = e;
     }
@@ -46,7 +40,6 @@ export default {
   components: {
     GoogleMap,
     Youtube,
-    ImportPlaylist,
     Ranking
   },
 
@@ -59,6 +52,6 @@ export default {
     margin: 0 6vw;
   }
   .googlemap-container {
-    margin-bottom: 30px;
+    margin: 25px 0;
   }
 </style>
