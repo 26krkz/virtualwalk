@@ -11,6 +11,7 @@
         </v-row>
       </v-container>
       <Youtube :video-id='videoId' :expand='expand'></Youtube>
+      <CountryTabs></CountryTabs>
     </v-main>
 </template>
 
@@ -18,6 +19,7 @@
 import GoogleMap from '../components/GoogleMap';
 import Youtube from '../components/Youtube';
 import Ranking from '../components/Ranking';
+import CountryTabs from '../components/CountryTabs';
 
 export default {
   name: 'App',
@@ -40,7 +42,8 @@ export default {
   components: {
     GoogleMap,
     Youtube,
-    Ranking
+    Ranking,
+    CountryTabs
   },
 
 
@@ -49,7 +52,9 @@ export default {
 
 <style>
   .main {
-    margin: 0 6vw;
+    margin-right:6vw;
+    margin-left:6vw;
+    margin-bottom: 50px;
   }
   .googlemap-container {
     margin: 25px 0;

@@ -93,16 +93,24 @@ export default {
           playingTime: '',
           endTime: '',
           sTimes: [
-              { text: '0 : 10', value: '600'},
-              { text: '0 : 30', value: '1800'},
-              { text: '1 : 00', value: '3600'},
-              { text: '1 : 30', value: '5400'},
+              { text: '0:10:00', value: '600'},
+              { text: '0:15:00', value: '600'},
+              { text: '0:30:00', value: '1800'},
+              { text: '1:00:00', value: '3600'},
+              { text: '1:30:00', value: '5400'},
+              { text: '2:00:00', value: '7200'},
+              { text: '2:30:00', value: '9000'},
+              { text: '3:00:00', value: '10800'},
           ],
           pTimes: [
               { text: '10 mim', value: '10'},
+              { text: '15 mim', value: '900'},
               { text: '20 mim', value: '1200'},
               { text: '30 mim', value: '1800'},
+              { text: '40 mim', value: '2400'},
+              { text: '50 mim', value: '3000'},
               { text: '1 h',    value: '3600'},
+              { text: '1.5 h',  value: '5400'},
           ],
           //youtubeから指定のプレイリストの動画を取得するのに必要なparams
           getPlayListParams: {

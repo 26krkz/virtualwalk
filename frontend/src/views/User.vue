@@ -303,6 +303,9 @@ import axios from 'axios'
      cursor: pointer;
      user-select: none;    
  }
+ .visible-icon, .invisible-icon {
+     margin-right: 0.2rem;
+ }
  .update-user-btn, .delete-user-btn {
      margin-bottom: 10px;
      margin-right: 20px;
