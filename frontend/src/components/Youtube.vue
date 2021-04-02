@@ -115,6 +115,7 @@ export default {
           //youtubeから指定のプレイリストの動画を取得するのに必要なparams
           getPlayListParams: {
             part: 'snippet',
+            maxResults: 50,
             playlistId: process.env.VUE_APP_YOUTUBE_PLAYLIST_ID, /*Youtubeのplaylist id*/
             key: process.env.VUE_APP_YOUTUBE_API_KEY
           },

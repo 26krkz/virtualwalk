@@ -11,7 +11,7 @@
         </v-row>
       </v-container>
       <Youtube :video-id='videoId' :expand='expand'></Youtube>
-      <CountryTabs></CountryTabs>
+      <CountryTabs @select-video-id="selectVideoId" @expand-window="expandWindow"></CountryTabs>
     </v-main>
 </template>
 

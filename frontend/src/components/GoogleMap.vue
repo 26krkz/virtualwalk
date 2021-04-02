@@ -7,6 +7,7 @@
 
 <script>
 import GoogleMapsApiLoader from 'google-maps-api-loader';
+import markerLocation from '../assets/marker.json'
 export default {
     name: 'Map',
     data(){
@@ -22,13 +23,7 @@ export default {
                 zoom: 1.9,
                 minZoom: 1.9,
             },
-            markerLocation: [
-                        {lat:49.2802229, lng: -123.1265343, videoId: 'lh8dNmneVyY' },
-                        {lat:47.6054117, lng: -122.3530468, videoId: '3EaCj-seAHM' },
-                        {lat:41.8902142, lng: 12.4900422,   videoId: 'eJeF7hDB0UA' },
-                        {lat:59.9311985, lng: 30.3541205,   videoId: 'unSFkZQiqDs' },
-                        {lat:32.3518153, lng: 35.0150653,   videoId: 'NYUWOdMkay0' },
-                       ],
+            markerLocation: markerLocation,
             markers: [],
             markerNum: 0,
         }
