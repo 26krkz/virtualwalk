@@ -1,26 +1,25 @@
 <template>
-    <v-main id="main">
-      <v-container fluid>
+    <v-main class="main">
+      <v-container fluid class="googlemap-container">
         <v-row>
           <v-col cols="9">
             <GoogleMap @select-video-id="selectVideoId" @expand-window="expandWindow"></GoogleMap>
           </v-col>
           <v-col cols="3">
-            <Ranking :items='items' @select-video-id="selectVideoId"></Ranking>
+            <Ranking @select-video-id="selectVideoId" @expand-window="expandWindow"></Ranking>
           </v-col>
         </v-row>
       </v-container>
-      
-      <ImportPlaylist @playlist-items="playlistItems"></ImportPlaylist>
-      <Youtube :video-id='videoId' :items='items' :expand='expand'></Youtube>
+      <Youtube :video-id='videoId' :expand='expand'></Youtube>
+      <CountryTabs @select-video-id="selectVideoId" @expand-window="expandWindow"></CountryTabs>
     </v-main>
 </template>
 
 <script>
 import GoogleMap from '../components/GoogleMap';
 import Youtube from '../components/Youtube';
-import ImportPlaylist from '../components/ImportPlaylist';
 import Ranking from '../components/Ranking';
+import CountryTabs from '../components/CountryTabs';
 
 export default {
   name: 'App',
@@ -35,9 +34,6 @@ export default {
     selectVideoId(e){
       this.videoId = e;
     },
-    playlistItems(e){
-      this.items= e;
-    },
     expandWindow(e){
       this.expand = e;
     }
@@ -46,8 +42,8 @@ export default {
   components: {
     GoogleMap,
     Youtube,
-    ImportPlaylist,
-    Ranking
+    Ranking,
+    CountryTabs
   },
 
 
@@ -55,7 +51,12 @@ export default {
 </script>
 
 <style>
-  #main {
-    margin: 0 6vw;
+  .main {
+    margin-right:6vw;
+    margin-left:6vw;
+    margin-bottom: 50px;
+  }
+  .googlemap-container {
+    margin: 25px 0;
   }
 </style>

@@ -1,112 +1,134 @@
 <template>
-<v-main id="main-container">
-    <p>ユーザー名</p>
-    <p>{{ userData.name }}</p>
-    <p>メールアドレス</p>
-    <p>{{ userData.email }}</p>
-    <v-btn class="btn" @click="expand1 = !expand1">プロフィールを変更</v-btn>
-    <v-btn class="btn" @click="deleteAccount">退会する</v-btn>
-    <v-expand-transition>
-        <v-card class="form-container" width="260" v-show="expand1">
-            <!-- submit.preventによりsubmitボタンを押してもページがリロードされるのを防ぐ -->
-            <v-form
-            ref="form"
-            @submit.prevent="updateAccount"
-            >
-                <v-container>
-                    <v-row class="mr-3 ml-3">
-                        <!-- ユーザーネームの登録 -->
-                        <v-col cols="12" >
-                            <v-text-field
-                            calss="text-field"
-                            v-model="form.userName"
-                            label="User name"
-                            :rules="rules.name"
-                            required
-                            ></v-text-field>
-                        </v-col>
-
-                        <!-- メールアドレスの登録 -->
-                        <v-col cols="12">
-                            <v-text-field
-                            class="text-field"
-                            v-model="form.email"
-                            :rules="[rules.required, rules.email]"
-                            label="E-mail"
-                            ></v-text-field>
-                        </v-col>
-
-                        <v-btn class="btn" @click="expand2 = !expand2">パスワードを変更</v-btn>
-
-                        <v-expand-transition>
-                            <div v-show="expand2">
-                                <!-- パスワードの登録 -->
-                                <v-col cols="12">
-                                    <v-text-field
-                                    class="text-field"
-                                    v-model="form.password1"
-                                    :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                                    :rules="[rules.required, rules.min]"
-                                    :type="show1 ? 'text' : 'password'"
-                                    label="Password"
-                                    counter
-                                    @click:append="show1 = !show1"
-                                    ></v-text-field>
-                                </v-col>
-
-                                <!-- パスワードの確認 -->
-                                <v-col cols="12">
-                                    <v-text-field
-                                    class="text-field"
-                                    v-model="form.password2"
-                                    :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                                    :rules="[rules.issame]"
-                                    :type="show2 ? 'text' : 'password'"
-                                    label="Password(確認)"
-                                    @click:append="show2 = !show2"
-                                    ></v-text-field>
-                                </v-col>
-                            </div>
-
-                        </v-expand-transition>
-                    </v-row>
-                </v-container>
-                <!-- キャンセルと登録ボタン、登録ボタンはformIsValidを満たした時にdisabledが外れる。 -->
-                <v-card-actions>
-                    <v-btn
-                    text
-                    @click="resetForm"
-                    >
-                    キャンセル
-                    </v-btn>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                    :disabled="!formIsValid"
-                    text
-                    color="primary"
-                    type="submit"
-                    >
-                    変更する
-                    </v-btn>
-                </v-card-actions>
-            </v-form>
-        </v-card>
-    </v-expand-transition>
-    <ImportPlaylist @playlist-items="playlistItems"></ImportPlaylist>
-    <div>
-        <p>お気に入り一覧</p>
-        <div v-for="favoriteVideo of favoriteVideos" v-bind:key="favoriteVideo.id">
-            <img :src="favoriteVideo.snippet.thumbnails.medium.url">
-            <hr>
+<v-main class="main-container">
+    <v-card class="user-card" width="450" elevation="1">
+        <div class="user-info">
+            <div class="user-info--name">
+                <div>ユーザー名：</div>
+                <div>{{ userData.name }}</div>
+            </div>
+            <div class="user-info--email">
+                <div>メールアドレス：</div>
+                <div class="email-invisible" v-show="!show1" @click="isVisible">
+                    <div class="invisible-icon"><v-icon>mdi-eye-off</v-icon></div>
+                    <div>***********</div>
+                </div>
+                <div class="email-visible" v-show="show1" @click="isVisible">
+                    <div class="visible-icon"><v-icon>mdi-eye</v-icon></div>
+                    <div>{{ userData.email }}</div>
+                </div>
+            </div>
         </div>
-        <p>end</p>
+        <v-btn class="update-user-btn" @click="expand1 = !expand1">プロフィールを変更</v-btn>
+        <v-btn class="delete-user-btn" @click="deleteAccount">退会する</v-btn>
+        <v-expand-transition>
+            <v-card class="form-container" width="260" v-show="expand1" >
+                <!-- submit.preventによりsubmitボタンを押してもページがリロードされるのを防ぐ -->
+                <v-form
+                ref="form"
+                @submit.prevent="updateAccount"
+                >
+                    <v-container>
+                        <v-row class="mr-3 ml-3">
+                            <!-- ユーザーネームの登録 -->
+                            <v-col cols="12" >
+                                <v-text-field
+                                calss="text-field"
+                                v-model="form.userName"
+                                label="User name"
+                                :rules="rules.name"
+                                required
+                                ></v-text-field>
+                            </v-col>
+
+                            <!-- メールアドレスの登録 -->
+                            <v-col cols="12">
+                                <v-text-field
+                                class="text-field"
+                                v-model="form.email"
+                                :rules="[rules.required, rules.email]"
+                                label="E-mail"
+                                ></v-text-field>
+                            </v-col>
+
+                            <v-btn class="btn" @click="expand2 = !expand2">パスワードを変更</v-btn>
+
+                            <v-expand-transition>
+                                <div v-show="expand2">
+                                    <!-- パスワードの登録 -->
+                                    <v-col cols="12">
+                                        <v-text-field
+                                        class="text-field"
+                                        v-model="form.password1"
+                                        :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :rules="[rules.required, rules.min]"
+                                        :type="show2 ? 'text' : 'password'"
+                                        label="Password"
+                                        counter
+                                        @click:append="show2 = !show2"
+                                        ></v-text-field>
+                                    </v-col>
+
+                                    <!-- パスワードの確認 -->
+                                    <v-col cols="12">
+                                        <v-text-field
+                                        class="text-field"
+                                        v-model="form.password2"
+                                        :append-icon="show3 ? 'mdi-eye' : 'mdi-eye-off'"
+                                        :rules="[rules.issame]"
+                                        :type="show3 ? 'text' : 'password'"
+                                        label="Password(確認)"
+                                        @click:append="show3 = !show3"
+                                        ></v-text-field>
+                                    </v-col>
+                                </div>
+
+                            </v-expand-transition>
+                        </v-row>
+                    </v-container>
+                    <!-- キャンセルと登録ボタン、登録ボタンはformIsValidを満たした時にdisabledが外れる。 -->
+                    <v-card-actions>
+                        <v-btn
+                        text
+                        @click="resetForm"
+                        >
+                        キャンセル
+                        </v-btn>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                        :disabled="!formIsValid"
+                        text
+                        color="primary"
+                        type="submit"
+                        >
+                        変更する
+                        </v-btn>
+                    </v-card-actions>
+                </v-form>
+            </v-card>
+        </v-expand-transition>
+    </v-card>
+    <div class="favorites">
+        <div class="favorites-title">お気に入り一覧</div>
+        <div class="border">
+            <div class="favorite-videos">
+                <div v-for="favoriteVideo of favoriteVideos" 
+                    v-bind:key="favoriteVideo.id"
+                    >
+                        <img :src="favoriteVideo.snippet.thumbnails.medium.url" 
+                            class="favorite-video-img"
+                            @click="showSelectedVideo(favoriteVideo.snippet.resourceId.videoId)"
+                        >
+                </div>
+            </div>
+        </div>
     </div>
+        <Youtube :video-id='videoId' :expand='expand'></Youtube>
 </v-main>
 </template>
 
 <script>
+import Youtube from '../components/Youtube'
 import axios from 'axios'
-import ImportPlaylist from '../components/ImportPlaylist';
   export default {
     data () {
     //   Object.freezeにより以降オブジェクトの変更を防ぎ空のオブジェクトを保つ
@@ -119,12 +141,16 @@ import ImportPlaylist from '../components/ImportPlaylist';
         snackbar: false,
         show1: false,
         show2: false,
+        show3: false,
         info: null,
-        items: null,
+        videoId: '',
+        items: [],
+        expand: null,
         favoriteList: null,
         favoriteVideos: [],
         defaultForm,
         form: Object.assign({}, this.defaultForm),
+        //ユーザー登録欄のバリデーション
         rules: {
           name: [value => (value || '').length > 0 || 'user nameは必須です'],
           email: value => {
@@ -135,21 +161,26 @@ import ImportPlaylist from '../components/ImportPlaylist';
           min: value => value&&value.length >= 6 || '6字以上で作成してください',
           issame: value => value == this.form.password1 || '同じパスワードを入力してください',
         },
+        //youtubeから指定のプレイリストの動画を取得するのに必要なparams
+        getPlayListParams: {
+            part: 'snippet',
+            maxResults: 50,
+            playlistId: process.env.VUE_APP_YOUTUBE_PLAYLIST_ID, /*Youtubeのplaylist id*/
+            key: process.env.VUE_APP_YOUTUBE_API_KEY
+        },
       }
     },
     mounted(){
         let that = this;
-        axios.get('http://localhost/users/favorites', {withCredentials: true} )
-        .then(function (response) {
-            that.favoriteList = response.data;
-            // that.favoriteVideos = [];   //既に追加されているお気に入りをリストから外すとその後のお気に入りリストが上手く表示されなくなるからここで一度リセット。
-            console.log('in axios')
-            that.sample();
-            that.compareFavoriteListAndItems();
 
+        // YoutubeAPIにより指定プレイリストの動画を取得し、それらをitemsにいれる
+        axios.get('https://www.googleapis.com/youtube/v3/playlistItems', { params: that.getPlayListParams })
+        .then(function (response) {
+            that.items = response.data.items;
+            that.getFavoriteList();
         })
         .catch(function (error) {
-            console.log(error);
+        console.log(error);
         })
     },
     computed: {
@@ -161,10 +192,18 @@ import ImportPlaylist from '../components/ImportPlaylist';
       },
     },
     methods: {
+      isVisible(){
+          if(this.show1){
+              this.show1 = false;
+          }else{
+              this.show1 = true;
+          }
+      },
       resetForm () {
         this.form = Object.assign({}, this.defaultForm)
         this.$refs.form.reset()
       },
+      //ユーザーアカウントの更新メソッド
       updateAccount() {
         let that = this;
         const url = 'http://localhost/users/' + this.userData.id;
@@ -187,6 +226,7 @@ import ImportPlaylist from '../components/ImportPlaylist';
 
         this.resetForm()
       },
+      //ユーザーの退会メソッド
       deleteAccount(){
         let that = this;
         const url = 'http://localhost/users/' + this.userData.id;
@@ -205,42 +245,100 @@ import ImportPlaylist from '../components/ImportPlaylist';
             this.$router.push({ name: 'User'})
         }
        },
-       playlistItems(e){
-          this.items= e;
+       //dbのfavoritesテーブル取得メソッド
+       getFavoriteList(){
+        //Youtuebeからプレイリストを取得した後、続けてdbのfavoritesテーブルからログインユーザーのお気に入りした動画のidを取得しfavoriteListにいれる
+        let that = this;
+
+        axios.get('http://localhost/users/favorites', {withCredentials: true} )
+        .then(function (response) {
+            that.favoriteList = response.data;
+            that.compareFavoriteListAndItems();
+
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
        },
+       //お気に入りした動画データの取得メソッド
        compareFavoriteListAndItems(){
+           //YoutubeAPIで取得したプレイリストとgetFavoriteList()で取得したデータを照らし合わせることで
+           //プレイリストの中のユーザーがお気に入りに入れた動画の情報のみを取得。取得したデータはfavoriteVideosに入れていく。
            for(let i = 0; this.favoriteList&&this.favoriteList.length > i; i++){
-               let favorite = this.favoriteList[i].video_id;
-               for(let i = 0; this.items&&this.items.length > i; i++){
-                   if(favorite == this.items[i].snippet.resourceId.videoId){
-                       this.favoriteVideos.push(this.items[i]);
+               for(let j = 0; this.items&&this.items.length > j; j++){
+                   let favorite = this.favoriteList[i].video_id;
+                   let item = this.items[j].snippet.resourceId.videoId;
+                   if(favorite == item){
+                       this.favoriteVideos.push(this.items[j]);
                    }
                }
            }
-           console.log('in compare');
        },
-       sample(){
-           console.log('sample');
+       showSelectedVideo(videoId){
+           this.videoId = videoId;
+           this.expand = true;
        }
     },
     components: {
-    ImportPlaylist,
+        Youtube,
     }
   }
 </script>
 
 <style scoped>
- p {
-     margin:0;
+.main-container {
+     margin: 30px 5vw;
  }
- .btn {
+.user-card {
+    margin-bottom: 25px;
+    padding: 25px;
+ }
+.user-info--name, .user-info--email, .email-invisible, .email-visible{
+    display: flex;
+ }
+ .user-info {
+     font-size: 1.2rem;
+     margin-bottom: 10px;
+ }
+ .email-invisible, .email-visible {
+     cursor: pointer;
+     user-select: none;    
+ }
+ .visible-icon, .invisible-icon {
+     margin-right: 0.2rem;
+ }
+ .update-user-btn, .delete-user-btn {
      margin-bottom: 10px;
      margin-right: 20px;
- }
- #main-container {
-     margin-left: 5vw;
- }
+ } 
  .text-field {
      padding: 0;
+ }
+ .favorites {
+     margin-bottom: 35px;
+ }
+ .favorites-title {
+     font-size: 1.5rem;
+     font-weight: bold;
+     color: #FF9800;
+     margin-bottom: 15px;
+ }
+ .border {
+     border-top: 3px solid #e0e0e0;
+     border-bottom: 3px solid #e0e0e0;
+ }
+ .favorite-videos {
+     display:flex;
+     overflow-x:scroll;
+     height: 198px;
+     border-radius: 1%/4.5%;
+     margin: 10px 0;
+ }
+ .favorite-video-img {
+     cursor: pointer;
+     height:198px;
+     width:352px;
+     margin-right: 0.5rem;
+     border-radius: 3%/6%;
  }
 </style>

@@ -12,4 +12,9 @@ class FavoritesController < ApplicationController
     render json: { message: 'お気に入りから削除しました' }
   end
 
+  def show
+    @top_five_favorites = Video.find(Favorite.group(:video_id).order('count(video_id) desc').limit(5).pluck(:video_id))
+    render json: @top_five_favorites
+  end
+
 end
