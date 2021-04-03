@@ -1,13 +1,13 @@
 <template>
 <v-expand-transition>
-  <v-container v-show="expand" class="container grey lighten-3">
+  <v-container fluid v-show="expand" class="container grey lighten-3">
       <div class="down-icon1"><v-icon x-large >mdi-chevron-down</v-icon></div>
       <div class="down-icon2"><v-icon x-large >mdi-chevron-down</v-icon></div>
       <v-btn class="close-btn" color="black" icon small outlined @click="expand = !expand">
           <v-icon>mdi-window-close</v-icon>
       </v-btn>
       <v-row>
-        <v-col cols='5' class="selected-video">
+        <v-col cols='4' class="selected-video">
             <img class="thumbnail" v-bind:src="item.snippet.thumbnails.medium.url">
             <div class="selected-video--tags">
                 <div class="tag"><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.country }}</div>
@@ -48,11 +48,16 @@
 
             <v-btn class="resume-btn" @click="resume">表示</v-btn>
         </v-col>
-        <v-col class="iframe" cols='7'>
-            <iframe width="656" height="369" 
-                v-bind:src="selectedMovieUrl" frameborder="0" allowfullscreen>
+        <v-col cols='8' class="iframe-outline"  >
+        <v-responsive :aspect-ratio="16/9">
+            <iframe
+                v-bind:src="selectedMovieUrl"
+                frameborder="0"
+                allowfullscreen
+                class="iframe">
             </iframe>
             <div class="iframe-cover" v-show="show2">表示ボタンを押してね</div>
+        </v-responsive>
         </v-col>
       </v-row>
       <!-- お気に入りに加えたらスナックバーを表示する -->
@@ -316,20 +321,23 @@ export default {
      width: 20vw;
  }
 
- .iframe {
+ .iframe-outline {
       position:relative;
-      padding-top: 20px;
-      padding-right: 20px;
+ }
+ .iframe {
+     position: absolute;
+     top: 3.5%;
+     left: 5%;
+     height:93%;
+     width: 90%;
  }
  .iframe-cover {
       position:absolute;
-      top: 0;
-      left: 0;
+      top: 3.5%;
+      left: 5%;
       background-color: #c0c0c0;
-      width:656px;
-      height: 369px;
-      margin-left: 20px;
-      margin-top: 20px;
+      height: 93%;
+      width:90%;
       text-align: center;
  }
    

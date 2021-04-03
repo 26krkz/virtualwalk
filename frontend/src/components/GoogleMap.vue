@@ -81,7 +81,6 @@ export default {
   position: relative;
   margin:auto;
   }
- 
 .map {
   position: absolute;
   width: 100%;

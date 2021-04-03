@@ -9,39 +9,45 @@
 
       
       <v-spacer></v-spacer>
-
-
-      <router-link to="/about" class="nav-btn mr-3" >
-          <v-btn text >virtualwalkとは</v-btn>
-        </router-link>
-
-    <!-- ログインしていた場合表示されるnav -->
-      <div v-if="loggedInUser">
-
-        <router-link :to="{ name: 'User', params: { username:current_user.name, current_user:current_user }}"
-                      class="nav-btn mr-3">
-          <v-btn text >{{ current_user.name }}</v-btn>
-        </router-link>
-
-        <router-link to="/logout" class="nav-btn mr-3" >
-          <v-btn text >log out</v-btn>
-        </router-link>
+      <div class="d-md-none">
+        <v-btn icon @click="drawer = !drawer">
+          <v-icon>mdi-menu</v-icon>
+        </v-btn>
       </div>
+      <nav class="d-none d-md-flex">
+        <router-link to="/about" class="nav-btn mr-3" >
+            <v-btn text >virtualwalkとは</v-btn>
+          </router-link>
 
-    <!-- ログインしていない場合表示されるnav -->
-      <div v-else>
-        <router-link to="/guest" class="nav-btn mr-3">
-          <v-btn text>ゲストユーザーでログイン</v-btn>
-        </router-link>
+        <!-- ログインしていた場合表示されるnav -->
+        <div v-if="loggedInUser">
 
-        <router-link to="/signup" class="nav-btn mr-3">
-          <v-btn text>sign up</v-btn>
-        </router-link>
+          <router-link :to="{ name: 'User', params: { username:current_user.name, current_user:current_user }}"
+                        class="nav-btn mr-3">
+            <v-btn text >{{ current_user.name }}</v-btn>
+          </router-link>
 
-        <router-link to="/login" class="nav-btn mr-3">
-          <v-btn text>log in</v-btn>
-        </router-link>
-      </div>
+          <router-link to="/logout" class="nav-btn mr-3" >
+            <v-btn text >log out</v-btn>
+          </router-link>
+        </div>
+
+        <!-- ログインしていない場合表示されるnav -->
+        <div v-else>
+          <router-link to="/guest" class="nav-btn mr-3">
+            <v-btn text>ゲストユーザーでログイン</v-btn>
+          </router-link>
+
+          <router-link to="/signup" class="nav-btn mr-3">
+            <v-btn text>sign up</v-btn>
+          </router-link>
+
+          <router-link to="/login" class="nav-btn mr-3">
+            <v-btn text>log in</v-btn>
+          </router-link>
+        </div>
+
+      </nav>
 
     </v-app-bar>
   </header>
@@ -69,6 +75,7 @@ import axios from 'axios';
 export default {
   data(){
     return{
+      drawer: false,
       snackbar: false,
       snackbarText: '',
       snackbarColor: '',
@@ -119,7 +126,7 @@ export default {
  .body {
    font-family: Helvetica, Arial, sans-serif;
    font-size: 0.875rem;
-}
+ }
  .home-btn, .nav-btn {
    color: #fff;
    text-decoration: none;
