@@ -114,10 +114,12 @@
                 <div v-for="favoriteVideo of favoriteVideos" 
                     v-bind:key="favoriteVideo.id"
                     >
+                    <v-card class="favorite-video-img">
                         <img :src="favoriteVideo.snippet.thumbnails.medium.url" 
-                            class="favorite-video-img"
+                            
                             @click="showSelectedVideo(favoriteVideo.snippet.resourceId.videoId)"
                         >
+                    </v-card>
                 </div>
             </div>
         </div>
@@ -330,15 +332,10 @@ import axios from 'axios'
  .favorite-videos {
      display:flex;
      overflow-x:scroll;
-     height: 198px;
-     border-radius: 1%/4.5%;
-     margin: 10px 0;
  }
  .favorite-video-img {
      cursor: pointer;
-     height:198px;
-     width:352px;
-     margin-right: 0.5rem;
-     border-radius: 3%/6%;
+     height: 180px;
+     margin: 5px 0.5vw 5px 0;
  }
 </style>

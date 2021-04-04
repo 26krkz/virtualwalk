@@ -3,19 +3,23 @@
   <header>
     <v-app-bar app color="cyan" dark>
 
-      <router-link to="/" class="home-btn ml-5">
-        <h1>virtualwalk</h1>
-      </router-link>
-
-      
-      <v-spacer></v-spacer>
       <div class="d-md-none">
         <v-btn icon @click="drawer = !drawer">
           <v-icon>mdi-menu</v-icon>
         </v-btn>
       </div>
+
+      <v-spacer class="d-md-none"></v-spacer>
+
+      <router-link to="/" class="home-btn">
+        <h1>virtualwalk</h1>
+      </router-link>
+
+      
+      <v-spacer></v-spacer>
+
       <nav class="d-none d-md-flex">
-        <router-link to="/about" class="nav-btn mr-3" >
+        <router-link to="/about" class="nav-btn" >
             <v-btn text >virtualwalkとは</v-btn>
           </router-link>
 
@@ -23,26 +27,26 @@
         <div v-if="loggedInUser">
 
           <router-link :to="{ name: 'User', params: { username:current_user.name, current_user:current_user }}"
-                        class="nav-btn mr-3">
+                        class="nav-btn">
             <v-btn text >{{ current_user.name }}</v-btn>
           </router-link>
 
-          <router-link to="/logout" class="nav-btn mr-3" >
+          <router-link to="/logout" class="nav-btn" >
             <v-btn text >log out</v-btn>
           </router-link>
         </div>
 
         <!-- ログインしていない場合表示されるnav -->
         <div v-else>
-          <router-link to="/guest" class="nav-btn mr-3">
+          <router-link to="/guest" class="nav-btn">
             <v-btn text>ゲストユーザーでログイン</v-btn>
           </router-link>
 
-          <router-link to="/signup" class="nav-btn mr-3">
+          <router-link to="/signup" class="nav-btn">
             <v-btn text>sign up</v-btn>
           </router-link>
 
-          <router-link to="/login" class="nav-btn mr-3">
+          <router-link to="/login" class="nav-btn">
             <v-btn text>log in</v-btn>
           </router-link>
         </div>
@@ -65,8 +69,61 @@
     >
       <span>{{ snackbarText }}</span>
     </v-snackbar>
+    <!-- 画面のwidthが960px以下になったらハンバーガーメニューとdrawerでnavを表示する。 -->
+    <v-navigation-drawer
+      class="navigation-drawer"
+      v-model="drawer"
+      temporary
+      absolute
+      dark
+      color="cyan"
+    >
+        <div>
+          <v-btn icon @click="drawer = !drawer">
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-btn>
+        </div>
+        <div>
+          <router-link to="/about" class="nav-btn" >
+              <v-btn text >virtualwalkとは</v-btn>
+            </router-link>
+        </div>
 
-  <router-view @logged-in-info="loggedInInfo"></router-view>
+        <!-- ログインしていた場合表示されるnav -->
+        <div v-if="loggedInUser">
+          <div>
+            <router-link :to="{ name: 'User', params: { username:current_user.name, current_user:current_user }}"
+                          class="nav-btn">
+              <v-btn text >{{ current_user.name }}</v-btn>
+            </router-link>
+          </div>
+          <div>
+            <router-link to="/logout" class="nav-btn" >
+              <v-btn text >log out</v-btn>
+            </router-link>
+          </div>
+        </div>
+
+        <!-- ログインしていない場合表示されるnav -->
+        <div v-else>
+          <div>
+            <router-link to="/guest" class="nav-btn">
+              <v-btn text>ゲストユーザーでログイン</v-btn>
+            </router-link>
+          </div>
+          <div>
+            <router-link to="/signup" class="nav-btn">
+              <v-btn text>sign up</v-btn>
+            </router-link>
+          </div>
+          <div>
+            <router-link to="/login" class="nav-btn">
+              <v-btn text>log in</v-btn>
+            </router-link>
+          </div>
+        </div>
+    </v-navigation-drawer>
+    <router-view @logged-in-info="loggedInInfo"></router-view>
   </v-app>
 </template>
 
@@ -126,6 +183,12 @@ export default {
  .body {
    font-family: Helvetica, Arial, sans-serif;
    font-size: 0.875rem;
+   max-width: 1500px;
+   margin:0 auto;
+ }
+ .home-btn {
+    margin-right: 48px;
+    margin-left: 1vw;
  }
  .home-btn, .nav-btn {
    color: #fff;
@@ -134,5 +197,10 @@ export default {
  .snackbar {
    position:absolute;
    top:5px;
+ }
+ @media screen and(max-width:960px){
+   .home-btn {
+     margin-left: 0;
+   }
  }
 </style>

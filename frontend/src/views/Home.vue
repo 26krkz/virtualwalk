@@ -7,7 +7,7 @@
               <GoogleMap @select-video-id="selectVideoId" @expand-window="expandWindow"></GoogleMap>
             </v-card>
           </v-col>
-          <v-col cols="3" class="d-none d-md-flex">
+          <v-col cols="12" md="3">
             <Ranking @select-video-id="selectVideoId" @expand-window="expandWindow"></Ranking>
           </v-col>
         </v-row>
@@ -17,7 +17,7 @@
           <Youtube :video-id='videoId' :expand='expand'></Youtube>
         </v-card>
       </div>
-      <CountryTabs @select-video-id="selectVideoId" @expand-window="expandWindow"></CountryTabs>
+      <CountryTabs class="country-tabs-component" @select-video-id="selectVideoId" @expand-window="expandWindow"></CountryTabs>
     </v-main>
 </template>
 
@@ -61,7 +61,7 @@ export default {
     margin-bottom: 50px;
   }
   .top-page-container {
-    margin: 25px 0;
+    margin: 10px 0;
   }
   .youtube-component {
     /* margin-right: 6vw;
@@ -69,10 +69,21 @@ export default {
     width: 90%;
     margin:0 auto;
   }
+  .country-tabs-component {
+    margin: 0 12px;
+  }
   @media screen and (min-width: 1270px){
     .main {
     margin-right:6vw;
     margin-left:6vw;
+    }
+    .country-tabs-component {
+      margin: 0;
+    }
+  }
+  @media screen and (min-width: 960px){
+    .top-page-container {
+    margin: 25px 0;
     }
   }
 </style>
