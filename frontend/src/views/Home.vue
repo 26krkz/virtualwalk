@@ -66,13 +66,13 @@ export default {
   .youtube-component {
     /* margin-right: 6vw;
     margin-left: 6vw; */
-    width: 90%;
+    width: 95%;
     margin:0 auto;
   }
   .country-tabs-component {
     margin: 0 12px;
   }
-  @media screen and (min-width: 1270px){
+  @media screen and (min-width: 1320px){
     .main {
     margin-right:6vw;
     margin-left:6vw;

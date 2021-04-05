@@ -299,7 +299,7 @@ import axios from 'axios'
     display: flex;
  }
  .user-info {
-     font-size: 1.2rem;
+     font-size: 1rem;
      margin-bottom: 10px;
  }
  .email-invisible, .email-visible {
@@ -337,5 +337,10 @@ import axios from 'axios'
      cursor: pointer;
      height: 180px;
      margin: 5px 0.5vw 5px 0;
+ }
+ @media screen and (max-width:400px){
+    .user-info {
+        font-size: 0.8rem;
+    }
  }
 </style>

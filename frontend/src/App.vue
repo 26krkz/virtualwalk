@@ -188,7 +188,7 @@ export default {
  }
  .home-btn {
     margin-right: 48px;
-    margin-left: 1vw;
+    padding-left: 1vw;
  }
  .home-btn, .nav-btn {
    color: #fff;
@@ -200,7 +200,7 @@ export default {
  }
  @media screen and(max-width:960px){
    .home-btn {
-     margin-left: 0;
+     padding-left: 0;
    }
  }
 </style>

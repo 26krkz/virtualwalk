@@ -1,16 +1,18 @@
 <template>
 <v-expand-transition>
   <v-container fluid v-show="expand" class="container grey lighten-3">
-      <div class="down-icon1"><v-icon x-large >mdi-chevron-down</v-icon></div>
-      <div class="down-icon2"><v-icon x-large >mdi-chevron-down</v-icon></div>
+      <div class="down-icon1 d-none d-lg-block"><v-icon x-large >mdi-chevron-down</v-icon></div>
+      <div class="down-icon2 d-none d-lg-block"><v-icon x-large >mdi-chevron-down</v-icon></div>
       <v-btn class="close-btn" color="black" icon small outlined @click="expand = !expand">
           <v-icon>mdi-window-close</v-icon>
       </v-btn>
       <v-row>
         <v-col cols='12' md="4" class="selected-video">
             <div class="video-info">
-                <div class="thumbnail">
-                    <img v-bind:src="item.snippet.thumbnails.medium.url">
+                <div class="thumbnail-wrapper">
+                    <div class="thumbnail">
+                        <img v-bind:src="item.snippet.thumbnails.medium.url">
+                    </div>
                 </div>
                 <div class="selected-video--tags">
                     <div class="tag"><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.country }}</div>
@@ -27,7 +29,7 @@
                 <div class="select-time">
                     <div class="select-time-start">
                     <!-- 開始時間を設定 -->
-                    <label for="start">開始時間：
+                    <label for="start">開始時間:
                     <select id="start" v-model="startTime">
                         <option selected>指定しない</option>
                         <option v-for="sTime in sTimes" v-bind:key="sTime.id" v-bind:value="sTime.value">
@@ -39,7 +41,7 @@
                 
                     <div class="select-time-playing">
                     <!-- 再生時間を設定 -->
-                    <label for="playing">再生時間：
+                    <label for="playing">再生時間:
                     <select id="playing" v-model="playingTime" v-on:change="getEndTime">
                         <option selected>指定しない</option>
                         <option v-for="pTime in pTimes" v-bind:key="pTime.id" v-bind:value="pTime.value">
@@ -53,16 +55,16 @@
                 <v-btn class="resume-btn" @click="resume">表示</v-btn>
             </div>
         </v-col>
-        <v-col cols='12' md="8" class="iframe-outline"  >
-        <v-responsive :aspect-ratio="16/9">
-            <iframe
-                v-bind:src="selectedMovieUrl"
-                frameborder="0"
-                allowfullscreen
-                class="iframe">
-            </iframe>
-            <div class="iframe-cover" v-show="show2">表示ボタンを押してね</div>
-        </v-responsive>
+        <v-col cols='12' md="8">
+            <div class="iframe-wrapper">
+                <iframe
+                    v-bind:src="selectedMovieUrl"
+                    frameborder="0"
+                    allowfullscreen
+                    class="iframe">
+                </iframe>
+                <div class="iframe-cover" v-show="show2">表示ボタンを押してね</div>
+            </div>
         </v-col>
       </v-row>
       <!-- お気に入りに加えたらスナックバーを表示する -->
@@ -272,7 +274,7 @@ export default {
 
 <style scoped>
  .container {
-      margin-bottom: 50px;
+      margin-bottom: 30px;
       position: relative;
  }
  .down-icon1 {
@@ -294,11 +296,18 @@ export default {
  .selected-video {
        width:100%;
  }
- .thumbnail img {
-      /* height:198px;
-      width:352px; */
+ .thumbnail-wrapper {
+     width:100%;
+     padding-top:56.25%; 
+     position:relative;
+     margin-bottom: 5px;
+ }
+ .thumbnail img{
+      position:absolute;
+      top:0;
       width:100%;
-      margin: 5px 0;
+      height: 100%;
+      /* margin: 5px 0; */
  }
  .selected-video--tags {
       display:flex;
@@ -310,70 +319,69 @@ export default {
   }
  .select-time {
      display: flex;
+     user-select:none;
  }
  .select-time-start {
      margin-right: 0.5rem;
+     margin-bottom: 15px;
+ }
+ .select-time-playing {
+     margin-bottom: 15px;
  }
  .select-time-start label, .select-time-playing label {
      background-color: #f5f5f5;
      padding: 9px 4px;
      border-radius: 4%;
+     font-size: 0.825rem;
  }
- .select-time-start, .select-time-playing, .fav-btn, .resume-btn {
+ .fav-btn, .resume-btn {
+     width: 100%;
      margin-bottom: 15px;
      user-select:none;
  }
- .fav-btn, .resume-btn {
-     /* width: 20vw; */
-     width: 90%;
- }
 
- .iframe-outline {
-      position:relative;
+ .iframe-wrapper {
+     width:100%;
+     padding-top:56.25%; 
+     position:relative;
  }
  .iframe {
      position: absolute;
-     top: 3.5%;
-     left: 5%;
-     height:93%;
-     width: 90%;
+     top: 0;
+     width: 100%;
+     height: 100%;
  }
  .iframe-cover {
       position:absolute;
-      top: 3.5%;
-      left: 5%;
+      top: 0;
       background-color: #c0c0c0;
-      height: 93%;
-      width:90%;
       text-align: center;
+      width: 100%;
+      height: 100%;
  }
  @media screen and (min-width:600px){
      .selected-video {
          display:flex;
      }
-          .select-time {
+     .customize-video {
+         margin: 20px 15px;
+         width: 40%;
+     }
+     .select-time {
         display: grid;
      }
-     /* .thumbnail img {
-         width:90%;
-     } */
  }
  @media screen and (min-width: 960px) {
      .selected-video {
          display:grid;
-         padding-left: 1.5rem;
      }
-     .select-time-start{
-     margin-right: 0.5rem;
+     .customize-video {
+         margin: 0;
+         width: 100%;
      }
       .select-time {
         display: flex;
      }
- 
-
-     /* .thumbnail img {
-         width:90%;
-     } */
  }
    
    
