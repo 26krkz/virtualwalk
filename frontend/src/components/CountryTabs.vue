@@ -62,7 +62,12 @@ export default {
         getRegionsVideos(selectedRegion){
                 this.selectedRegionVideos = [];
                 let that = this;
-                axios.get('http://localhost/videos', {params: {region: selectedRegion} }, {withCredentials: true})
+                axios.get('http://localhost/videos',
+                          {params: {region: selectedRegion},
+                           withCredentials: true,
+                           headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                          }
+                         )
                 .then(function (response) {
                     that.selectedRegionData = response.data;
                     that.compareSelectedRegionDataAndItems();

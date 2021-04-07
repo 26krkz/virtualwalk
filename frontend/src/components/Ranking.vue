@@ -1,9 +1,19 @@
 <template>
-    <div>
-        <div class="ranking-title">お気に入りランキング<span>Top 5</span></div>
-        <div class="scroll-area">
+    <div class="ranking-wrapper">
+        <div class="ranking">
+            <div class="ranking-title">お気に入りランキング<span>Top5</span></div>
+            <div class="scroll-area">
+                <div v-for="topFiveFavoriteVideo of topFiveFavoriteVideos" :key="topFiveFavoriteVideo.id">
+                    <v-card flat>
+                        <img :src="topFiveFavoriteVideo.snippet.thumbnails.medium.url" 
+                            @click="showSelectedVideo(topFiveFavoriteVideo.snippet.resourceId.videoId)"
+                            class="thumbnail"
+                        >
+                    </v-card>
+                </div>
+            </div>
+            <div class="scroll-area-bottom-icon d-none d-md-block "><v-icon large >mdi-chevron-down</v-icon></div>
         </div>
-        <div class="scroll-area-bottom-icon"><v-icon large >mdi-chevron-down</v-icon></div>
     </div>
 
 </template>
@@ -45,12 +55,10 @@ export default {
         getTopFiveFavorites(){
             let that = this;
 
-            axios.get('http://localhost/favorite', {withCredentials: true} )
+            axios.get('http://localhost/favorite', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
             .then(function (response) {
                 that.topFiveFavorites = response.data;
                 that.compareTopFiveFavoritesAndItems();
-                that.getRankingView();
-                // console.log(that.topFiveFavorites);
             })
             .catch(function (error) {
                 console.log(error);
@@ -70,44 +78,71 @@ export default {
                 }
             }
         },
-        //.scroll-area内にimgタグを作る。それぞれのsrcはお気に入りtopFiveFavoriteVideosから取得する。
-        getRankingView(){
-            let that = this;
-            const scrollArea = document.querySelector('.scroll-area'); 
-            for(let i = 0; this.items&&this.items.length > i; i++){
-                let newImg = document.createElement('img');
-                newImg.src = that.topFiveFavoriteVideos[i].snippet.thumbnails.medium.url;
-                newImg.width = 270;
-                newImg.style.cssText = "cursor:pointer;";
-                newImg.addEventListener('click', ()=>{
-                    that.$emit('select-video-id', that.topFiveFavoriteVideos[i].snippet.resourceId.videoId);
-                    that.$emit('expand-window', true)
-                });
-                scrollArea.appendChild(newImg);
-            }
-        },
+        showSelectedVideo(videoId){
+            this.$emit('select-video-id', videoId);
+            this.$emit('expand-window', true)
+        }
     }
 }
 </script>
 
 <style scoped>
- .scroll-area{
-    height: 570px;
-	overflow: auto;
-    padding-right: 20px;
-}
-.scroll-area-bottom-icon {
-    text-align: center;
-    padding-right: 20px;
-}
-.ranking-title {
-    color: #FF9800;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-.ranking-title span {
-    color: #00BCD4; 
-    font-size: 1.7rem;
-}
+    .scroll-area {
+        display:flex;
+        overflow-x: scroll;
+        border-top: 3px solid #e0e0e0;
+        border-bottom: 3px solid #e0e0e0;
+    }
+    .thumbnail {
+        cursor: pointer;
+        margin: 5px 0.5vw 0 0.5vw;
+    }
+    .scroll-area-bottom-icon {
+        text-align: center;
+        padding-right: 20px;
+    }
+    .ranking-title {
+        color: #FF9800;
+        font-size: 1rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .ranking-title span {
+        color: #00BCD4; 
+        font-size: 1.5rem;
+    }
+    @media screen and (min-width:960px) {
+        .ranking-wrapper {
+            width:100%;
+            padding-top:220%;
+            position: relative;
+            margin:auto;
+        }
+        .ranking {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+        }
+        .scroll-area {
+            display:grid;
+            height: 88%;
+            overflow: auto;
+            padding-right: 20px;
+            border-top: none;
+            border-bottom: none;
+        }
+        .thumbnail {
+            width:100%;
+            margin: 0;
+        }
+    }
+    @media screen and (min-width:1270px) {
+        .ranking-title {
+            font-size:1.2rem;
+        }
+        .ranking-title span {
+            font-size:1.7rem;
+        }
+    }
 </style>

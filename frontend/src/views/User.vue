@@ -114,10 +114,12 @@
                 <div v-for="favoriteVideo of favoriteVideos" 
                     v-bind:key="favoriteVideo.id"
                     >
+                    <v-card class="favorite-video-img">
                         <img :src="favoriteVideo.snippet.thumbnails.medium.url" 
-                            class="favorite-video-img"
+                            
                             @click="showSelectedVideo(favoriteVideo.snippet.resourceId.videoId)"
                         >
+                    </v-card>
                 </div>
             </div>
         </div>
@@ -214,7 +216,7 @@ import axios from 'axios'
                                 }
                         };
     
-        axios.patch( url, params, { withCredentials: true })
+        axios.patch( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }})
         .then(function (response) {
             that.info = response.data;
             that.$emit('logged-in-info', that.info);
@@ -232,7 +234,7 @@ import axios from 'axios'
         const url = 'http://localhost/users/' + this.userData.id;
         let result = confirm('退会するとアカウントが削除されますがよろしいですか？');
         if( result ){
-            axios.delete( url, {withCredentials: true})
+            axios.delete( url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }})
             .then(function (response) {
                 that.info = response.data;
                 that.$emit('logged-in-info', that.info);
@@ -250,7 +252,7 @@ import axios from 'axios'
         //Youtuebeからプレイリストを取得した後、続けてdbのfavoritesテーブルからログインユーザーのお気に入りした動画のidを取得しfavoriteListにいれる
         let that = this;
 
-        axios.get('http://localhost/users/favorites', {withCredentials: true} )
+        axios.get('http://localhost/users/favorites', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
         .then(function (response) {
             that.favoriteList = response.data;
             that.compareFavoriteListAndItems();
@@ -297,7 +299,7 @@ import axios from 'axios'
     display: flex;
  }
  .user-info {
-     font-size: 1.2rem;
+     font-size: 1rem;
      margin-bottom: 10px;
  }
  .email-invisible, .email-visible {
@@ -330,15 +332,15 @@ import axios from 'axios'
  .favorite-videos {
      display:flex;
      overflow-x:scroll;
-     height: 198px;
-     border-radius: 1%/4.5%;
-     margin: 10px 0;
  }
  .favorite-video-img {
      cursor: pointer;
-     height:198px;
-     width:352px;
-     margin-right: 0.5rem;
-     border-radius: 3%/6%;
+     height: 180px;
+     margin: 5px 0.5vw 5px 0;
+ }
+ @media screen and (max-width:400px){
+    .user-info {
+        font-size: 0.8rem;
+    }
  }
 </style>

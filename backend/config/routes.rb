@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   resources :users do
     get :favorites, on: :collection
+    get :guest, on: :collection
   end
   resources :videos
 end

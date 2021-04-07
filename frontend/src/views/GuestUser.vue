@@ -13,14 +13,9 @@ export default {
     },
     created(){
         let that = this;
-        const url = 'http://localhost/login';
-        let params = {session: {email: this.email,
-                                password: this.password,
-                                remember_me: false
-                               }
-                      };
+        const url = 'http://localhost/users/guest';
 
-        axios.post( url, params, {withCredentials: true} )
+        axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
         .then(function (response) {
             that.info = response.data;
             that.$emit('logged-in-info', that.info);

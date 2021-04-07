@@ -13,7 +13,7 @@ export default {
         let that = this;
         let result = confirm('ログアウトしますか？');
         if( result ){
-            axios.delete('http://localhost/login', {withCredentials: true} )
+            axios.delete('http://localhost/login', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
             .then(function (response) {
                 that.info = response.data;
                 that.$emit('logged-in-info', that.info);

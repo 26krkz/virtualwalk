@@ -21,7 +21,6 @@ export default {
                     lng: 155
                 },
                 zoom: 1.9,
-                minZoom: 1.9,
             },
             markerLocation: markerLocation,
             markers: [],
@@ -81,7 +80,6 @@ export default {
   position: relative;
   margin:auto;
   }
- 
 .map {
   position: absolute;
   width: 100%;

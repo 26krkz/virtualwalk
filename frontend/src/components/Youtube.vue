@@ -1,58 +1,70 @@
 <template>
 <v-expand-transition>
-  <v-container v-show="expand" class="container grey lighten-3">
-      <div class="down-icon1"><v-icon x-large >mdi-chevron-down</v-icon></div>
-      <div class="down-icon2"><v-icon x-large >mdi-chevron-down</v-icon></div>
+  <v-container fluid v-show="expand" class="container grey lighten-3">
+      <div class="down-icon1 d-none d-lg-block"><v-icon x-large >mdi-chevron-down</v-icon></div>
+      <div class="down-icon2 d-none d-lg-block"><v-icon x-large >mdi-chevron-down</v-icon></div>
       <v-btn class="close-btn" color="black" icon small outlined @click="expand = !expand">
           <v-icon>mdi-window-close</v-icon>
       </v-btn>
       <v-row>
-        <v-col cols='5' class="selected-video">
-            <img class="thumbnail" v-bind:src="item.snippet.thumbnails.medium.url">
-            <div class="selected-video--tags">
-                <div class="tag"><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.country }}</div>
-                <div class="tag"><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.tag1 }}</div>
-                <div class="tag"><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.region }}</div>
-                <div class="tag"><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.time }}</div>
-            </div>
-
-            <v-btn class="fav-btn" :disabled="disable" @click="pressFavoriteBtn">
-                お気に入りに追加
-                <v-icon v-bind:color="heartColor">{{ heartIcon }}</v-icon>
-            </v-btn>
-            <div class="select-time">
-                <div class="select-time-start">
-                <!-- 開始時間を設定 -->
-                <label for="start">開始時間：
-                <select id="start" v-model="startTime">
-                    <option selected>指定しない</option>
-                    <option v-for="sTime in sTimes" v-bind:key="sTime.id" v-bind:value="sTime.value">
-                        {{ sTime.text }}
-                    </option>
-                </select>
-                </label>
+        <v-col cols='12' md="4" class="selected-video">
+            <div class="video-info">
+                <div class="thumbnail-wrapper">
+                    <div class="thumbnail">
+                        <img v-bind:src="item.snippet.thumbnails.medium.url">
+                    </div>
                 </div>
-            
-                <div class="select-time-playing">
-                <!-- 再生時間を設定 -->
-                <label for="playing">再生時間：
-                <select id="playing" v-model="playingTime" v-on:change="getEndTime">
-                    <option selected>指定しない</option>
-                    <option v-for="pTime in pTimes" v-bind:key="pTime.id" v-bind:value="pTime.value">
-                        {{ pTime.text }}
-                    </option>
-                </select>
-                </label>
+                <div class="selected-video--tags">
+                    <div class="tag"><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.country }}</div>
+                    <div class="tag"><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.tag1 }}</div>
+                    <div class="tag"><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.region }}</div>
+                    <div class="tag"><v-icon small color="orange">mdi-tag</v-icon>{{ videoData.time }}</div>
                 </div>
             </div>
+            <div class="customize-video">
+                <v-btn class="fav-btn" :disabled="disable" @click="pressFavoriteBtn">
+                    お気に入りに追加
+                    <v-icon v-bind:color="heartColor">{{ heartIcon }}</v-icon>
+                </v-btn>
+                <div class="select-time">
+                    <div class="select-time-start">
+                    <!-- 開始時間を設定 -->
+                    <label for="start">開始時間:
+                    <select id="start" v-model="startTime">
+                        <option selected>指定しない</option>
+                        <option v-for="sTime in sTimes" v-bind:key="sTime.id" v-bind:value="sTime.value">
+                            {{ sTime.text }}
+                        </option>
+                    </select>
+                    </label>
+                    </div>
+                
+                    <div class="select-time-playing">
+                    <!-- 再生時間を設定 -->
+                    <label for="playing">再生時間:
+                    <select id="playing" v-model="playingTime" v-on:change="getEndTime">
+                        <option selected>指定しない</option>
+                        <option v-for="pTime in pTimes" v-bind:key="pTime.id" v-bind:value="pTime.value">
+                            {{ pTime.text }}
+                        </option>
+                    </select>
+                    </label>
+                    </div>
+                </div>
 
-            <v-btn class="resume-btn" @click="resume">表示</v-btn>
+                <v-btn class="resume-btn" @click="resume">表示</v-btn>
+            </div>
         </v-col>
-        <v-col class="iframe" cols='7'>
-            <iframe width="656" height="369" 
-                v-bind:src="selectedMovieUrl" frameborder="0" allowfullscreen>
-            </iframe>
-            <div class="iframe-cover" v-show="show2">表示ボタンを押してね</div>
+        <v-col cols='12' md="8">
+            <div class="iframe-wrapper">
+                <iframe
+                    v-bind:src="selectedMovieUrl"
+                    frameborder="0"
+                    allowfullscreen
+                    class="iframe">
+                </iframe>
+                <div class="iframe-cover" v-show="show2">表示ボタンを押してね</div>
+            </div>
         </v-col>
       </v-row>
       <!-- お気に入りに加えたらスナックバーを表示する -->
@@ -89,7 +101,7 @@ export default {
           snackbar: false,
           snackbarText: '',
           selectedMovieUrl: '',
-          startTime: '',
+          startTime: '0',
           playingTime: '',
           endTime: '',
           sTimes: [
@@ -125,7 +137,7 @@ export default {
     // アプリを開いた時にログイン済みかどうか確認する。
     // ログイン済みの場合のみ（jsonにcurrent_userが含まれる）、current_userを取得＋お気に入りボタンを表示
     let that = this;
-        axios.get('http://localhost/login', { withCredentials: true })
+        axios.get('http://localhost/login', { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
             const info = response.data;
             if(info.current_user){
@@ -158,7 +170,7 @@ export default {
                     //    データ取得後、propsで取得したyoutubeのプレイリストの動画の中から取得したデータと一致する動画をitemに格納
                     const url = 'http://localhost/videos/' + this.videoId;
             
-                    axios.get(url, {withCredentials: true} )
+                    axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
                     .then(function (response) {
                         that.videoData = response.data;
                         if( that.current_user != null){
@@ -191,7 +203,7 @@ export default {
          // ログインしているユーザーがお気に入りした全ての動画のvideo_idを取得し、その中に選択した動画のidがあるか調べる。
          // あればお気に入り登録されているのでハートマークを赤色に、なければそのままにする。
         let that = this;
-        axios.get('http://localhost/users/favorites', {withCredentials: true} )
+        axios.get('http://localhost/users/favorites', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
         .then(function (response) {
             let favoriteList = response.data;
             for(let i = 0;i < favoriteList.length; i++){
@@ -223,7 +235,7 @@ export default {
         let params = {user_id: this.current_user.id,
                       video_id: this.videoData.id
                       };
-        axios.post( url, params, { withCredentials: true })
+        axios.post( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
             that.snackbarText = response.data.message;
         })
@@ -241,7 +253,7 @@ export default {
         let that = this;
         const url = 'http://localhost/favorite';
         let params = { data: { video_id: this.videoData.id, user_id: this.current_user.id } };
-        axios.delete( url, params, { withCredentials: true })
+        axios.delete( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
             that.snackbarText = response.data.message;
             console.log(response.data)
@@ -262,7 +274,7 @@ export default {
 
 <style scoped>
  .container {
-      margin-bottom: 50px;
+      margin-bottom: 30px;
       position: relative;
  }
  .down-icon1 {
@@ -282,12 +294,20 @@ export default {
  }
 
  .selected-video {
-       padding-left: 1.5rem;
+       width:100%;
  }
- .thumbnail {
-      height:198px;
-      width:352px;
-      margin: 5px 0;
+ .thumbnail-wrapper {
+     width:100%;
+     padding-top:56.25%; 
+     position:relative;
+     margin-bottom: 5px;
+ }
+ .thumbnail img{
+      position:absolute;
+      top:0;
+      width:100%;
+      height: 100%;
+      /* margin: 5px 0; */
  }
  .selected-video--tags {
       display:flex;
@@ -299,38 +319,69 @@ export default {
   }
  .select-time {
      display: flex;
+     user-select:none;
  }
- .select-time-start, .select-time-playing {
-     margin-right: 1rem;
+ .select-time-start {
+     margin-right: 0.5rem;
+     margin-bottom: 15px;
+ }
+ .select-time-playing {
+     margin-bottom: 15px;
  }
  .select-time-start label, .select-time-playing label {
      background-color: #f5f5f5;
      padding: 9px 4px;
      border-radius: 4%;
+     font-size: 0.825rem;
  }
- .select-time-start, .select-time-playing, .fav-btn, .resume-btn {
+ .fav-btn, .resume-btn {
+     width: 100%;
      margin-bottom: 15px;
      user-select:none;
  }
- .fav-btn, .resume-btn {
-     width: 20vw;
- }
 
+ .iframe-wrapper {
+     width:100%;
+     padding-top:56.25%; 
+     position:relative;
+ }
  .iframe {
-      position:relative;
-      padding-top: 20px;
-      padding-right: 20px;
+     position: absolute;
+     top: 0;
+     width: 100%;
+     height: 100%;
  }
  .iframe-cover {
       position:absolute;
       top: 0;
-      left: 0;
       background-color: #c0c0c0;
-      width:656px;
-      height: 369px;
-      margin-left: 20px;
-      margin-top: 20px;
       text-align: center;
+      width: 100%;
+      height: 100%;
+ }
+ @media screen and (min-width:600px){
+     .selected-video {
+         display:flex;
+     }
+     .customize-video {
+         margin: 20px 15px;
+         width: 40%;
+     }
+     .select-time {
+        display: grid;
+     }
+ }
+ @media screen and (min-width: 960px) {
+     .selected-video {
+         display:grid;
+     }
+     .customize-video {
+         margin: 0;
+         width: 100%;
+     }
+      .select-time {
+        display: flex;
+     }
  }
    
    
