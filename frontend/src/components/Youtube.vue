@@ -101,7 +101,7 @@ export default {
           snackbar: false,
           snackbarText: '',
           selectedMovieUrl: '',
-          startTime: '',
+          startTime: '0',
           playingTime: '',
           endTime: '',
           sTimes: [
@@ -137,7 +137,7 @@ export default {
     // アプリを開いた時にログイン済みかどうか確認する。
     // ログイン済みの場合のみ（jsonにcurrent_userが含まれる）、current_userを取得＋お気に入りボタンを表示
     let that = this;
-        axios.get('http://localhost/login', { withCredentials: true })
+        axios.get('http://localhost/login', { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
             const info = response.data;
             if(info.current_user){
@@ -170,7 +170,7 @@ export default {
                     //    データ取得後、propsで取得したyoutubeのプレイリストの動画の中から取得したデータと一致する動画をitemに格納
                     const url = 'http://localhost/videos/' + this.videoId;
             
-                    axios.get(url, {withCredentials: true} )
+                    axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
                     .then(function (response) {
                         that.videoData = response.data;
                         if( that.current_user != null){
@@ -203,7 +203,7 @@ export default {
          // ログインしているユーザーがお気に入りした全ての動画のvideo_idを取得し、その中に選択した動画のidがあるか調べる。
          // あればお気に入り登録されているのでハートマークを赤色に、なければそのままにする。
         let that = this;
-        axios.get('http://localhost/users/favorites', {withCredentials: true} )
+        axios.get('http://localhost/users/favorites', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
         .then(function (response) {
             let favoriteList = response.data;
             for(let i = 0;i < favoriteList.length; i++){
@@ -235,7 +235,7 @@ export default {
         let params = {user_id: this.current_user.id,
                       video_id: this.videoData.id
                       };
-        axios.post( url, params, { withCredentials: true })
+        axios.post( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
             that.snackbarText = response.data.message;
         })
@@ -253,7 +253,7 @@ export default {
         let that = this;
         const url = 'http://localhost/favorite';
         let params = { data: { video_id: this.videoData.id, user_id: this.current_user.id } };
-        axios.delete( url, params, { withCredentials: true })
+        axios.delete( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
             that.snackbarText = response.data.message;
             console.log(response.data)

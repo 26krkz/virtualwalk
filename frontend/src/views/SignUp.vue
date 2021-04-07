@@ -139,7 +139,7 @@ import axios from 'axios'
                              }
                       };
 
-        axios.post( url, params, { withCredentials: true })
+        axios.post( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }})
         .then(function (response) {
             that.info = response.data;
             that.$emit('logged-in-info', that.info);

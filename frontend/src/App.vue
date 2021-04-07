@@ -79,7 +79,7 @@
       color="cyan"
     >
         <div>
-          <v-btn icon @click="drawer = !drawer">
+          <v-btn class="arrow-left" icon @click="drawer = !drawer">
             <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
         </div>
@@ -144,7 +144,7 @@ export default {
   created(){
     // アプリを開いた時にログイン済みかどうか確認する
     let that = this;
-        axios.get('http://localhost/login', { withCredentials: true })
+        axios.get('http://localhost/login', { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
             that.info = response.data;
             if(that.info.current_user){
@@ -197,6 +197,9 @@ export default {
  .snackbar {
    position:absolute;
    top:5px;
+ }
+ .arrow-left {
+   margin:10px;
  }
  @media screen and(max-width:960px){
    .home-btn {

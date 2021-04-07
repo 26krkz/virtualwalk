@@ -55,7 +55,7 @@ export default {
         getTopFiveFavorites(){
             let that = this;
 
-            axios.get('http://localhost/favorite', {withCredentials: true} )
+            axios.get('http://localhost/favorite', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
             .then(function (response) {
                 that.topFiveFavorites = response.data;
                 that.compareTopFiveFavoritesAndItems();

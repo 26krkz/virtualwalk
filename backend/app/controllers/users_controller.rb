@@ -42,6 +42,20 @@ class UsersController < ApplicationController
         render json: @favorite_list
     end
 
+    #ゲストユーザーログイン
+    def guest
+        @user = User.new(
+                         name: "ゲストユーザー",
+                         email: "guest_#{SecureRandom.alphanumeric(9)}@example.com",
+                         password: SecureRandom.alphanumeric(10)
+                         )
+        @user.save
+        log_in @user
+        logged_in?
+        info = {message: 'ゲストユーザーでログインしました！', current_user: @current_user, loggedIn: @logged_in }
+        render json:info
+    end
+
     private
 
         def user_params

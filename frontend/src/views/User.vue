@@ -216,7 +216,7 @@ import axios from 'axios'
                                 }
                         };
     
-        axios.patch( url, params, { withCredentials: true })
+        axios.patch( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }})
         .then(function (response) {
             that.info = response.data;
             that.$emit('logged-in-info', that.info);
@@ -234,7 +234,7 @@ import axios from 'axios'
         const url = 'http://localhost/users/' + this.userData.id;
         let result = confirm('退会するとアカウントが削除されますがよろしいですか？');
         if( result ){
-            axios.delete( url, {withCredentials: true})
+            axios.delete( url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }})
             .then(function (response) {
                 that.info = response.data;
                 that.$emit('logged-in-info', that.info);
@@ -252,7 +252,7 @@ import axios from 'axios'
         //Youtuebeからプレイリストを取得した後、続けてdbのfavoritesテーブルからログインユーザーのお気に入りした動画のidを取得しfavoriteListにいれる
         let that = this;
 
-        axios.get('http://localhost/users/favorites', {withCredentials: true} )
+        axios.get('http://localhost/users/favorites', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
         .then(function (response) {
             that.favoriteList = response.data;
             that.compareFavoriteListAndItems();
