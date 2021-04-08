@@ -16,7 +16,7 @@ Youtube上にある様々な国や地域の街並みを徒歩で撮影した動�
 ## 使用技術
 #### バックエンド
 * Ruby 2.6.6  
-* Ruby on Rails 6.1.1  
+* Ruby on Rails 6.1.3  
 * MySQL 5.7  
 * Nginx 1.15.8  
 #### フロントエンド
@@ -25,9 +25,13 @@ Youtube上にある様々な国や地域の街並みを徒歩で撮影した動�
 #### その他
 Docker|Docker-compose
 #### gem
+* rack-cors (1.1.1)  
+* rspec-rails (5.0.1)  
+* spring-commands-rspec (1.0.4)  
+* factory_bot_rails (6.1.0)  
 
 #### npm
-* vue-router 3.2.0 (SPA化)
-* vuetify 2.4.0 (CSSコンポーネントライブラリ)
-* axios 0.21.1 (外部APIとの通信)
-* google-maps-api-loader 1.1.1 (Googleマップ)
+* vue-router (3.2.0) (SPA化)
+* vuetify (2.4.0) (CSSコンポーネントライブラリ)
+* axios (0.21.1) (外部APIとの通信)
+* google-maps-api-loader (1.1.1) (Googleマップ)
