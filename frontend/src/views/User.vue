@@ -297,6 +297,7 @@ import axios from 'axios'
  }
 .user-info--name, .user-info--email, .email-invisible, .email-visible{
     display: flex;
+    flex-wrap: wrap;
  }
  .user-info {
      font-size: 1rem;
