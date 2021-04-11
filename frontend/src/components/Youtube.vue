@@ -252,11 +252,10 @@ export default {
         //既にお気に入りに登録している場合、favoritesテーブルのuser_idとvideo_idの一致するデータを削除する。
         let that = this;
         const url = 'http://localhost/favorite';
-        let params = { data: { video_id: this.videoData.id, user_id: this.current_user.id } };
-        axios.delete( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        let params = { video_id: this.videoData.id, user_id: this.current_user.id };
+        axios.delete( url, {params: params, withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
             that.snackbarText = response.data.message;
-            console.log(response.data)
         })
         .catch(function (error) {
             console.log(error);
