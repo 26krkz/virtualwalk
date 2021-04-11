@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
-    def show
-        @user = User.find(params[:id])
-        render json: @user
-    end
+    # def show
+    #     @user = User.find(params[:id])
+    #     render json: @user
+    # end
 
     def create
         @user = User.new(user_params)
@@ -38,8 +38,12 @@ class UsersController < ApplicationController
         current_user
 
         favorites = Favorite.where(user_id: @current_user.id).pluck(:video_id)
-        @favorite_list = Video.find(favorites)
-        render json: @favorite_list
+        if favorites.length != 0
+            @favorite_list = Video.find(favorites)
+            render json: @favorite_list
+        else
+            render json: {message: "does not have favorites"}
+        end
     end
 
     #ゲストユーザーログイン

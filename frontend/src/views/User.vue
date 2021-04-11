@@ -111,6 +111,11 @@
         <div class="favorites-title">お気に入り一覧</div>
         <div class="border">
             <div class="favorite-videos">
+                <div v-show="showDummy">
+                    <v-card class="favorite-video-img-dummy">
+                        <div class="img-dummy"><div>お気に入りに追加すると<br>動画が表示されます。</div></div>
+                    </v-card>
+                </div>
                 <div v-for="favoriteVideo of favoriteVideos" 
                     v-bind:key="favoriteVideo.id"
                     >
@@ -144,6 +149,7 @@ import axios from 'axios'
         show1: false,
         show2: false,
         show3: false,
+        showDummy: false,
         info: null,
         videoId: '',
         items: [],
@@ -254,6 +260,9 @@ import axios from 'axios'
 
         axios.get('http://localhost/users/favorites', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
         .then(function (response) {
+            if(response.data.message){
+                that.showDummy = true;
+            }
             that.favoriteList = response.data;
             that.compareFavoriteListAndItems();
 
@@ -333,6 +342,19 @@ import axios from 'axios'
  .favorite-videos {
      display:flex;
      overflow-x:scroll;
+ }
+ .favorite-video-img-dummy {
+     height: 180px;
+     margin: 5px 0.5vw 5px 0;
+ }
+ .img-dummy {
+     height: 180px;
+     width: 320px;
+     background-color: #c0c0c0;
+ }
+ .img-dummy div {
+     padding-top: 70px;
+     text-align: center;
  }
  .favorite-video-img {
      cursor: pointer;
