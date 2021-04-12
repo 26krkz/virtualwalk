@@ -37,8 +37,10 @@ RSpec.describe "Users", type: :request do
 
     context 'with invalid params' do
       it 'does not create new user' do
-        #これが必要かわかんない
+
         expect_any_instance_of(ApplicationController).to_not receive(:log_in)
+        expect_any_instance_of(ApplicationController).to_not receive(:logged_in?)
+
 
         params = {
           user: {
@@ -84,8 +86,8 @@ RSpec.describe "Users", type: :request do
 
     context 'with invalid params' do
       it 'does not update a user' do
-        #なぜ要らないのかわからない
-        # expect_any_instance_of(ApplicationController).to receive(:logged_in?)
+        expect_any_instance_of(ApplicationController).to_not receive(:logged_in?)
+
         
         params = {
           user: {
