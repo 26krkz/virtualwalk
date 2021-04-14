@@ -5,16 +5,11 @@ RSpec.describe "Users", type: :request do
     { 'X-Requested-With': 'XMLHttpRequest' }
   }
   let(:user) { FactoryBot.create(:user) }
-
-  before do
-    allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(user)
-  end
+  let(:video) { FactoryBot.create(:video) }
 
   describe 'POST /users' do
     context 'with valid params' do
       it 'creates new user' do
-        expect_any_instance_of(ApplicationController).to receive(:log_in)
-        expect_any_instance_of(ApplicationController).to receive(:logged_in?)
 
         params = {
           user: {
@@ -30,15 +25,13 @@ RSpec.describe "Users", type: :request do
         }.to change(User, :count).by(+1)
 
         expect(response).to have_http_status(200)
-        json = JSON.parse(response.body)
         expect(json['message']).to eq '登録が完了しました！'
+        expect(json['current_user']).to be_truthy
       end
     end
 
     context 'with invalid params' do
       it 'does not create new user' do
-        #これが必要かわかんない
-        expect_any_instance_of(ApplicationController).to_not receive(:log_in)
 
         params = {
           user: {
@@ -54,17 +47,29 @@ RSpec.describe "Users", type: :request do
         }.to change(User, :count).by(0)
 
         expect(response).to have_http_status(200)
-        json = JSON.parse(response.body)
         expect(json['error']).to be_truthy
+        expect(json['current_user']).to be_falsey
       end
     end
   end
 
   describe 'PATCH /users/:id' do
+    #一度userでログインする
+    before do
+      params = {
+        session: {
+          email: user.email,
+          password: user.password,
+          remember_me: false
+        }
+      }
+        
+      post '/login', params: params, headers: xhr_header
+    end
+
     context 'with valid params' do
       it 'updates a user' do
-        expect_any_instance_of(ApplicationController).to receive(:logged_in?)
-        
+
         params = {
           user: {
             name: '変更したユーザー',
@@ -73,19 +78,16 @@ RSpec.describe "Users", type: :request do
             password_confirmation: 'updatefoobar'
           }
         }
-
         patch "/users/#{user.id}", params: params, headers: xhr_header
 
         expect(response).to have_http_status(200)
-        json = JSON.parse(response.body)
         expect(json['message']).to eq 'プロフィールを変更しました！'
+        expect(json['current_user']).to be_truthy
       end
     end
 
     context 'with invalid params' do
       it 'does not update a user' do
-        #なぜ要らないのかわからない
-        # expect_any_instance_of(ApplicationController).to receive(:logged_in?)
         
         params = {
           user: {
@@ -99,13 +101,26 @@ RSpec.describe "Users", type: :request do
         patch "/users/#{user.id}", params: params, headers: xhr_header
 
         expect(response).to have_http_status(200)
-        json = JSON.parse(response.body)
         expect(json['error']).to be_truthy
+        expect(json['current_user']).to be_falsey
       end
     end
   end
 
   describe 'DELETE /users/:id' do
+    #一度userでログインする
+    before do
+      params = {
+        session: {
+          email: user.email,
+          password: user.password,
+          remember_me: false
+        }
+      }
+        
+      post '/login', params: params, headers: xhr_header
+    end
+
     it 'delete a user' do
       expect {
         delete "/users/#{user.id}",
@@ -113,29 +128,57 @@ RSpec.describe "Users", type: :request do
       }.to change(User, :count).by(-1)
 
       expect(response).to have_http_status(200)
-      json = JSON.parse(response.body)
       expect(json['message']).to eq '退会しました'
+      expect(json['current_user']).to be_falsey
     end
   end
 
-  # describe 'GET /users/favorites' do
-  #   it 'get user favorites' do
-  #   end
-  # end
+  describe 'GET /users/favorites' do
+    #一度userでログインする
+    before do
+      params = {
+        session: {
+          email: user.email,
+          password: user.password,
+          remember_me: false
+        }
+      }
+        
+      post '/login', params: params, headers: xhr_header
+    end
+
+    it 'get user favorite videos' do
+      params = {
+        user_id: json['current_user']['id'],
+        video_id: video.id
+      }
+
+      # 一度paramsで渡す情報でfavorite tableに追加する(お気に入り追加)
+      post '/favorite', params: params, headers: xhr_header
+
+      get '/users/favorites', headers: xhr_header
+      expect(response).to have_http_status(200)
+      expect(json).to be_truthy
+
+    end
+    it 'get user favorite videos but when there is no user favorite videos' do
+      get '/users/favorites', headers: xhr_header
+      expect(response).to have_http_status(200)
+      expect(json['message']).to eq 'does not have favorites'
+
+    end
+  end
 
   describe 'GET /users/guest' do
     it 'create a guest user and login' do
 
-      expect_any_instance_of(ApplicationController).to receive(:log_in)
-      expect_any_instance_of(ApplicationController).to receive(:logged_in?)
-
       expect {
         get "/users/guest",
         headers: xhr_header
-    }.to change(User, :count).by(+1)
+      }.to change(User, :count).by(+1)
       expect(response).to have_http_status(200)
-      json = JSON.parse(response.body)
       expect(json['message']).to eq 'ゲストユーザーでログインしました！'
+      expect(json['current_user']).to be_truthy
     end
   end
 end

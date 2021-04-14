@@ -8,10 +8,15 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
-      log_in user                   #ログイン成功後はApp.vueではなく/Homeに移動するのでnewメソッドは利用できない
+      log_in user                   #ログイン成功後はApp.vueではなく/Homeに移動するのでnewメソッドは利用できない、
       logged_in?                    #そこで@current_userと@looged_inを取得するためにlooged_in?を追加している
-      params[:session][:remember_me] == true ? remember(user) : forget(user)
-      #ユーザーログイン後にsucessメッセージとuser nameをrenderする
+      # params[:session][:remember_me] == true ? remember(user) : forget(user)
+      if params[:session][:remember_me]
+        remember(user)
+      else
+        forget(user)
+      end
+      #ユーザーログイン後にsucessメッセージとユーザーデータをrenderする
       info = { message: 'ログインしました！', current_user: @current_user, loggedIn: @logged_in }
     else
       #ログインに失敗したらエラーメッセージをrenderする
