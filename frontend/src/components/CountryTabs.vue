@@ -106,6 +106,6 @@ export default {
      overflow: auto;
  }
  .tab-item {
-     margin: 10px 5px;
+     margin: 10px 7px;
  }
 </style>

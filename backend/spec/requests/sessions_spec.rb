@@ -40,43 +40,40 @@ RSpec.describe "Sessions", type: :request do
 
   describe 'POST /login' do
     context 'with valid params' do
-      context 'login with valid email and password with remembering' do
-        it 'login with remebering' do
-        
-          params = {
-            session: {
-              email: user.email,
-              password: user.password,
-              remember_me: true
-            }
+      it 'login with remebering' do
+      
+        params = {
+          session: {
+            email: user.email,
+            password: user.password,
+            remember_me: true
           }
-            
-          post '/login', params: params, headers: xhr_header
-  
-          expect(response).to have_http_status(200)
-          expect(json['message']).to eq 'ログインしました！'
-          expect(json['current_user']).to be_truthy
-          # expect(cookies[:remember_token]).to be_truthy
-        end
+        }
+          
+        post '/login', params: params, headers: xhr_header
+
+        expect(response).to have_http_status(200)
+        expect(json['message']).to eq 'ログインしました！'
+        expect(json['current_user']).to be_truthy
+        expect(cookies[:remember_token]).to be_truthy
       end
-      context 'login with valid email and password without remembering' do
-        it 'login without remembering' do
-        
-          params = {
-            session: {
-              email: user.email,
-              password: user.password,
-              remember_me: false
-            }
+      it 'login without remembering' do
+      
+        params = {
+          session: {
+            email: user.email,
+            password: user.password,
+            remember_me: false
           }
-  
-          post '/login', params: params, headers: xhr_header
-  
-          expect(response).to have_http_status(200)
-          expect(json['message']).to eq 'ログインしました！'
-          expect(json['current_user']).to be_truthy
-          # expect(cookies[:remember_token]).to be_falsey
-        end
+        }
+
+        post '/login', params: params, headers: xhr_header
+
+        expect(response).to have_http_status(200)
+        expect(json['message']).to eq 'ログインしました！'
+        expect(json['current_user']).to be_truthy
+        #なぜかremember_tokenがnilにならない。controller内では機能している。
+        # expect(cookies[:remember_token]).to be_falsey
       end
     end
 
