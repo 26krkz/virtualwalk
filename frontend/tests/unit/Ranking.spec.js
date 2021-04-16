@@ -1,13 +1,16 @@
-import { mount } from '@vue/test-utils'
-import Vue from 'vue';
+import { mount, createLocalVue } from '@vue/test-utils'
 import Vuetify from 'vuetify';
 import Ranking from '@/components/Ranking.vue'
 
-Vue.use(Vuetify);
-
 describe('Ranking.vue', () => {
+    const localVue = createLocalVue();
+    let vuetify
+
+    beforeEach(() => {
+      vuetify = new Vuetify()
+    })
     it('render a Ranking top 5 videos', () => {
-        const wrapper = mount(Ranking);
+        const wrapper = mount(Ranking, { localVue, vuetify });
         console.log(wrapper.html())
     })
 })
