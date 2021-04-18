@@ -62,7 +62,8 @@ export default {
         getRegionsVideos(selectedRegion){
                 this.selectedRegionVideos = [];
                 let that = this;
-                axios.get('http://localhost/videos',
+                const url = process.env.VUE_APP_API_BASE_URL + '/videos';
+                axios.get(url,
                           {params: {region: selectedRegion},
                            withCredentials: true,
                            headers: { 'X-Requested-With': 'XMLHttpRequest' }

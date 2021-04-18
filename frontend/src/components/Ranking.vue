@@ -54,8 +54,8 @@ export default {
         //お気に入りに追加された回数で降順に並べた動画データを配列で取得する
         getTopFiveFavorites(){
             let that = this;
-
-            axios.get('http://localhost/favorite', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
+            const url = process.env.VUE_APP_API_BASE_URL + '/favorite';
+            axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
             .then(function (response) {
                 that.topFiveFavorites = response.data;
                 that.compareTopFiveFavoritesAndItems();

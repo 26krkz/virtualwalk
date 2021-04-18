@@ -105,7 +105,7 @@ import axios from 'axios'
       },
       submit () {
         let that = this;
-        const url = 'http://localhost/login';
+        const url = process.env.VUE_APP_API_BASE_URL + '/login';
         let params = {session: {email: this.form.email,
                                 password: this.form.password,
                                 remember_me: this.form.remember_me

@@ -214,7 +214,7 @@ import axios from 'axios'
       //ユーザーアカウントの更新メソッド
       updateAccount() {
         let that = this;
-        const url = 'http://localhost/users/' + this.userData.id;
+        const url = process.env.VUE_APP_API_BASE_URL + '/users/' + this.userData.id;
         const params =  {user: {name: this.form.userName,
                                 email: this.form.email,
                                 password: this.form.password1,
@@ -237,7 +237,7 @@ import axios from 'axios'
       //ユーザーの退会メソッド
       deleteAccount(){
         let that = this;
-        const url = 'http://localhost/users/' + this.userData.id;
+        const url = process.env.VUE_APP_API_BASE_URL + '/users/' + this.userData.id;
         let result = confirm('退会するとアカウントが削除されますがよろしいですか？');
         if( result ){
             axios.delete( url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }})
@@ -257,8 +257,9 @@ import axios from 'axios'
        getFavoriteList(){
         //Youtuebeからプレイリストを取得した後、続けてdbのfavoritesテーブルからログインユーザーのお気に入りした動画のidを取得しfavoriteListにいれる
         let that = this;
+        const url = process.env.VUE_APP_API_BASE_URL + '/users/favorites';
 
-        axios.get('http://localhost/users/favorites', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
+        axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
         .then(function (response) {
             if(response.data.message){
                 that.showDummy = true;

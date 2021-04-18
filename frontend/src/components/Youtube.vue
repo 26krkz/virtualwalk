@@ -136,8 +136,9 @@ export default {
   created(){
     // アプリを開いた時にログイン済みかどうか確認する。
     // ログイン済みの場合のみ（jsonにcurrent_userが含まれる）、current_userを取得＋お気に入りボタンを表示
-    let that = this;
-        axios.get('http://localhost/login', { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        let that = this;
+        const url = process.env.VUE_APP_API_BASE_URL + '/login';
+        axios.get(url, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
             const info = response.data;
             if(info.current_user){
@@ -168,7 +169,7 @@ export default {
 
                     //    videoIdを元にdb上のvideoテーブルからvideoIdと一致するvideo_idをもつデータを取得
                     //    データ取得後、propsで取得したyoutubeのプレイリストの動画の中から取得したデータと一致する動画をitemに格納
-                    const url = 'http://localhost/videos/' + this.videoId;
+                    const url = process.env.VUE_APP_API_BASE_URL + '/videos/' + this.videoId;
             
                     axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
                     .then(function (response) {
@@ -203,7 +204,8 @@ export default {
          // ログインしているユーザーがお気に入りした全ての動画のvideo_idを取得し、その中に選択した動画のidがあるか調べる。
          // あればお気に入り登録されているのでハートマークを赤色に、なければそのままにする。
         let that = this;
-        axios.get('http://localhost/users/favorites', {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
+        const url = process.env.VUE_APP_API_BASE_URL + '/users/favorites';
+        axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
         .then(function (response) {
             let favoriteList = response.data;
             for(let i = 0;i < favoriteList.length; i++){
@@ -231,7 +233,7 @@ export default {
     addFavorite(){
         //お気に入りに登録したら、ログインしているユーザーとその動画をaxios.postによりfavoritesテーブルに登録する
         let that = this;
-        const url = 'http://localhost/favorite';
+        const url = process.env.VUE_APP_API_BASE_URL + '/favorite';
         let params = {
                 user_id: this.current_user.id,
                 video_id: this.videoData.id
@@ -253,7 +255,7 @@ export default {
     removeFavorite(){
         //既にお気に入りに登録している場合、favoritesテーブルのuser_idとvideo_idの一致するデータを削除する。
         let that = this;
-        const url = 'http://localhost/favorite';
+        const url = process.env.VUE_APP_API_BASE_URL + '/favorite';
         let params = {
                 user_id: this.current_user.id,
                 video_id: this.videoData.id

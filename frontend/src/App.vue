@@ -144,7 +144,8 @@ export default {
   created(){
     // アプリを開いた時にログイン済みかどうか確認する
     let that = this;
-        axios.get('http://localhost/login', { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+    const url = process.env.VUE_APP_API_BASE_URL + '/login';
+        axios.get(url, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
             that.info = response.data;
             if(that.info.current_user){
