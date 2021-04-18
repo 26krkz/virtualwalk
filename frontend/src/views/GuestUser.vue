@@ -13,7 +13,7 @@ export default {
     },
     created(){
         let that = this;
-        const url = 'http://localhost/users/guest';
+        const url = process.env.VUE_APP_API_BASE_URL + '/users/guest';
 
         axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
         .then(function (response) {
