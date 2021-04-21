@@ -26,6 +26,7 @@ Youtube上にある様々な国や地域の街並みを徒歩で撮影した動�
 Docker|Docker-compose
 #### gem
 * rack-cors (1.1.1)  
+* unicorn (6.0.0)
 * rspec-rails (5.0.1)  
 * spring-commands-rspec (1.0.4)  
 * factory_bot_rails (6.1.0)  
