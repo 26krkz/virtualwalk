@@ -12,12 +12,12 @@ services:
     stdin_open: true
 
   app:
-    build: ./backend/api
+    build: ./backend
     env_file:
       - ./backend/environments/db.env
-    command: bundle exec puma -C config/puma.rb
+    command: bundle exec unicorn -c config/unicorn.rb
     volumes:
-      - ./backend/api:/webapp:cached
+      - ./backend:/webapp:cached
       - public-data:/webapp/public
       - tmp-data:/webapp/tmp
       - log-data:/webapp/log
@@ -32,7 +32,7 @@ services:
       - ./backend/environments/db.env
     volumes:
       - db-data:/var/lib/mysql
-      - ./backend/mycnf/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./backend/my.cnf:/etc/mysql/conf.d/my.cnf
     ports:
       - '3306:3306'
 

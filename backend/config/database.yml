@@ -50,6 +50,8 @@ test:
 #
 production:
   <<: *default
-  database: webapp_production
-  username: webapp
-  password: <%= ENV['WEBAPP_DATABASE_PASSWORD'] %>
+  database: <%= ENV['DATABASE_NAME'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  url: <%= ENV['DATABASE_URL'] %>
+  

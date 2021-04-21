@@ -24,4 +24,4 @@ RUN bundle install
 COPY . /webapp
 
 # puma.sockを配置するディレクトリを作成
-RUN mkdir -p tmp/sockets
+# RUN mkdir -p tmp/sockets
