@@ -1,3 +1,8 @@
+events {
+  use epoll;
+  worker_connections 1024;
+}
+
 http{
   upstream webapp {
     server unix:///webapp/tmp/sockets/.unicorn.sock fail_timeout=0;
@@ -5,7 +10,7 @@ http{
 
   server {
     listen <%= ENV["PORT"] %>;
-    server_name https://virtualwalk-backend.herokuapp.com;
+    server_name *.herokuapp.com;
 
     access_log /var/log/nginx/access.log;
     error_log  /var/log/nginx/error.log;
