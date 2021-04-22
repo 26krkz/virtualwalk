@@ -1,12 +1,24 @@
+daemon off;
+
+worker_processes <%= ENV['NGINX_WORKERS'] || 4 %>;
+
 events {
   use epoll;
+  accept_mutex on;
   worker_connections 1024;
 }
 
-http{
-  upstream webapp {
-    server unix:///webapp/tmp/sockets/.unicorn.sock fail_timeout=0;
-  }
+http {
+  gzip on;
+  gzip_comp_level 3;
+  gzip_min_length 150;
+  gzip_proxied any;
+  gzip_types text/plain text/css text/json text/javascript
+    application/javascript application/x-javascript application/json
+    application/rss+xml application/vnd.ms-fontobject application/x-font-ttf
+    application/xml font/opentype image/svg+xml text/xml;
+
+  server_tokens off;
 
   log_format l2met 'measure#nginx.service=$request_time request_id=$http_x_request_id';
   access_log logs/nginx/access.log l2met;
@@ -18,27 +30,63 @@ http{
 
   client_body_timeout 5;
 
+  upstream app_server {
+    server unix:///webapp/tmp/sockets/.unicorn.sock fail_timeout=0;
+  }
+
   server {
     listen <%= ENV["PORT"] %>;
     server_name *.herokuapp.com;
-
-    access_log /var/log/nginx/access.log;
-    error_log  /var/log/nginx/error.log;
+    keepalive_timeout 5;
 
     root /webapp/public;
 
-    client_max_body_size 100m;
-    error_page 404             /404.html;
-    error_page 505 502 503 504 /500.html;
-    try_files  $uri/index.html $uri @webapp;
-    keepalive_timeout 5;
+    location ~* ^/documentation(.*) {
+      set $s3_bucket        'docs.codeship.io.s3-website-us-east-1.amazonaws.com';
+      set $url_full         '$1';
+      resolver              8.8.8.8 valid=300s;
+      resolver_timeout      10s;
 
+      index index.html;
 
-    location @webapp {
+      proxy_hide_header       x-amz-id-2;
+      proxy_hide_header       x-amz-request-id;
+      proxy_hide_header       Set-Cookie;
+      proxy_set_header        X-Real-IP $remote_addr;
+      proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header        Host $s3_bucket;
+      proxy_ignore_headers    "Set-Cookie";
+      proxy_buffering         off;
+      proxy_intercept_errors  on;
+      proxy_redirect          off;
+      proxy_pass              http://$s3_bucket/documentation$url_full;
+    }
+
+    location ~* \.(eot|oft|svg|ttf|woff2?)$ {
+      add_header Access-Control-Allow-Origin *;
+      expires max;
+      log_not_found off;
+      access_log off;
+      add_header Cache-Control public;
+    }
+
+    location ~* ^/assets/ {
+      gzip_static on;
+
+      expires 1y;
+      add_header Cache-Control public;
+
+      add_header Last-Modified "";
+      add_header ETag "";
+      break;
+    }
+
+    location / {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
       proxy_set_header Host $http_host;
-      proxy_pass http://webapp;
+      proxy_redirect off;
+      proxy_pass http://app_server;
     }
   }
 }
