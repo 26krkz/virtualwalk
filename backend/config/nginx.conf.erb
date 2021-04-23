@@ -64,9 +64,6 @@ http {
 
     location ~* \.(eot|oft|svg|ttf|woff2?)$ {
       add_header Access-Control-Allow-Origin https://virtualwalk.netlify.app;
-      add_header Access-Control-Allow-Methods GET, POST, PUT, PATCH, DELETE;
-      add_header Access-Control-Allow-Headers "X-Requested-With, Origin, X-Csrftoken, Content-Type, Accept";
-      add_header Access-Control-Allow-Credentials: true;
       expires max;
       log_not_found off;
       access_log off;
