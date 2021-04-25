@@ -63,7 +63,7 @@ http {
     }
 
     location ~* \.(eot|oft|svg|ttf|woff2?)$ {
-      add_header Access-Control-Allow-Origin "https://virtualwalk.netlify.app" always;
+      add_header Access-Control-Allow-Origin "https://virtualwalk.netlify.app";
       add_header Access-Control-Allow-Methods "GET, POST, PATCH, DELETE, OPTIONS";
       add_header Access-Control-Allow-Headers "X-Requested-With, Origin, X-Csrftoken, Content-Type, Accept";
       add_header Access-Control-Allow-Credentials: true;
@@ -85,7 +85,7 @@ http {
     }
 
     location / {
-      add_header Access-Control-Allow-Origin "https://virtualwalk.netlify.app" always;
+      add_header Access-Control-Allow-Origin "https://virtualwalk.netlify.app";
       add_header Access-Control-Allow-Methods "GET, POST, PATCH, DELETE, OPTIONS";
       add_header Access-Control-Allow-Headers "X-Requested-With, Origin, X-Csrftoken, Content-Type, Accept";
       add_header Access-Control-Allow-Credentials true;
