@@ -106,7 +106,7 @@ export default {
           endTime: '',
           sTimes: [
               { text: '0:10:00', value: '600'},
-              { text: '0:15:00', value: '600'},
+              { text: '0:15:00', value: '900'},
               { text: '0:30:00', value: '1800'},
               { text: '1:00:00', value: '3600'},
               { text: '1:30:00', value: '5400'},
@@ -115,7 +115,7 @@ export default {
               { text: '3:00:00', value: '10800'},
           ],
           pTimes: [
-              { text: '10 mim', value: '10'},
+              { text: '10 mim', value: '600'},
               { text: '15 mim', value: '900'},
               { text: '20 mim', value: '1200'},
               { text: '30 mim', value: '1800'},
