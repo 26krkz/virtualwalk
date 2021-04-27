@@ -226,7 +226,7 @@ import axios from 'axios'
         .then(function (response) {
             that.info = response.data;
             that.$emit('logged-in-info', that.info);
-            that.$router.push({ name: 'User'})
+            // that.$router.push({ name: 'User'})
         })
         .catch(function (error) {
             console.log(error);
