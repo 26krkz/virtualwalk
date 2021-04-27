@@ -85,7 +85,7 @@
         </div>
         <div>
           <router-link to="/about" class="nav-btn" >
-              <v-btn text >virtualwalkとは</v-btn>
+              <v-btn text >how to use</v-btn>
             </router-link>
         </div>
 
