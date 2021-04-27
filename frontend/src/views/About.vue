@@ -4,7 +4,7 @@
             <v-row>
                 <v-col cols="12" md="6">
                     <div class="img-wrapper">
-                        <img class="page-image" src="../assets/home-page.png" >
+                        <img class="page-image" src="../assets/top_page.jpeg" >
                     </div>
                     <ol>
                         <li>ゲストユーザーでログインしても利用できます。</li>
@@ -18,7 +18,7 @@
                 </v-col>
                 <v-col cols="12" md="6">
                     <div class="img-wrapper">
-                        <img class="page-image" src="../assets/user-page.png" > 
+                        <img class="page-image" src="../assets/user_page.jpeg" > 
                     </div>
                     <ol start="6">
                         <li>ユーザー情報を変更できます。名前とメールアドレスは必須です。</li>
