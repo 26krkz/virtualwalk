@@ -6,7 +6,7 @@ WORKDIR /webapp
 
 RUN apk update
 
-COPY package*.json ./
+COPY package.json ./
 RUN npm install
 
 CMD ["/bin/sh"]

@@ -3,6 +3,7 @@ https://virtualwalk.netlify.app
 (フロントエンドのテスト追加途中)  
 世界の風景を撮影した動画が集められたアプリケーションです。  
 Youtube上にある様々な国や地域を徒歩で撮影した動画を集め、直感的に選択、閲覧できるようにしました。
+![ポートフォリオイメージ](./readme_images/portfolio_image.png "ポートフォリオの画像")
 
 ## 工夫した点
 * SPAによる静的ページ間のスムーズな移動  
@@ -24,7 +25,7 @@ Youtube上にある様々な国や地域を徒歩で撮影した動画を集め�
 * Vue CLI 4.5
 #### その他
 Docker|Docker-compose
-![環境構築画像](./system_architecture_img.png "環境構築図")
+![環境構築画像](./readme_images/system_architecture_img.png "環境構築図")
 #### gem
 * rack-cors (1.1.1)  
 * unicorn (6.0.0)  
