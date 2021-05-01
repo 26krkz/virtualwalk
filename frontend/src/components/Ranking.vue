@@ -74,7 +74,6 @@ export default {
                     let item = this.items[j].snippet.resourceId.videoId;
                     if(topFive == item){
                         this.topFiveFavoriteVideos.push(this.items[j]);
-                        console.log(this.topFiveFavoriteVideos)
                     }
                 }
             }

@@ -9,7 +9,7 @@ describe('Ranking.vue', () => {
     beforeEach(() => {
       vuetify = new Vuetify()
     })
-    it('render a Ranking top 5 videos', () => {
+    it('サムネイルをクリックするとselect-video-idとexpand-windowがイベントアップされる', () => {
         const wrapper = shallowMount(Ranking, { localVue, 
                                                 vuetify,
                                                 data(){
@@ -24,12 +24,8 @@ describe('Ranking.vue', () => {
                                                   }
                                                 } 
                                               });
-        // const stub = jest.fn();
-        // wrapper.setMethods({
-        //   showSelectedVideo: stub,
-        // });
+
         wrapper.find('img').trigger('click');
-        // expect(stub).toHaveBeenCalled();
         expect(wrapper.emitted('select-video-id')).not.toBeUndefined();
         expect(wrapper.emitted('expand-window')).not.toBeUndefined();
     })
