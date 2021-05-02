@@ -28,7 +28,7 @@ describe( 'CountryTabs.vue', () => {
                                                    }
                                         );
         wrapper.find('img').trigger('click');
-        expect(wrapper.emitted('select-video-id')).not.toBeUndefined();
-        expect(wrapper.emitted('expand-window')).not.toBeUndefined();
+        expect(wrapper.emitted('select-video-id')[0][0]).toBe('sampleVideoId');
+        expect(wrapper.emitted('expand-window')[0][0]).toBe(true);
     })
 })
