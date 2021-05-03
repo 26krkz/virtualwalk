@@ -1,5 +1,7 @@
 import { shallowMount } from '@vue/test-utils'
 import Youtube from '@/components/Youtube.vue'
+// import axios from 'axios'
+// jest.mock('axios')
 
 describe('Youtube.vue', () => {
     const wrapper = shallowMount(Youtube, {
@@ -25,9 +27,7 @@ describe('Youtube.vue', () => {
                                             }
                                         }
     );
-    it('render vue', () => {
-        console.log(wrapper.html());
-    })
+
     it('表示ボタンを押すと動画のURLが指定される', () => {
         wrapper.find('v-btn'+ '.resume-btn').trigger('click');
         expect(wrapper.vm.selectedMovieUrl).toBe('https://www.youtube.com/embed/sampleVideoId?start=0&end=');
@@ -43,25 +43,47 @@ describe('Youtube.vue', () => {
         expect(wrapper.vm.selectedMovieUrl).toBe('https://www.youtube.com/embed/sampleVideoId?start=600&end=1200');
     })
 
-    // it('ログインしている場合お気に入り追加ボタンが機能している', () => {
-    //     wrapper.vm.disable = false;
-
+    // it('指定の動画がお気に入りに追加されていた場合ハートがピンクになる', () => {
+    //     wrapper.vm.whetherAddedFavorite();
+    //     const url = process.env.VUE_APP_API_BASE_URL + '/users/favorites';
+    //     const response = {
+    //         message: '成功'
+    //       }
+    //       axios.get.mockImplementationOnce((url) => {
+    //         return Promise.resolve(response)
+    //       })
+        
     // })
 
-    // it('指定の動画がお気に入りに追加されていない場合ハートがグレーである', () => {
-    //     wrapper.vm.disable = false;
-
-    // })
-    it('指定の動画がお気に入りに追加されていた場合ハートがピンクになる', () => {
+    it('指定の動画がお気に入りに追加した場合ハートがグレーからピンクになり、お気に入り追加メソッドが実行される', () => {
+        // お気に入りボタンを使えるようにする
         wrapper.vm.disable = false;
+        //お気に入りボタンのアイコンをお気に入り追加されていない状態に設定
+        wrapper.vm.heartIcon = 'mdi-heart-outline';
+
         const stub = jest.fn();
         wrapper.setMethods({
-            whetherAddedFavorite: stub,
+            addFavorite: stub,
         });
-        wrapper.vm.videoId = 'otherSampleVideoId';
+        wrapper.find('.fav-btn').trigger('click');
+        expect(wrapper.vm.heartIcon).toBe("mdi-heart")
+        expect(wrapper.vm.heartColor).toBe("pink")
         expect(stub).toHaveBeenCalled();
-        // wrapper.vm.favoriteList
+        
     })
-    // it('指定の動画がお気に入りに追加した場合ハートがグレーからピンクになり、お気に入り追加メソッドが実行される')
-    // it('指定の動画がお気に入りから削除した場合ハートがピンクからグレーになり、お気に入り削除メソッドが実行される')
+    it('指定の動画がお気に入りから削除した場合ハートがピンクからグレーになり、お気に入り削除メソッドが実行される', () => {
+        // お気に入りボタンを使えるようにする
+        wrapper.vm.disable = false;
+        //お気に入りボタンのアイコンをお気に入り追加されている状態に設定
+        wrapper.vm.heartIcon = 'mdi-heart';
+
+        const stub = jest.fn();
+        wrapper.setMethods({
+            removeFavorite: stub,
+        });
+        wrapper.find('.fav-btn').trigger('click');
+        expect(wrapper.vm.heartIcon).toBe("mdi-heart-outline")
+        expect(wrapper.vm.heartColor).toBe(null)
+        expect(stub).toHaveBeenCalled();
+    })
 })
