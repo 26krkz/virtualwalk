@@ -13,7 +13,7 @@
         >
             <v-container>
                 <v-row class="mr-3 ml-3">
-                    <!-- ユーザーネームの入力 -->
+                    <!-- メールアドレスの入力 -->
                     <v-col cols="12">
                         <v-text-field
                         calss="text-field"

@@ -18,6 +18,7 @@ describe('Youtube.vue', () => {
                                                         }
                                                     },
                                                     videoData: {
+                                                        id: 1,
                                                         country: 'Japan',
                                                         tag1: 'Tokyo',
                                                         region: 'Asia',
@@ -44,14 +45,15 @@ describe('Youtube.vue', () => {
     })
 
     // it('指定の動画がお気に入りに追加されていた場合ハートがピンクになる', () => {
+    //     wrapper.vm.heartIcon = 'mdi-heart-outline';
     //     wrapper.vm.whetherAddedFavorite();
-    //     const url = process.env.VUE_APP_API_BASE_URL + '/users/favorites';
     //     const response = {
-    //         message: '成功'
+    //         favoriteList: [{id: 1}]
     //       }
-    //       axios.get.mockImplementationOnce((url) => {
+    //     axios.get.mockImplementationOnce(() => {
     //         return Promise.resolve(response)
     //       })
+    //     expect(wrapper.vm.heartIcon).toBe('mdi-heart')
         
     // })
 

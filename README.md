@@ -25,7 +25,7 @@ Youtube上にある様々な国や地域を徒歩で撮影した動画を集め�
 * Vue CLI 4.5
 #### その他
 Docker|Docker-compose
-![環境構築画像](./readme_images/system_architecture_img.png "環境構築図")
+![環境構築画像](./readme_images/system_architecture_image.png "環境構築図")
 #### gem
 * rack-cors (1.1.1)  
 * unicorn (6.0.0)  
