@@ -167,8 +167,7 @@ export default {
                     this.heartIcon = "mdi-heart-outline";
                     this.heartColor = null;
 
-                    //    videoIdを元にdb上のvideoテーブルからvideoIdと一致するvideo_idをもつデータを取得
-                    //    データ取得後、propsで取得したyoutubeのプレイリストの動画の中から取得したデータと一致する動画をitemに格納
+                    //videoIdを元にdb上のvideoテーブルからvideoIdと一致するvideo_idをもつデータを取得
                     const url = process.env.VUE_APP_API_BASE_URL + '/videos/' + this.videoId;
             
                     axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
@@ -181,6 +180,7 @@ export default {
                     .catch(function (error) {
                         console.log(error);
                     })
+                    //データ取得後、propsで取得したyoutubeのプレイリストの動画の中から取得したデータと一致する動画をitemに格納
                     for(let i = 0;i < this.items.length; i++){
                         if(this.items[i].snippet.resourceId.videoId == this.videoId){
                             this.item = this.items[i];

@@ -4,13 +4,13 @@
 <script>
 import axios from 'axios'
 export default {
-    data(){
-        return {
-            email: 'guest@gmail.com',
-            password: 'guestuser',
-            info: null,
-        }
-    },
+    // data(){
+    //     return {
+    //         email: 'guest@gmail.com',
+    //         password: 'guestuser',
+    //         info: null,
+    //     }
+    // },
     created(){
         let that = this;
         const url = process.env.VUE_APP_API_BASE_URL + '/users/guest';
