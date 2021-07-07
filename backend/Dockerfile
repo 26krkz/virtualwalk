@@ -1,4 +1,4 @@
-FROM ruby:2.6
+FROM ruby:2.6.6
 
 # リポジトリを更新し依存モジュールをインストール
 RUN apt-get update -qq && apt-get install -y build-essential nodejs
@@ -23,5 +23,7 @@ RUN bundle install
 # ホストのアプリケーションディレクトリ内をすべてコンテナにコピー
 COPY . /webapp
 
+# unicorn.pidを配置するディレクトリを作成
+RUN mkdir -p tmp/pids
 # puma.sockを配置するディレクトリを作成
-# RUN mkdir -p tmp/sockets
+RUN mkdir -p tmp/sockets
