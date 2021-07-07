@@ -15,12 +15,14 @@ services:
     build: ./backend
     env_file:
       - ./backend/environments/db.env
-    command: bundle exec unicorn -c config/unicorn.rb
+    command: bundle exec puma -C config/puma.rb
     volumes:
       - ./backend:/webapp:cached
       - public-data:/webapp/public
       - tmp-data:/webapp/tmp
       - log-data:/webapp/log
+    ports:
+      - '3000:3000'
     tty: true
     stdin_open: true
     depends_on:
