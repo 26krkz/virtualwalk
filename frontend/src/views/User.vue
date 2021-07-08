@@ -129,7 +129,12 @@
             </div>
         </div>
     </div>
-        <Youtube :video-id='videoId' :expand='expand'></Youtube>
+    <div class="youtube-component">
+      <v-btn class="close-btn" v-show="expand" @click="expand = !expand" small>close</v-btn>
+        <v-card>
+          <Youtube :video-id='videoId' :expand='expand'></Youtube>
+        </v-card>
+      </div>
 </v-main>
 </template>
 
@@ -299,7 +304,7 @@ import axios from 'axios'
 
 <style scoped>
 .main-container {
-     margin: 30px 5vw;
+     margin: 30px 3vw;
  }
 .user-card {
     margin-bottom: 25px;
@@ -362,9 +367,24 @@ import axios from 'axios'
      height: 180px;
      margin: 5px 0.5vw 5px 0;
  }
+ .youtube-component {
+    width: 95%;
+    margin:0 auto;
+    position: relative;
+  }
+ .close-btn {
+    position: absolute;
+    top: -24px;
+    right: 0;
+    background-color: #eee;
+    border-radius: 0;
+  }
  @media screen and (max-width:400px){
     .user-info {
         font-size: 0.8rem;
+    }
+    .main-container {
+     margin: 30px 0.5vw;
     }
  }
 </style>

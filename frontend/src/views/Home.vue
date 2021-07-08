@@ -4,7 +4,7 @@
         <v-row>
           <v-col cols="12" md="9">
             <v-card elevation="1">
-              <GoogleMap @select-video-id="selectVideoId" @expand-window="expandWindow"></GoogleMap>
+              <GoogleMap @select-video-id="selectVideoId" @expand-window="expandWindow" :video-id='videoId' :zoom='zoom'></GoogleMap>
             </v-card>
           </v-col>
           <v-col cols="12" md="3">
@@ -13,6 +13,9 @@
         </v-row>
       </v-container>
       <div class="youtube-component">
+      <div class="down-icon1 d-none d-lg-block" ><v-icon x-large v-show="expand">mdi-chevron-down</v-icon></div>
+      <div class="down-icon2 d-none d-lg-block" ><v-icon x-large v-show="expand">mdi-chevron-down</v-icon></div>
+      <v-btn class="close-btn" v-show="expand" @click="closeYoutubeWindow" small >close</v-btn>
         <v-card>
           <Youtube :video-id='videoId' :expand='expand'></Youtube>
         </v-card>
@@ -34,6 +37,7 @@ export default {
       videoId: '',
       items: null,
       expand: null,
+      zoom: false,
     }
   },
   methods: {
@@ -42,6 +46,10 @@ export default {
     },
     expandWindow(e){
       this.expand = e;
+    },
+    closeYoutubeWindow() {
+      this.expand = false;
+      this.zoom = !this.zoom;
     }
   },
 
@@ -61,13 +69,31 @@ export default {
     margin-bottom: 50px;
   }
   .top-page-container {
-    margin: 10px 0;
+    margin: 17px 0;
+  }
+  .down-icon1 {
+    position:absolute;
+    top: -45px;
+    right: 50%;
+  }
+  .down-icon2 {
+      position:absolute;
+      top: -35px;
+      right: 50%;
+  }
+  .close-btn {
+    position: absolute;
+    top: -24px;
+    right: 0;
+    background-color: #eee;
+    border-radius: 0;
   }
   .youtube-component {
     /* margin-right: 6vw;
     margin-left: 6vw; */
     width: 95%;
     margin:0 auto;
+    position: relative;
   }
   .country-tabs-component {
     margin: 0 12px;
