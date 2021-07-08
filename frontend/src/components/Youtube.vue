@@ -1,11 +1,6 @@
 <template>
 <v-expand-transition>
   <v-container fluid v-show="expand" class="container grey lighten-3">
-      <div class="down-icon1 d-none d-lg-block"><v-icon x-large >mdi-chevron-down</v-icon></div>
-      <div class="down-icon2 d-none d-lg-block"><v-icon x-large >mdi-chevron-down</v-icon></div>
-      <v-btn class="close-btn" color="black" icon small outlined @click="expand = !expand">
-          <v-icon>mdi-window-close</v-icon>
-      </v-btn>
       <v-row>
         <v-col cols='12' md="4" class="selected-video">
             <div class="video-info">
@@ -284,22 +279,6 @@ export default {
       margin-bottom: 30px;
       position: relative;
  }
- .down-icon1 {
-     position:absolute;
-     top: -45px;
-     right: 50%;
- }
- .down-icon2 {
-     position:absolute;
-     top: -35px;
-     right: 50%;
- }
- .close-btn {
-      position:absolute;
-      top: -13px;
-      right: -13px;
- }
-
  .selected-video {
        width:100%;
  }
