@@ -9,6 +9,7 @@
 import GoogleMapsApiLoader from 'google-maps-api-loader';
 import markerLocation from '../assets/marker.json'
 export default {
+    props: ['videoId', 'zoom'],
     name: 'Map',
     data(){
         return {
@@ -37,6 +38,24 @@ export default {
     this.initializeMap()
     this.setMarker();
     },
+    watch: {
+      videoId: function() {
+        for (let i = 0; i < this.markerLocation.length; i++) {
+          this.markers[i].setAnimation(null);
+          if (this.markerLocation[i].videoId == this.videoId) {
+            this.zoomIn(i);
+            // マーカーが弾むようにする。
+            this.markers[i].setAnimation(this.google.maps.Animation.BOUNCE);
+          }
+        }
+      },
+      zoom: function() {
+        this.zoomOut();
+        for (let i = 0; i < this.markerLocation.length; i++) {
+          this.markers[i].setAnimation(null);
+        }
+      }
+    },
     methods: {
       //google mapの表示。
       initializeMap() {
@@ -51,7 +70,6 @@ export default {
             let marker = new this.google.maps.Marker({
                 position: this.markerLocation[i],
                 map: this.map,
-                // title: this.markerLocation[i].id,
             });
             this.markers.push(marker);          //生成したマーカーをマーカー配列にpushする
             marker.addListener('click', ()=>{          //マーカーをクリックしたときのイベント
@@ -60,14 +78,28 @@ export default {
                         this.markers[i].setAnimation(null);
                     }
                     marker.setAnimation(this.google.maps.Animation.BOUNCE);
+                    this.zoomIn(i);
                     this.$emit('expand-window', true)
                   } else {
                     marker.setAnimation(null);
                     this.$emit('expand-window', false)
+                    this.zoomOut();
                 }
                 this.$emit('select-video-id', this.markerLocation[i].videoId);    //event upで選択したマーカーのidをApp.vueに渡す。
             });
         }
+      },
+      // googlemap上で指定のマーカーに対してズームインする
+      zoomIn(i){
+        this.map.setZoom(5);
+        let latlng = new this.google.maps.LatLng(this.markerLocation[i].lat, this.markerLocation[i].lng);
+        this.map.setCenter(latlng);
+      },
+      // googlemap上でデフォルトの位置までズームアウトする。
+      zoomOut(){
+        this.map.setZoom(1.9);
+        let latlng = new this.google.maps.LatLng(35, 155);                    
+        this.map.setCenter(latlng);
       }
     },
 }
