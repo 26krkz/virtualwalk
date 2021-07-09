@@ -3,9 +3,12 @@
       <v-container fluid class="top-page-container">
         <v-row>
           <v-col cols="12" md="9">
-            <v-card elevation="1">
-              <GoogleMap @select-video-id="selectVideoId" @expand-window="expandWindow" :video-id='videoId' :zoom='zoom'></GoogleMap>
-            </v-card>
+            <div class="google-map-container">
+              <v-card elevation="1">
+                <GoogleMap @select-video-id="selectVideoId" @expand-window="expandWindow" :video-id='videoId' :zoom='zoom' :random='random'></GoogleMap>
+              </v-card>
+              <v-btn class="randomly-select-btn" color="warning" small dark @click="randomlySelect">ランダムに選択<v-icon>mdi-map-marker</v-icon></v-btn>
+            </div>
           </v-col>
           <v-col cols="12" md="3">
             <Ranking @select-video-id="selectVideoId" @expand-window="expandWindow"></Ranking>
@@ -38,6 +41,7 @@ export default {
       items: null,
       expand: null,
       zoom: false,
+      random: false,
     }
   },
   methods: {
@@ -50,6 +54,9 @@ export default {
     closeYoutubeWindow() {
       this.expand = false;
       this.zoom = !this.zoom;
+    },
+    randomlySelect() {
+      this.random = !this.random;
     }
   },
 
@@ -71,6 +78,19 @@ export default {
   .top-page-container {
     margin: 17px 0;
   }
+  .google-map-container {
+    position: relative;
+  }
+  .randomly-select-btn {
+    position: absolute;
+    bottom: 5%;
+    left: 7%;
+  }
+  .youtube-component {
+    width: 95%;
+    margin:0 auto;
+    position: relative;
+  }
   .down-icon1 {
     position:absolute;
     top: -45px;
@@ -87,13 +107,6 @@ export default {
     right: 0;
     background-color: #eee;
     border-radius: 0;
-  }
-  .youtube-component {
-    /* margin-right: 6vw;
-    margin-left: 6vw; */
-    width: 95%;
-    margin:0 auto;
-    position: relative;
   }
   .country-tabs-component {
     margin: 0 12px;
