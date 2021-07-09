@@ -9,7 +9,7 @@
 import GoogleMapsApiLoader from 'google-maps-api-loader';
 import markerLocation from '../assets/marker.json'
 export default {
-    props: ['videoId', 'zoom'],
+    props: ['videoId', 'zoom', 'random'],
     name: 'Map',
     data(){
         return {
@@ -49,11 +49,27 @@ export default {
           }
         }
       },
+      // zoomがpropsで渡ってきたらzoom outメソッドを発火させる。
       zoom: function() {
         this.zoomOut();
         for (let i = 0; i < this.markerLocation.length; i++) {
           this.markers[i].setAnimation(null);
         }
+      },
+      // randomのpropsが渡ってきたら全てのマーカーのアニメーションを順番にonにしていく。
+      // 全てのマーカーのアニメーションを終えたら、randomlySelect()を発火させる。
+      random: function() {
+        let count = 0;
+        const innerFunction = () => {
+          this.markers[count].setAnimation(this.google.maps.Animation.BOUNCE);
+          this.markers[count].setAnimation(null);
+          count += 1;
+          if (count == this.markerLocation.length) {
+            clearInterval(bounce);
+            this.randomlySelect();
+          }
+        }
+        const bounce = setInterval(innerFunction, 80)
       }
     },
     methods: {
@@ -100,6 +116,16 @@ export default {
         this.map.setZoom(1.9);
         let latlng = new this.google.maps.LatLng(35, 155);                    
         this.map.setCenter(latlng);
+      },
+      // ランダムな値をnumに代入してnum番目のマーカーのvideoIdをevent upする。randomをwatchしている箇所でno timeで発火させると動作が
+      // うまくいかないと考えられるためsetTimeoutを用いて600ms後に発火させている。
+      randomlySelect() {
+        const innerFunction = () => {
+          let num = Math.floor(Math.random() * 41);
+          this.$emit('select-video-id', this.markerLocation[num].videoId);
+          this.$emit('expand-window', true)
+        }
+        setTimeout(innerFunction, 600);
       }
     },
 }
