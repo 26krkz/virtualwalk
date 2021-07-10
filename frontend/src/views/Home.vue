@@ -14,6 +14,7 @@
             <Ranking @select-video-id="selectVideoId" @expand-window="expandWindow"></Ranking>
           </v-col>
         </v-row>
+        <Search class="search-component"></Search>
       </v-container>
       <div class="youtube-component">
       <div class="down-icon1 d-none d-lg-block" ><v-icon x-large v-show="expand">mdi-chevron-down</v-icon></div>
@@ -32,6 +33,7 @@ import GoogleMap from '../components/GoogleMap';
 import Youtube from '../components/Youtube';
 import Ranking from '../components/Ranking';
 import CountryTabs from '../components/CountryTabs';
+import Search from '../components/Search';
 
 export default {
   name: 'App',
@@ -64,7 +66,8 @@ export default {
     GoogleMap,
     Youtube,
     Ranking,
-    CountryTabs
+    CountryTabs,
+    Search
   },
 
 
@@ -77,6 +80,13 @@ export default {
   }
   .top-page-container {
     margin: 17px 0;
+    position:relative;
+  }
+  .search-component {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 100%;
   }
   .google-map-container {
     position: relative;
