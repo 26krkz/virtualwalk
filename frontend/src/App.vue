@@ -26,7 +26,7 @@
         <!-- ログインしていた場合表示されるnav -->
         <div v-if="loggedInUser">
 
-          <router-link :to="{ name: 'User', params: { username:current_user.name, current_user:current_user }}"
+          <router-link :to="{ name: 'User', params: { userId:current_user.id, current_user:current_user }}"
                         class="nav-btn">
             <v-btn text >{{ current_user.name }}</v-btn>
           </router-link>

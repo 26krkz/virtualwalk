@@ -14,7 +14,7 @@
             <Ranking @select-video-id="selectVideoId" @expand-window="expandWindow"></Ranking>
           </v-col>
         </v-row>
-        <Search class="search-component"></Search>
+        <Search class="search-component" @select-video-id="selectVideoId" @expand-window="expandWindow"></Search>
       </v-container>
       <div class="youtube-component">
       <div class="down-icon1 d-none d-lg-block" ><v-icon x-large v-show="expand">mdi-chevron-down</v-icon></div>

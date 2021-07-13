@@ -42,7 +42,7 @@ const routes = [
     component: GuestUser
   },
   {
-    path: '/:username',
+    path: '/:userId',
     name: 'User',
     component: User,
   },

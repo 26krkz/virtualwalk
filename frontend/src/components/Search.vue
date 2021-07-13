@@ -11,14 +11,18 @@
         v-on="on"
         ></v-text-field>
       </template>
-      <div class="result-contaienr-wrapper">
+      <div class="result-contaienr-wrapper" v-show="show">
         <v-card class="result-container">
-          <!-- if文で場合わけする -->
-          <div>検索対象がありません</div>
+          <!-- 検索で何もヒットしなかった時 -->
+          <div v-show="extractedVideoData.length == 0" class="not-result">検索対象は見つかりませんでした。</div>
+
+          <!-- 何かヒットした時 -->
           <div
             class="result-item"
             v-for="n of thumbnails.length"
             :key="n"
+            v-show="extractedVideoData.length != 0"
+            @click="showSelectedVideo(extractedVideoData[n-1].videoId)"
           >
             <div class="result-item-tags">
               <div
@@ -42,10 +46,10 @@ import getYoutubeData from '../getYoutubeData.js';
 export default {
   data() {
     return {
+      show: false,
       inputWord: '',
       videoData: videoData,
       extractedVideoData: [],
-      videoIds: [],
       items: [],
       thumbnails: [],
     }
@@ -53,6 +57,7 @@ export default {
   watch: {
     inputWord: function() {
       if (this.inputWord != '') {
+        this.show = true;
         let keyword = this.inputWord;
         let extractedVideoData = this.extractedVideoData;
         const videoData = this.videoData;
@@ -70,7 +75,10 @@ export default {
           }
         }
       } else {
+        // 検索欄が空の場合、検索結果に使う情報を空に戻す。検索結果の表示しないようにする。
         this.extractedVideoData = [];
+        this.thumbnails = [];
+        this.show = false;
       }
     }
   },
@@ -97,6 +105,10 @@ export default {
           }
         }
       }
+    },
+    showSelectedVideo(videoId){
+      this.$emit('select-video-id', videoId);
+      this.$emit('expand-window', true)
     }
   }
 }
@@ -106,11 +118,17 @@ export default {
     max-width: 290px;
   }
   .result-contaienr-wrapper {
+    min-height: 40px;
     max-height: 350px;
   }
   .result-container {
     overflow: auto;
+    min-height: 40px;
     max-width: 380px;
+  }
+  .not-result {
+    font-size: 16px;
+    line-height: 40px;
   }
   .result-item {
     width: 95%;
