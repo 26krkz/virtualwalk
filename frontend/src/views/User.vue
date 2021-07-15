@@ -129,6 +129,9 @@
             </div>
         </div>
     </div>
+    <div class="memo-component">
+        <Memo v-show="expand"></Memo>
+    </div>
     <div class="youtube-component">
       <v-btn class="close-btn" v-show="expand" @click="expand = !expand" small>close</v-btn>
         <v-card>
@@ -139,7 +142,8 @@
 </template>
 
 <script>
-import Youtube from '../components/Youtube'
+import Youtube from '../components/Youtube';
+import Memo from '../components/Memo';
 import axios from 'axios'
   export default {
     data () {
@@ -183,7 +187,7 @@ import axios from 'axios'
         },
       }
     },
-    mounted(){
+    created(){
         let that = this;
 
         // YoutubeAPIにより指定プレイリストの動画を取得し、それらをitemsにいれる
@@ -297,6 +301,7 @@ import axios from 'axios'
     },
     components: {
         Youtube,
+        Memo,
     }
   }
 </script>
@@ -366,6 +371,11 @@ import axios from 'axios'
      height: 180px;
      margin: 5px 0.5vw 5px 0;
  }
+ .memo-component {
+     width: 80%;
+     margin: 0 auto;
+     margin-bottom: 45px;;
+ }
  .youtube-component {
     width: 95%;
     margin:0 auto;
@@ -385,5 +395,10 @@ import axios from 'axios'
     .main-container {
      margin: 30px 0.5vw;
     }
+ }
+ @media screen and (min-width: 960px) {
+     .memo-component {
+        width: 65%;
+     }
  }
 </style>

@@ -1,13 +1,14 @@
 <template>
   <div>
     <v-menu offset-y>
-      <template v-slot:activator="{ on }">
+      <template v-slot:activator="{ on, attrs }">
         <v-text-field
         class="input-container"
         solo
         placeholder="タグで検索（地域、国、都市名）"
         prepend-inner-icon="mdi-map-marker"
         v-model="inputWord"
+        v-bind="attrs"
         v-on="on"
         ></v-text-field>
       </template>
@@ -65,6 +66,8 @@ export default {
         for (let i = 0; i < videoData.length; i++) {
           let tags = videoData[i].tags;
           for (let j = 0; j < tags.length; j++) {
+            // tags内で検索ワードと一致するタグがあるかindexOf()を使って調べる。一致した場合一致したtags配列のindexを返す。
+            // つまり0以上が返ってこれば一致するということ。一致しない場合は-1が返ってくることになっている。
             if (tags[j].indexOf(keyword) > -1) {
               if (!extractedVideoData.includes(videoData[i])) {
                 // 検索ワードに引っかかったtagにヒットして抽出されたvideoDataをextractedVideoDataにpushしている。
