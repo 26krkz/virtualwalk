@@ -130,12 +130,12 @@
         </div>
     </div>
     <div class="memo-component">
-        <Memo v-show="expand"></Memo>
+        <Memo v-show="expand" @get-customized-times="getCustomizedTimes" :video-id='videoId'></Memo>
     </div>
     <div class="youtube-component">
       <v-btn class="close-btn" v-show="expand" @click="expand = !expand" small>close</v-btn>
         <v-card>
-          <Youtube :video-id='videoId' :expand='expand'></Youtube>
+          <Youtube :video-id='videoId' :expand='expand' :customizedTimes="customizedTimes"></Youtube>
         </v-card>
       </div>
 </v-main>
@@ -151,6 +151,7 @@ import axios from 'axios'
       const defaultForm = Object.freeze({ userName: '', email: '', password1: '', password2: '' })
 
       return {
+        customizedTimes: "",
         expand1: false,
         expand2: false,
         userData: this.$route.params.current_user,
@@ -297,7 +298,10 @@ import axios from 'axios'
        showSelectedVideo(videoId){
            this.videoId = videoId;
            this.expand = true;
-       }
+       },
+       getCustomizedTimes(e){
+            this.customizedTimes = e;
+        },
     },
     components: {
         Youtube,

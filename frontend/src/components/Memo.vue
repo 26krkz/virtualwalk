@@ -77,8 +77,10 @@
 <script>
 import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
   export default {
+    props: ['videoId' ],
     data() {
       return {
+        customizedTimes: [],
         dialog: false,
         dialogDelete: false,
         headers: [
@@ -118,6 +120,9 @@ import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
       dialogDelete (val) {
         val || this.closeDelete()
       },
+      videoId: function() {
+        this.getCustomizedTime();
+      }
     },
     created () {
       // axios.getの処理
@@ -164,6 +169,7 @@ import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem);
           this.editedIndex = -1;
+          this.getCustomizedTime();
           // axios.deleteの処理
         })
       },
@@ -176,7 +182,15 @@ import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
           this.memos.push(this.editedItem);
           // axios.postの処理
         }
+        this.getCustomizedTime();
         this.close();
+      },
+      getCustomizedTime () {
+        this.customizedTimes = [];
+        for (let i = 0; i < this.memos.length; i++) {
+          this.customizedTimes.push(this.memos[i].time);
+        }
+        this.$emit('get-customized-times', this.customizedTimes);
       }
     },
     computed: {
