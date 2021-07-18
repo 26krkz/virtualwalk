@@ -281,7 +281,6 @@ export default {
             option.value = this.getCustomizedTimeValue(this.customizedTimes[i]);
             option.classList.add('customized-time');
             section.appendChild(option);
-            console.log(option)
         }
     },
     getCustomizedTimeValue(time) {

@@ -8,7 +8,6 @@
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>メモ</v-toolbar-title>
-        <!-- <v-divider class="mx-4" inset vertical></v-divider> -->
         <v-spacer></v-spacer>
 
         <!-- メモの追加、編集ダイアログ -->
@@ -58,7 +57,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="cyan" dark @click="closeDelete">キャンセル</v-btn>
-              <v-btn color="pink" dark @click="deleteItemConfirm">削除</v-btn>
+              <v-btn color="pink" dark @click="deleteMemo">削除</v-btn>
               <v-spacer></v-spacer>
             </v-card-actions>
           </v-card>
@@ -75,9 +74,10 @@
   </v-data-table>
 </template>
 <script>
-import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
+import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue';
+import axios from 'axios';
   export default {
-    props: ['videoId' ],
+    props: ['videoId', 'userData' ],
     data() {
       return {
         customizedTimes: [],
@@ -121,21 +121,8 @@ import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
         val || this.closeDelete()
       },
       videoId: function() {
-        this.getCustomizedTime();
+        this.getMemos();
       }
-    },
-    created () {
-      // axios.getの処理
-      this.memos = [
-          {
-            time: "0:13:15",
-            comment: '緑が綺麗。',
-          },
-          {
-            time: "1:20:00",
-            comment: '旧市街の街並み',
-          },
-        ]
     },
     methods: {
       editItem (item) {
@@ -170,27 +157,81 @@ import VueTimepicker from 'vue2-timepicker/src/vue-timepicker.vue'
           this.editedItem = Object.assign({}, this.defaultItem);
           this.editedIndex = -1;
           this.getCustomizedTime();
-          // axios.deleteの処理
         })
       },
 
       save () {
         if (this.editedIndex > -1) {
           Object.assign(this.memos[this.editedIndex], this.editedItem);
-          // axios.patchの処理
+          this.updateMemo(this.memos[this.editedIndex].id);
         } else {
           this.memos.push(this.editedItem);
-          // axios.postの処理
+          this.addMemo();
         }
         this.getCustomizedTime();
         this.close();
       },
+
+      // メモに時間を追加したら、その時間をyoutubeコンポーネントに渡し、開始時間の指定にメモした時間を利用できる。
       getCustomizedTime () {
         this.customizedTimes = [];
         for (let i = 0; i < this.memos.length; i++) {
           this.customizedTimes.push(this.memos[i].time);
         }
         this.$emit('get-customized-times', this.customizedTimes);
+      },
+
+      // お気に入り一覧から動画を選択したらその動画のメモ一覧を取得してresponseをthis.memosに代入することでdomに反映させる。
+      getMemos () {
+        let that = this;
+        const url = process.env.VUE_APP_API_BASE_URL + '/memos';
+        axios.get(url,
+                  {params: {user_id: this.userData.id, video_id: this.videoId},
+                    withCredentials: true,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                  }
+                  )
+        .then(function (response) {
+          that.memos = response.data;
+          that.getCustomizedTime();
+        })
+        .catch(function (error) {
+        console.log(error);
+        })
+      },
+
+      // 追加したメモをデータベースに保存。
+      addMemo () {
+        const url = process.env.VUE_APP_API_BASE_URL + '/memos';
+        let params = {memo: {
+          user_id: this.userData.id,
+          video_id: this.videoId,
+          time: this.editedItem.time,
+          comment: this.editedItem.comment
+        }};
+        axios.post( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }})
+      },
+
+      // 編集したメモをデータベース上でも更新するメソッド
+      updateMemo (id) {
+        const url = process.env.VUE_APP_API_BASE_URL + '/memos/' + id;
+        let params = {memo: {
+          time: this.editedItem.time,
+          comment: this.editedItem.comment
+        }};
+        axios.patch( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }})
+      },
+
+      // 削除したメモをデータベース上からも削除するメソッド
+      // データベースから指定のメモのデータを削除してからdom上からもそのデータを削除するメソッドを発火する（that.deleteItemComfirm()）。
+      deleteMemo() {
+        let that = this;
+        const url = process.env.VUE_APP_API_BASE_URL + '/memos/' + this.memos[this.editedIndex].id;
+        axios.delete( url, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }})
+        .then(that.deleteItemConfirm())
+        .catch(function (error) {
+            console.log(error);
+        })
       }
     },
     computed: {

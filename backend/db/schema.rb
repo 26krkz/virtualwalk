@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_30_071242) do
+ActiveRecord::Schema.define(version: 2021_07_17_080210) do
 
   create_table "favorites", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -19,6 +19,15 @@ ActiveRecord::Schema.define(version: 2021_03_30_071242) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["user_id"], name: "index_favorites_on_user_id"
     t.index ["video_id"], name: "index_favorites_on_video_id"
+  end
+
+  create_table "memos", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "favorite_id", null: false
+    t.string "time"
+    t.string "comment"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["favorite_id"], name: "index_memos_on_favorite_id"
   end
 
   create_table "users", charset: "utf8mb4", force: :cascade do |t|
@@ -31,7 +40,7 @@ ActiveRecord::Schema.define(version: 2021_03_30_071242) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
-  create_table "videos", charset: "utf8mb4", force: :cascade do |t|
+  create_table "videos", charset: "utf8", force: :cascade do |t|
     t.string "video_id"
     t.string "region"
     t.string "country"
@@ -43,4 +52,5 @@ ActiveRecord::Schema.define(version: 2021_03_30_071242) do
 
   add_foreign_key "favorites", "users"
   add_foreign_key "favorites", "videos"
+  add_foreign_key "memos", "favorites"
 end

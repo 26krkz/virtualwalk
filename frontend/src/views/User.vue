@@ -130,7 +130,7 @@
         </div>
     </div>
     <div class="memo-component">
-        <Memo v-show="expand" @get-customized-times="getCustomizedTimes" :video-id='videoId'></Memo>
+        <Memo v-show="expand" @get-customized-times="getCustomizedTimes" :video-id='videoId' :user-data='userData'></Memo>
     </div>
     <div class="youtube-component">
       <v-btn class="close-btn" v-show="expand" @click="expand = !expand" small>close</v-btn>
