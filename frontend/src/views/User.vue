@@ -129,17 +129,21 @@
             </div>
         </div>
     </div>
+    <div class="memo-component">
+        <Memo v-show="expand" @get-customized-times="getCustomizedTimes" :video-id='videoId' :user-data='userData'></Memo>
+    </div>
     <div class="youtube-component">
       <v-btn class="close-btn" v-show="expand" @click="expand = !expand" small>close</v-btn>
         <v-card>
-          <Youtube :video-id='videoId' :expand='expand'></Youtube>
+          <Youtube :video-id='videoId' :expand='expand' :customizedTimes="customizedTimes"></Youtube>
         </v-card>
       </div>
 </v-main>
 </template>
 
 <script>
-import Youtube from '../components/Youtube'
+import Youtube from '../components/Youtube';
+import Memo from '../components/Memo';
 import axios from 'axios'
   export default {
     data () {
@@ -147,6 +151,7 @@ import axios from 'axios'
       const defaultForm = Object.freeze({ userName: '', email: '', password1: '', password2: '' })
 
       return {
+        customizedTimes: "",
         expand1: false,
         expand2: false,
         userData: this.$route.params.current_user,
@@ -183,7 +188,7 @@ import axios from 'axios'
         },
       }
     },
-    mounted(){
+    created(){
         let that = this;
 
         // YoutubeAPIにより指定プレイリストの動画を取得し、それらをitemsにいれる
@@ -293,10 +298,14 @@ import axios from 'axios'
        showSelectedVideo(videoId){
            this.videoId = videoId;
            this.expand = true;
-       }
+       },
+       getCustomizedTimes(e){
+            this.customizedTimes = e;
+        },
     },
     components: {
         Youtube,
+        Memo,
     }
   }
 </script>
@@ -366,6 +375,11 @@ import axios from 'axios'
      height: 180px;
      margin: 5px 0.5vw 5px 0;
  }
+ .memo-component {
+     width: 80%;
+     margin: 0 auto;
+     margin-bottom: 45px;;
+ }
  .youtube-component {
     width: 95%;
     margin:0 auto;
@@ -385,5 +399,10 @@ import axios from 'axios'
     .main-container {
      margin: 30px 0.5vw;
     }
+ }
+ @media screen and (min-width: 960px) {
+     .memo-component {
+        width: 65%;
+     }
  }
 </style>

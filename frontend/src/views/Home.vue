@@ -21,7 +21,7 @@
       <div class="down-icon2 d-none d-lg-block" ><v-icon x-large v-show="expand">mdi-chevron-down</v-icon></div>
       <v-btn class="close-btn" v-show="expand" @click="closeYoutubeWindow" small >close</v-btn>
         <v-card>
-          <Youtube :video-id='videoId' :expand='expand'></Youtube>
+          <Youtube :video-id='videoId' :expand='expand' :customizedTimes="customizedTimes"></Youtube>
         </v-card>
       </div>
       <CountryTabs class="country-tabs-component" @select-video-id="selectVideoId" @expand-window="expandWindow"></CountryTabs>
@@ -40,6 +40,7 @@ export default {
   data(){
     return {
       videoId: '',
+      customizedTimes: null,
       items: null,
       expand: null,
       zoom: false,
