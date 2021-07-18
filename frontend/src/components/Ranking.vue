@@ -5,6 +5,12 @@
             <div class="scroll-area">
                 <div v-for="topFiveFavoriteVideo of topFiveFavoriteVideos" :key="topFiveFavoriteVideo.id">
                     <v-card flat>
+                        <div v-for="n of 5" :key="n">
+                            <img src="https://placehold.jp/320x180.png?text=virtualwalk"
+                                class="thumbnail"
+                                v-show="show"
+                            >
+                        </div>
                         <img :src="topFiveFavoriteVideo.snippet.thumbnails.medium.url" 
                             @click="showSelectedVideo(topFiveFavoriteVideo.snippet.resourceId.videoId)"
                             class="thumbnail"
@@ -26,6 +32,7 @@ export default {
             items: [],
             topFiveFavorites: [],
             topFiveFavoriteVideos: [],
+            show: true,
 
             //youtubeから指定のプレイリストの動画を取得するのに必要なparams
             getPlayListParams: {
@@ -57,6 +64,7 @@ export default {
             const url = process.env.VUE_APP_API_BASE_URL + '/favorite';
             axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
             .then(function (response) {
+                that.show = false;
                 that.topFiveFavorites = response.data;
                 that.compareTopFiveFavoritesAndItems();
             })
