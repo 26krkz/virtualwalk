@@ -12,4 +12,5 @@ Rails.application.routes.draw do
     get :guest, on: :collection
   end
   resources :videos
+  resources :memos
 end

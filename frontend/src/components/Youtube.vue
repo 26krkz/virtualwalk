@@ -26,7 +26,6 @@
                     <!-- 開始時間を設定 -->
                     <label for="start">開始時間:
                     <select id="start" v-model="startTime">
-                        <option selected>指定しない</option>
                         <option v-for="sTime in sTimes" v-bind:key="sTime.id" v-bind:value="sTime.value">
                             {{ sTime.text }}
                         </option>
@@ -38,7 +37,6 @@
                     <!-- 再生時間を設定 -->
                     <label for="playing">再生時間:
                     <select id="playing" v-model="playingTime" v-on:change="getEndTime">
-                        <option selected>指定しない</option>
                         <option v-for="pTime in pTimes" v-bind:key="pTime.id" v-bind:value="pTime.value">
                             {{ pTime.text }}
                         </option>
@@ -81,7 +79,7 @@
 <script>
 import axios from 'axios';
 export default {
-  props: ['videoId', 'expand'],
+  props: ['videoId', 'expand', 'customizedTimes'],
   data(){
       return{
           apiKey: null,
@@ -100,6 +98,7 @@ export default {
           playingTime: '',
           endTime: '',
           sTimes: [
+              { text: '指定しない', value: '0'},
               { text: '0:10:00', value: '600'},
               { text: '0:15:00', value: '900'},
               { text: '0:30:00', value: '1800'},
@@ -110,6 +109,7 @@ export default {
               { text: '3:00:00', value: '10800'},
           ],
           pTimes: [
+              { text: '指定しない', value: ''},
               { text: '10 mim', value: '600'},
               { text: '15 mim', value: '900'},
               { text: '20 mim', value: '1200'},
@@ -182,6 +182,10 @@ export default {
                         }
                     }
                 },
+      customizedTimes: function() {
+                    this.initializeStartTimes();
+                    this.getCustomizedTimes();
+                }
   },
   methods: {
     // 開始時間と再生時間の和を終了時間としてendTimeに代入している
@@ -268,7 +272,38 @@ export default {
         setTimeout(function(){
             that.snackbar = false;
         }, 2000);
-    }
+    },
+    getCustomizedTimes() {
+        const section = document.getElementById('start');
+        for (let i = 0; i < this.customizedTimes.length; i++) {
+            let option = document.createElement('option');
+            option.textContent = this.customizedTimes[i];
+            option.value = this.getCustomizedTimeValue(this.customizedTimes[i]);
+            option.classList.add('customized-time');
+            section.appendChild(option);
+        }
+    },
+    getCustomizedTimeValue(time) {
+        let value = time.split(':');
+        let hour = Number(value[0]);
+        let minite = Number(value[1]);
+        let second = Number(value[2]);
+        return String(hour * 3600 + minite * 60 + second);
+    },
+    initializeStartTimes() {
+        const section = document.getElementById('start');
+        if(section.firstChild != null) {
+            while(section.firstChild) {
+                section.removeChild(section.firstChild);
+            }
+            for (let i = 0; i < this.sTimes.length; i++) {
+                let option = document.createElement('option');
+                option.textContent = this.sTimes[i].text;
+                option.value = this.sTimes[i].value;
+                section.appendChild(option);
+            }
+        }
+    },
   }
 }
 

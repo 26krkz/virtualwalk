@@ -15,7 +15,7 @@ services:
     build: ./backend
     env_file:
       - ./backend/environments/db.env
-    command: bundle exec puma -C config/puma.rb
+    command: bundle exec unicorn -c config/unicorn.rb
     volumes:
       - ./backend:/webapp:cached
       - public-data:/webapp/public
