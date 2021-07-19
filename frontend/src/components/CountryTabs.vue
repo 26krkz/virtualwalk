@@ -13,6 +13,11 @@
                 </v-tab>
             </v-tabs>
             <v-card flat height="200" class="tab-items">
+                <div v-for="n of 5" :key="n">
+                    <v-card v-show="show" class="tab-item" width="320" height="180">
+                        <img src="https://placehold.jp/320x180.png?text=virtualwalk">
+                    </v-card>
+                </div>
                 <div v-for="selectedRegionVideo of selectedRegionVideos" :key="selectedRegionVideo.id">
                     <v-card class="tab-item" width="320" height="180">
                         <img :src="selectedRegionVideo.snippet.thumbnails.medium.url" 
@@ -35,6 +40,7 @@ export default {
             items:[],
             selectedRegionData:[],
             selectedRegionVideos: [],
+            show: true,
 
             //youtubeから指定のプレイリストの動画を取得するのに必要なparams
             getPlayListParams: {
@@ -51,6 +57,7 @@ export default {
         // YoutubeAPIにより指定プレイリストの動画を取得し、それらをitemsにいれる
         axios.get('https://www.googleapis.com/youtube/v3/playlistItems', { params: that.getPlayListParams })
         .then(function (response) {
+            that.show = false;
             that.items = response.data.items;
             that.getRegionsVideos(that.regions[0]);
         })

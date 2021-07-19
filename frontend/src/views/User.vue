@@ -111,17 +111,19 @@
         <div class="favorites-title">お気に入り一覧</div>
         <div class="border">
             <div class="favorite-videos">
+                <div v-for="n of 5" :key="n">
+                    <v-card class="favorite-video-img">
+                        <img src="https://placehold.jp/320x180.png?text=virtualwalk" v-show="show4">
+                    </v-card>
+                </div>
                 <div v-show="showDummy">
                     <v-card class="favorite-video-img-dummy">
                         <div class="img-dummy"><div>お気に入りに追加すると<br>動画が表示されます。</div></div>
                     </v-card>
                 </div>
-                <div v-for="favoriteVideo of favoriteVideos" 
-                    v-bind:key="favoriteVideo.id"
-                    >
+                <div v-for="favoriteVideo of favoriteVideos" v-bind:key="favoriteVideo.id">
                     <v-card class="favorite-video-img">
-                        <img :src="favoriteVideo.snippet.thumbnails.medium.url" 
-                            
+                        <img :src="favoriteVideo.snippet.thumbnails.medium.url"       
                             @click="showSelectedVideo(favoriteVideo.snippet.resourceId.videoId)"
                         >
                     </v-card>
@@ -130,12 +132,12 @@
         </div>
     </div>
     <div class="memo-component">
-        <Memo v-show="expand" @get-customized-times="getCustomizedTimes" :video-id='videoId' :user-data='userData'></Memo>
+        <Memo v-show="expand" @get-customized-times="getCustomizedTimes" @select-time="selectTime" :video-id='videoId' :user-data='userData'></Memo>
     </div>
     <div class="youtube-component">
       <v-btn class="close-btn" v-show="expand" @click="expand = !expand" small>close</v-btn>
         <v-card>
-          <Youtube :video-id='videoId' :expand='expand' :customizedTimes="customizedTimes"></Youtube>
+          <Youtube :video-id='videoId' :expand='expand' :customizedTimes="customizedTimes" :selectedTime="selectedTime"></Youtube>
         </v-card>
       </div>
 </v-main>
@@ -152,6 +154,7 @@ import axios from 'axios'
 
       return {
         customizedTimes: "",
+        selectedTime: "",
         expand1: false,
         expand2: false,
         userData: this.$route.params.current_user,
@@ -159,6 +162,7 @@ import axios from 'axios'
         show1: false,
         show2: false,
         show3: false,
+        show4: true,
         showDummy: false,
         info: null,
         videoId: '',
@@ -270,12 +274,12 @@ import axios from 'axios'
 
         axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
         .then(function (response) {
+            that.show4 = false;
             if(response.data.message){
                 that.showDummy = true;
             }
             that.favoriteList = response.data;
             that.compareFavoriteListAndItems();
-
         })
         .catch(function (error) {
             console.log(error);
@@ -302,6 +306,9 @@ import axios from 'axios'
        getCustomizedTimes(e){
             this.customizedTimes = e;
         },
+        selectTime(e) {
+            this.selectedTime = e;
+        }
     },
     components: {
         Youtube,
