@@ -79,7 +79,7 @@
 <script>
 import axios from 'axios';
 export default {
-  props: ['videoId', 'expand', 'customizedTimes'],
+  props: ['videoId', 'expand', 'customizedTimes', 'selectedTime'],
   data(){
       return{
           apiKey: null,
@@ -185,7 +185,16 @@ export default {
       customizedTimes: function() {
                     this.initializeStartTimes();
                     this.getCustomizedTimes();
-                }
+                },
+      selectedTime: function () {
+          let customizedTimes = document.getElementsByClassName('customized-time');
+          for(let i = 0;i < customizedTimes.length; i++) {
+              if (this.selectedTime == customizedTimes[i].innerText) {
+                  customizedTimes[i].selected = true;
+                  this.startTime = customizedTimes[i].value;
+              }
+          }
+      }
   },
   methods: {
     // 開始時間と再生時間の和を終了時間としてendTimeに代入している

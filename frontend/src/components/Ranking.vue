@@ -3,14 +3,16 @@
         <div class="ranking">
             <div class="ranking-title">お気に入りランキング<span>Top5</span></div>
             <div class="scroll-area">
+                <div v-for="n of 5" :key="n">
+                    <v-card flat>
+                        <img src="https://placehold.jp/320x180.png?text=virtualwalk"
+                            class="thumbnail"
+                            v-show="show"
+                        >
+                    </v-card>
+                </div>
                 <div v-for="topFiveFavoriteVideo of topFiveFavoriteVideos" :key="topFiveFavoriteVideo.id">
                     <v-card flat>
-                        <div v-for="n of 5" :key="n">
-                            <img src="https://placehold.jp/320x180.png?text=virtualwalk"
-                                class="thumbnail"
-                                v-show="show"
-                            >
-                        </div>
                         <img :src="topFiveFavoriteVideo.snippet.thumbnails.medium.url" 
                             @click="showSelectedVideo(topFiveFavoriteVideo.snippet.resourceId.videoId)"
                             class="thumbnail"
