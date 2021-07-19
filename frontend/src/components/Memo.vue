@@ -4,10 +4,12 @@
     :items="memos"
     hide-default-footer
     class="elevation-1"
+    @click:row="clickMemo"
   >
     <template v-slot:top>
       <v-toolbar flat>
-        <v-toolbar-title>メモ</v-toolbar-title>
+        <v-toolbar-title class="mr-2">メモ</v-toolbar-title>
+        <div class="d-none d-sm-flex">（追加すると開始時間として指定できるよ！）</div>
         <v-spacer></v-spacer>
 
         <!-- メモの追加、編集ダイアログ -->
@@ -62,6 +64,9 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+      </v-toolbar>
+      <v-toolbar flat class="d-sm-none">
+        <div>（追加すると開始時間として指定できるよ！）</div>
       </v-toolbar>
     </template>
 
@@ -232,6 +237,9 @@ import axios from 'axios';
         .catch(function (error) {
             console.log(error);
         })
+      },
+      clickMemo(item) {
+        this.$emit('select-time', item.time);
       }
     },
     computed: {
