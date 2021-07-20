@@ -30,7 +30,7 @@
                         <v-text-field
                         class="text-field"
                         v-model="form.email"
-                        :rules="[rules.required, rules.email]"
+                        :rules="[rules.requiredEmail, rules.email]"
                         label="E-mail"
                         ></v-text-field>
                     </v-col>
@@ -41,7 +41,7 @@
                         class="text-field"
                         v-model="form.password1"
                         :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-                        :rules="[rules.required, rules.min]"
+                        :rules="[rules.requiredPassword, rules.min]"
                         :type="show1 ? 'text' : 'password'"
                         label="Password"
                         counter
@@ -106,7 +106,8 @@ import axios from 'axios'
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             return pattern.test(value) || '有効なメールアドレスを入力してください'
           },
-          required: value => !!value || 'Passwordは必須です',
+          requiredEmail: value => !!value || 'e-mailは必須です',
+          requiredPassword: value => !!value || 'passwordは必須です',
           min: value => value.length >= 6 || '6字以上で作成してください',
           issame: value => value == this.form.password1 || '同じパスワードを入力してください',
         },
