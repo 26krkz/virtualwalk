@@ -4,7 +4,8 @@
         <div class="user-info">
             <div class="user-info--name">
                 <div>ユーザー名：</div>
-                <div>{{ userData.name }}</div>
+                <div v-show="!temporaryUserData">{{ userData.name }}</div>
+                <div v-show="temporaryUserData">{{ temporaryUserDataName }}</div>
             </div>
             <div class="user-info--email">
                 <div>メールアドレス：</div>
@@ -14,7 +15,8 @@
                 </div>
                 <div class="email-visible" v-show="show1" @click="isVisible">
                     <div class="visible-icon"><v-icon>mdi-eye</v-icon></div>
-                    <div>{{ userData.email }}</div>
+                    <div v-show="!temporaryUserData">{{ userData.email }}</div>
+                    <div v-show="temporaryUserData">{{ temporaryUserDataEmail }}</div>
                 </div>
             </div>
         </div>
@@ -45,7 +47,7 @@
                                 <v-text-field
                                 class="text-field"
                                 v-model="form.email"
-                                :rules="[rules.required, rules.email]"
+                                :rules="[rules.requiredEmail, rules.email]"
                                 label="E-mail"
                                 ></v-text-field>
                             </v-col>
@@ -60,7 +62,7 @@
                                         class="text-field"
                                         v-model="form.password1"
                                         :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-                                        :rules="[rules.required, rules.min]"
+                                        :rules="[rules.requiredPassword, rules.min]"
                                         :type="show2 ? 'text' : 'password'"
                                         label="Password"
                                         counter
@@ -155,6 +157,9 @@ import axios from 'axios'
       return {
         customizedTimes: "",
         selectedTime: "",
+        temporaryUserData: false,
+        temporaryUserDataName: "",
+        temporaryUserDataEmail: "",
         expand1: false,
         expand2: false,
         userData: this.$route.params.current_user,
@@ -179,7 +184,8 @@ import axios from 'axios'
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             return pattern.test(value) || '有効なメールアドレスを入力してください'
           },
-          required: value => !!value || 'Passwordは必須です',
+          requiredEmail: value => !!value || 'e-mailは必須です',
+          requiredPassword: value => !!value || 'passwordは必須です',
           min: value => value&&value.length >= 6 || '6字以上で作成してください',
           issame: value => value == this.form.password1 || '同じパスワードを入力してください',
         },
@@ -235,6 +241,9 @@ import axios from 'axios'
                                 password_confirmation: this.form.password2
                                 }
                         };
+        this.temporaryUserData = true;
+        this.temporaryUserDataName = this.form.userName;
+        this.temporaryUserDataEmail = this.form.email;
     
         axios.patch( url, params, { withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }})
         .then(function (response) {
