@@ -38,7 +38,7 @@
                         <v-card class="grey lighten-3">
                             <div class="comment">
                                 <h2>【virtualwalkとは】</h2>
-                                <p>「virtualwalk」は私がyoutube上で「virtual walking tour」と検索している<span class="comment-bold">海外の風景動画</span>を視聴しやすくすることを目的として作成しました。</p>
+                                <p>「virtualwalk」は私がyoutube上で「virtual walking tour」と検索して観ている<span class="comment-bold">海外の風景動画</span>を視聴しやすくすることを目的として作成しました。</p>
                                 <p>上記の海外風景の動画はほとんどは外国の方が撮影した動画であるため<span class="comment-bold">日本語</span>で検索することができません。
                                 <br>かと言ってそれ以上検索で絞り込みを行おうとすると都市名（Paris）などの英字名で検索する必要があり、
                                     そのスペルを知るためにはカタカナで「パリ」とググる必要があります。<span class="comment-bold">面倒ですね。</span>
