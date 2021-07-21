@@ -102,11 +102,13 @@ export default {
               { text: '0:10:00', value: '600'},
               { text: '0:15:00', value: '900'},
               { text: '0:30:00', value: '1800'},
+              { text: '0:45:00', value: '2700'},
               { text: '1:00:00', value: '3600'},
-              { text: '1:30:00', value: '5400'},
+              { text: '1:20:00', value: '4800'},
+              { text: '1:40:00', value: '6000'},
               { text: '2:00:00', value: '7200'},
-              { text: '2:30:00', value: '9000'},
-              { text: '3:00:00', value: '10800'},
+              { text: '2:20:00', value: '8400'},
+              { text: '2:40:00', value: '9600'},
           ],
           pTimes: [
               { text: '指定しない', value: ''},
@@ -171,6 +173,7 @@ export default {
                         if( that.current_user != null){
                             that.whetherAddedFavorite();
                         }
+                        that.initializeStartTimes(response.data.time);
                     })
                     .catch(function (error) {
                         console.log(error);
@@ -183,7 +186,7 @@ export default {
                     }
                 },
       customizedTimes: function() {
-                    this.initializeStartTimes();
+                    this.initializeStartTimes(this.videoData.time);
                     this.getCustomizedTimes();
                 },
       selectedTime: function () {
@@ -287,15 +290,15 @@ export default {
             that.snackbar = false;
         }, 2000);
     },
-    // propで渡ってきたcustomizedTimesを開始時間のsectionのoptionとして追加している。
+    // propで渡ってきたcustomizedTimesを開始時間のselectのoptionとして追加している。
     getCustomizedTimes() {
-        const section = document.getElementById('start');
+        const select = document.getElementById('start');
         for (let i = 0; i < this.customizedTimes.length; i++) {
             let option = document.createElement('option');
             option.textContent = this.customizedTimes[i];
             option.value = this.getCustomizedTimeValue(this.customizedTimes[i]);
             option.classList.add('customized-time');
-            section.appendChild(option);
+            select.appendChild(option);
         }
     },
     // propで渡ってきたcustomizedTimesは'XX:YY:ZZ'の文字列型だから、時間、分、秒で分けてミリ秒変換してリターンしoptionのvalueとして扱う。
@@ -306,21 +309,34 @@ export default {
         let second = Number(value[2]);
         return String(hour * 3600 + minite * 60 + second);
     },
-    // 新たに動画を選択したり、新たにcustomizedTimesが渡ってきた時に開始時間のsectionを空にして、optionを初期化している。
-    initializeStartTimes() {
-        const section = document.getElementById('start');
-        if(section.firstChild != null) {
-            while(section.firstChild) {
-                section.removeChild(section.firstChild);
+    // 新たに動画を選択したり、新たにcustomizedTimesが渡ってきた時に開始時間のselectを空にして、optionを初期化している。
+    // selectに追加するoptionは指定した動画の時間に応じて変更されるようになっている。setOption()
+    initializeStartTimes(videoTime) {
+        const select = document.getElementById('start');
+        if(select.firstChild != null) {
+            while(select.firstChild) {
+                select.removeChild(select.firstChild);
             }
-            for (let i = 0; i < this.sTimes.length; i++) {
+        }
+        let time = videoTime.split(':');
+        let hour = Number(time[0]);
+        let minite = Number(time[1]);
+        let second = Number(time[2]);
+        let value = hour * 3600 + minite * 60 + second;
+
+        this.setOption(value);
+    },
+    setOption(value) {
+        const select = document.getElementById('start');
+        for (let i = 0; i < this.sTimes.length; i++) {
+            if( this.sTimes[i].value < value){
                 let option = document.createElement('option');
                 option.textContent = this.sTimes[i].text;
                 option.value = this.sTimes[i].value;
-                section.appendChild(option);
+                select.appendChild(option);
             }
         }
-    },
+    }
   }
 }
 
