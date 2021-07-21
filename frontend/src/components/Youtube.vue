@@ -208,9 +208,9 @@ export default {
 
         if(this.show2 == true){this.show2 = false;}  //初めて表示ボタンを押す時には.iframe-coverを外す。
     },
+    // ログインしているユーザーがお気に入りした全ての動画のvideo_idを取得し、その中に選択した動画のidがあるか調べる。
+    // あればお気に入り登録されているのでハートマークを赤色に、なければそのままにする。
     whetherAddedFavorite(){
-         // ログインしているユーザーがお気に入りした全ての動画のvideo_idを取得し、その中に選択した動画のidがあるか調べる。
-         // あればお気に入り登録されているのでハートマークを赤色に、なければそのままにする。
         let that = this;
         const url = process.env.VUE_APP_API_BASE_URL + '/users/favorites';
         axios.get(url, {withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' }} )
@@ -233,13 +233,16 @@ export default {
           this.heartColor = "pink";
           this.addFavorite();
       }else{
-          this.heartIcon = "mdi-heart-outline";
-          this.heartColor = null;
-          this.removeFavorite();
+          let result = confirm('お気に入りから削除すると動画のメモも削除されますがよろしいですか？');
+          if(result){
+              this.heartIcon = "mdi-heart-outline";
+              this.heartColor = null;
+              this.removeFavorite();
+          }
       }
     },
+    // お気に入りに登録したら、ログインしているユーザーとその動画をaxios.postによりfavoritesテーブルに登録する
     addFavorite(){
-        //お気に入りに登録したら、ログインしているユーザーとその動画をaxios.postによりfavoritesテーブルに登録する
         let that = this;
         const url = process.env.VUE_APP_API_BASE_URL + '/favorite';
         let params = {
@@ -260,14 +263,16 @@ export default {
             that.snackbar = false;
         }, 2000);
     },
+    // 既にお気に入りに登録している場合、favoritesテーブルのuser_idとvideo_idの一致するデータを削除する。
     removeFavorite(){
-        //既にお気に入りに登録している場合、favoritesテーブルのuser_idとvideo_idの一致するデータを削除する。
         let that = this;
         const url = process.env.VUE_APP_API_BASE_URL + '/favorite';
         let params = {
                 user_id: this.current_user.id,
                 video_id: this.videoData.id
                 };
+
+        this.$emit('deleted-favorite-video-id', this.videoData.video_id);
 
         axios.delete( url, {params: params, withCredentials: true, headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(function (response) {
@@ -282,6 +287,7 @@ export default {
             that.snackbar = false;
         }, 2000);
     },
+    // propで渡ってきたcustomizedTimesを開始時間のsectionのoptionとして追加している。
     getCustomizedTimes() {
         const section = document.getElementById('start');
         for (let i = 0; i < this.customizedTimes.length; i++) {
@@ -292,6 +298,7 @@ export default {
             section.appendChild(option);
         }
     },
+    // propで渡ってきたcustomizedTimesは'XX:YY:ZZ'の文字列型だから、時間、分、秒で分けてミリ秒変換してリターンしoptionのvalueとして扱う。
     getCustomizedTimeValue(time) {
         let value = time.split(':');
         let hour = Number(value[0]);
@@ -299,6 +306,7 @@ export default {
         let second = Number(value[2]);
         return String(hour * 3600 + minite * 60 + second);
     },
+    // 新たに動画を選択したり、新たにcustomizedTimesが渡ってきた時に開始時間のsectionを空にして、optionを初期化している。
     initializeStartTimes() {
         const section = document.getElementById('start');
         if(section.firstChild != null) {

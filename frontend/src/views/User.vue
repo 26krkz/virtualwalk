@@ -124,7 +124,7 @@
                     </v-card>
                 </div>
                 <div v-for="favoriteVideo of favoriteVideos" v-bind:key="favoriteVideo.id">
-                    <v-card class="favorite-video-img">
+                    <v-card class="favorite-video-img" :id="favoriteVideo.snippet.resourceId.videoId">
                         <img :src="favoriteVideo.snippet.thumbnails.medium.url"       
                             @click="showSelectedVideo(favoriteVideo.snippet.resourceId.videoId)"
                         >
@@ -139,7 +139,7 @@
     <div class="youtube-component">
       <v-btn class="close-btn" v-show="expand" @click="expand = !expand" small>close</v-btn>
         <v-card>
-          <Youtube :video-id='videoId' :expand='expand' :customizedTimes="customizedTimes" :selectedTime="selectedTime"></Youtube>
+          <Youtube @deleted-favorite-video-id='deletedFavoriteVideoId' :video-id='videoId' :expand='expand' :customizedTimes="customizedTimes" :selectedTime="selectedTime"></Youtube>
         </v-card>
       </div>
 </v-main>
@@ -157,6 +157,7 @@ import axios from 'axios'
       return {
         customizedTimes: "",
         selectedTime: "",
+        delteFavoriteId: "",
         temporaryUserData: false,
         temporaryUserDataName: "",
         temporaryUserDataEmail: "",
@@ -197,6 +198,13 @@ import axios from 'axios'
             key: process.env.VUE_APP_YOUTUBE_API_KEY
         },
       }
+    },
+    watch: {
+        // Youtubeコンポーネントでお気に入りから動画を削除すると、$emitによって削除した動画のIDが渡され、対応する動画のimgが削除される。
+        delteFavoriteId: function() {
+            let deleteItem = document.getElementById(this.delteFavoriteId);
+            deleteItem.remove();
+        }
     },
     created(){
         let that = this;
@@ -317,6 +325,9 @@ import axios from 'axios'
         },
         selectTime(e) {
             this.selectedTime = e;
+        },
+        deletedFavoriteVideoId(e) {
+            this.delteFavoriteId = e;
         }
     },
     components: {

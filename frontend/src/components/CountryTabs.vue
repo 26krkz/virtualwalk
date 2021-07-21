@@ -57,7 +57,6 @@ export default {
         // YoutubeAPIにより指定プレイリストの動画を取得し、それらをitemsにいれる
         axios.get('https://www.googleapis.com/youtube/v3/playlistItems', { params: that.getPlayListParams })
         .then(function (response) {
-            that.show = false;
             that.items = response.data.items;
             that.getRegionsVideos(that.regions[0]);
         })
@@ -77,6 +76,7 @@ export default {
                           }
                          )
                 .then(function (response) {
+                    that.show = false;
                     that.selectedRegionData = response.data;
                     that.compareSelectedRegionDataAndItems();
                 })
